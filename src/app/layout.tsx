@@ -1,11 +1,9 @@
 import Footer from "@/components/layout/footer";
 import Header from "@/components/layout/header";
-import ThemeProvider from "@/components/shared/theme-provider";
-import { Skeleton } from "@/components/ui/skeleton";
+import Provider from "@/components/shared/provider";
 import { siteConfig } from "@/config/site";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Suspense } from "react";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -16,16 +14,7 @@ export const metadata: Metadata = {
 		template: `%s - ${siteConfig.name}`,
 	},
 	description: siteConfig.description,
-	keywords: [
-		"Next.js",
-		"React",
-		"Tailwind CSS",
-		"Server Components",
-		"shadcn/ui",
-		"NextAuth",
-		"Prisma",
-		"Vercel",
-	],
+	keywords: ["Next.js", "shadcn/ui", "NextAuth", "Prisma", "Vercel"],
 	authors: [
 		{
 			name: "moinulmoin",
@@ -72,17 +61,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	return (
 		<html lang="en">
 			<body className={inter.className}>
-				<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+				<Provider>
 					<div className="fixed h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-100 dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-900 dark:to-black" />
-					<Suspense fallback={<Skeleton className="w-full max-w-xl h-16 rounded-full" />}>
-						{/* @ts-expect-error Server Components */}
-						<Header />
-					</Suspense>
+					<Header />
 					<main className="flex h-[calc(100vh-80px)] w-full flex-col justify-center items-center py-24">
 						{children}
 					</main>
 					<Footer />
-				</ThemeProvider>
+				</Provider>
 			</body>
 		</html>
 	);
