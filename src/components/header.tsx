@@ -4,7 +4,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import useScroll from "@/lib/hooks/use-scroll";
 import Image from "next/image";
-import { ThemeToggle } from "./theme-toogle";
+import { ThemeToggle } from "./theme-toggle";
 import { Button } from "./ui/button";
 
 export function Header() {
