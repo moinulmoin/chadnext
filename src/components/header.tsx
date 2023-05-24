@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import useScroll from "@/lib/hooks/use-scroll";
 import Image from "next/image";
 import { ThemeToggle } from "./theme-toogle";
+import { Button } from "./ui/button";
 
 export function Header() {
 	const scrolled = useScroll(50);
@@ -31,7 +32,10 @@ export function Header() {
 						/>
 						<p>ChadNext</p>
 					</Link>
-					<ThemeToggle />
+					<div className=" flex gap-x-2 items-center">
+						<ThemeToggle />
+						<Button>Sign In</Button>
+					</div>
 				</div>
 			</div>
 		</header>
