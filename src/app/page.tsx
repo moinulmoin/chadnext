@@ -1,4 +1,4 @@
-import { Icons } from "@/components/icons";
+import Icons from "@/components/shared/icons";
 import { nFormatter } from "@/lib/utils";
 import Balancer from "react-wrap-balancer";
 

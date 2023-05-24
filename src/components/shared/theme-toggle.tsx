@@ -1,6 +1,6 @@
 "use client";
 
-import { Icons } from "@/components/icons";
+import Icons from "@/components/shared/icons";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "next-themes";
 
-export function ThemeToggle() {
+export default function ThemeToggle() {
 	const { setTheme } = useTheme();
 
 	return (

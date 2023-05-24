@@ -1,13 +1,13 @@
 "use client";
 
-import Link from "next/link";
-import { cn } from "@/lib/utils";
 import useScroll from "@/lib/hooks/use-scroll";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { ThemeToggle } from "./theme-toggle";
-import { Button } from "./ui/button";
+import Link from "next/link";
+import ThemeToggle from "../shared/theme-toggle";
+import { Button } from "../ui/button";
 
-export function Header() {
+export default function Header() {
 	const scrolled = useScroll(50);
 	return (
 		<header

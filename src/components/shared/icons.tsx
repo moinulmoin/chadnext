@@ -29,7 +29,7 @@ import {
 
 export type Icon = LucideIcon;
 
-export const Icons = {
+const Icons = {
 	logo: (props: LucideProps) => (
 		<svg
 			viewBox="0 0 24 24"
@@ -158,3 +158,5 @@ export const Icons = {
 		</svg>
 	),
 };
+
+export default Icons;
