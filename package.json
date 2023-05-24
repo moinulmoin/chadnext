@@ -11,6 +11,8 @@
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.6",
     "@prisma/client": "^4.14.1",
+    "@radix-ui/react-avatar": "^1.0.2",
+    "@radix-ui/react-dialog": "^1.0.3",
     "@radix-ui/react-dropdown-menu": "^2.0.4",
     "@radix-ui/react-slot": "^1.0.1",
     "@types/node": "20.2.3",

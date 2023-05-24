@@ -1,17 +1,14 @@
 import Footer from "@/components/layout/footer";
 import Header from "@/components/layout/header";
 import ThemeProvider from "@/components/shared/theme-provider";
+import { Skeleton } from "@/components/ui/skeleton";
 import { siteConfig } from "@/config/site";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
-
-// export const metadata = {
-// 	title: "ChadNext - quickstart for your Next.js project",
-// 	description: "ChadNext - quickstart for your Next.js project",
-// };
 
 export const metadata: Metadata = {
 	title: {
@@ -77,8 +74,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			<body className={inter.className}>
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
 					<div className="fixed h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-100 dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-900 dark:to-black" />
-					<Header />
-					<main className="flex min-h-screen w-full flex-col items-center py-32">{children}</main>
+					<Suspense fallback={<Skeleton className="w-full max-w-xl h-16 rounded-full" />}>
+						{/* @ts-expect-error Server Components */}
+						<Header />
+					</Suspense>
+					<main className="flex h-[calc(100vh-80px)] w-full flex-col justify-center items-center py-24">
+						{children}
+					</main>
 					<Footer />
 				</ThemeProvider>
 			</body>
