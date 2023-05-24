@@ -14,13 +14,13 @@ export default function Header() {
 			className={cn(
 				"fixed top-0 w-full",
 				scrolled
-					? "border-b border-gray-200 bg-white/50 backdrop-blur-x transition-all"
-					: "bg-white/0",
+					? "border-b border-gray-200 h-16 bg-transparent backdrop-blur-xl transition-all"
+					: "bg-white/0 h-20",
 				"z-30"
 			)}
 		>
-			<div className="container">
-				<div className="flex h-20 items-center justify-between">
+			<div className="container h-full">
+				<div className="flex h-full  items-center justify-between">
 					<Link href="/" className="flex items-center font-bold text-2xl">
 						<Image
 							src="/chad-next.png"
@@ -28,7 +28,6 @@ export default function Header() {
 							width="30"
 							height="30"
 							className="mr-2 object-contain rounded-sm"
-							quality="100"
 						/>
 						<p>ChadNext</p>
 					</Link>

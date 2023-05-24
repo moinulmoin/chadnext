@@ -1,5 +1,5 @@
 export const siteConfig = {
-	name: "chadnext",
+	name: "ChadNext",
 	url: "https://chadnext.moinulmoin.com",
 	ogImage: "https://chadnext.moinulmoin.com/opengraph-image",
 	description: "Quick Starter for your Next project.",
