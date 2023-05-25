@@ -10,17 +10,12 @@ import {
 } from "@/components/ui/dialog";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Icons from "../shared/icons";
 import LoadingDots from "../shared/loading-dots";
 
 export default function SignInModal() {
 	const [loading, setLoading] = useState(false);
-
-	useEffect(() => {
-		if (!loading) return;
-		return () => setLoading(false);
-	}, [loading]);
 
 	return (
 		<Dialog>
@@ -50,6 +45,7 @@ export default function SignInModal() {
 						}}
 						type="submit"
 						className="w-full"
+						disabled={loading}
 					>
 						{loading ? (
 							<LoadingDots />
