@@ -1,16 +1,16 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { signIn } from "next-auth/react";
+import Image from "next/image";
+import { useState } from "react";
+import { Button } from "~/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from "@/components/ui/dialog";
-import { signIn } from "next-auth/react";
-import Image from "next/image";
-import { useState } from "react";
+} from "~/components/ui/dialog";
 import Icons from "../shared/icons";
 import LoadingDots from "../shared/loading-dots";
 

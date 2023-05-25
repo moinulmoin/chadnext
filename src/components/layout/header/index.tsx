@@ -1,5 +1,5 @@
-import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
+import { authOptions } from "~/lib/auth";
 import Navbar from "./navbar";
 
 async function Header() {

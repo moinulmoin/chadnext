@@ -1,10 +1,10 @@
 "use client";
 
-import useScroll from "@/lib/hooks/use-scroll";
-import { cn } from "@/lib/utils";
 import { Session } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
+import useScroll from "~/lib/hooks/use-scroll";
+import { cn } from "~/lib/utils";
 import ThemeToggle from "../../shared/theme-toggle";
 import SignInModal from "../signin-modal";
 import UserNav from "../user-nav";

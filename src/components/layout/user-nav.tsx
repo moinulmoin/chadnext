@@ -1,7 +1,10 @@
 import { LogOut, User } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
+import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -9,10 +12,7 @@ import {
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Session } from "next-auth";
-import { signOut } from "next-auth/react";
-import Link from "next/link";
+} from "~/components/ui/dropdown-menu";
 
 export default function UserNav({ session }: { session: Session | null }) {
 	return (

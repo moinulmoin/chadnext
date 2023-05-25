@@ -1,6 +1,6 @@
-import Icons from "@/components/shared/icons";
-import { nFormatter } from "@/lib/utils";
 import Balancer from "react-wrap-balancer";
+import Icons from "~/components/shared/icons";
+import { nFormatter } from "~/lib/utils";
 
 export default async function Home() {
 	const { stargazers_count: stars } = await fetch(

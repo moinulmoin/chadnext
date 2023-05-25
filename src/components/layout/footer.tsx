@@ -1,5 +1,5 @@
-import { siteConfig } from "@/config/site";
 import Image from "next/image";
+import { siteConfig } from "~/config/site";
 
 export default function Footer() {
 	return (
