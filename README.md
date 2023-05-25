@@ -65,7 +65,3 @@ Thank you for checking out ChadNext! 😊
 ## Author
 
 - Moinul Moin ([@moinulmoin](https://twitter.com/immoinulmoin))
-
-## Inspiration
-
-- [Precedent](Precedent) – Building blocks for your Next project
