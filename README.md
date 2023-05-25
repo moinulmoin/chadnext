@@ -41,6 +41,7 @@ ChadNext is a quick starter template for your Next.js project. It's very minimal
 - [TypeScript](https://www.typescriptlang.org/) – Static type checker for end-to-end typesafety
 - [Prettier](https://prettier.io/) – Opinionated code formatter for consistent code style
 - [ESLint](https://eslint.org/) – Pluggable linter for Next.js and TypeScript
+- [Husky](https://typicode.github.io/husky/#/) – Git hooks made easy
 
 ## One Click Deploy
 
