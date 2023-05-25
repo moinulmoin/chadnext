@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 
 export default function useScroll(threshold: number) {
-	const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-	const onScroll = useCallback(() => {
-		setScrolled(window.scrollY > threshold);
-	}, [threshold]);
+  const onScroll = useCallback(() => {
+    setScrolled(window.scrollY > threshold);
+  }, [threshold]);
 
-	useEffect(() => {
-		window.addEventListener("scroll", onScroll);
-		return () => window.removeEventListener("scroll", onScroll);
-	}, [onScroll]);
+  useEffect(() => {
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [onScroll]);
 
-	return scrolled;
+  return scrolled;
 }
