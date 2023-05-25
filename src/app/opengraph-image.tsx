@@ -2,7 +2,7 @@
 import { ImageResponse } from "next/server";
 
 export const runtime = "edge";
-export const alt = "ChadNext - Quick Starter for your Next.js project";
+export const alt = "ChadNext - Quick Starter Template for your Next.js project";
 export const contentType = "image/png";
 
 export default async function OG() {
@@ -49,7 +49,7 @@ export default async function OG() {
 						letterSpacing: "-0.02em",
 					}}
 				>
-					Quick Starter for your Next project
+					Quick Starter Template for your Next project
 				</h2>
 				<p>Developed by Moinul Moin</p>
 			</div>

@@ -39,7 +39,7 @@ export default function UserNav({ session }: { session: Session | null }) {
 						<span>Dashboard</span>
 					</Link>
 				</DropdownMenuItem>
-				<DropdownMenuItem onClick={() => signOut({ redirect: true, callbackUrl: "/" })}>
+				<DropdownMenuItem onClick={() => signOut()}>
 					<LogOut className="mr-2 h-4 w-4" />
 					<span>Log out</span>
 				</DropdownMenuItem>

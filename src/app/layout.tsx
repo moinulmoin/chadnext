@@ -1,6 +1,7 @@
 import Footer from "@/components/layout/footer";
 import Header from "@/components/layout/header";
 import Provider from "@/components/shared/provider";
+import { Toaster } from "@/components/ui/toaster";
 import { siteConfig } from "@/config/site";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -55,6 +56,7 @@ export const metadata: Metadata = {
 		apple: "/apple-touch-icon.png",
 	},
 	manifest: `${siteConfig.url}/site.webmanifest`,
+	metadataBase: new URL(siteConfig.url),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -64,10 +66,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<Provider>
 					<div className="fixed h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-100 dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-900 dark:to-black" />
 					<Header />
-					<main className="flex h-[calc(100vh-80px)] w-full flex-col justify-center items-center py-24">
+					<main className="flex h-[calc(100vh-80px)] z-10 w-full flex-col justify-center items-center py-24">
 						{children}
 					</main>
 					<Footer />
+					<Toaster />
 				</Provider>
 			</body>
 		</html>

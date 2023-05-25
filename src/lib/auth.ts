@@ -15,9 +15,9 @@ export const authOptions: NextAuthOptions = {
 		strategy: "jwt",
 	},
 	callbacks: {
-		async session({ token, session }: any) {
+		async session({ token, session }) {
 			if (token) {
-				// TODO: Fix the any type
+				session.user.id = token.id;
 				session.user.name = token.name;
 				session.user.email = token.email;
 				session.user.image = token.picture;

@@ -9,7 +9,7 @@ import ThemeToggle from "../shared/theme-toggle";
 import UserNav from "../user-nav";
 import SignInModal from "./signin-modal";
 
-export default function Navbar() {
+export default function Header() {
 	const scrolled = useScroll(50);
 	const { data: session } = useSession();
 	return (
