@@ -6,8 +6,8 @@ import { Session } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import ThemeToggle from "../../shared/theme-toggle";
-import UserNav from "../../user-nav";
 import SignInModal from "../signin-modal";
+import UserNav from "../user-nav";
 
 export default function Navbar({ session }: { session: Session | null }) {
 	const scrolled = useScroll(50);
