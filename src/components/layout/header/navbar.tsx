@@ -2,16 +2,15 @@
 
 import useScroll from "@/lib/hooks/use-scroll";
 import { cn } from "@/lib/utils";
-import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
-import ThemeToggle from "../shared/theme-toggle";
-import UserNav from "../user-nav";
-import SignInModal from "./signin-modal";
+import ThemeToggle from "../../shared/theme-toggle";
+import UserNav from "../../user-nav";
+import SignInModal from "../signin-modal";
 
-export default function Header() {
+export default function Navbar({ session }: { session: Session | null }) {
 	const scrolled = useScroll(50);
-	const { data: session } = useSession();
 	return (
 		<header
 			className={cn(
