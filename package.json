@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write ./src/**/*.{ts,tsx,js,jsx,json}",
+    "lint:fix": "eslint src/**/*.{js,jsx,ts,tsx} --fix",
     "prepare": "husky install"
   },
   "dependencies": {

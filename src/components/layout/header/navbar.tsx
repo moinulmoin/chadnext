@@ -1,6 +1,6 @@
 "use client";
 
-import { Session } from "next-auth";
+import { type Session } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import useScroll from "~/lib/hooks/use-scroll";
