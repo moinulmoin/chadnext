@@ -1,8 +1,9 @@
 import Footer from "@/components/layout/footer";
 import Header from "@/components/layout/header";
-import Provider from "@/components/shared/provider";
+import ThemeProvider from "@/components/shared/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { siteConfig } from "@/config/site";
+import { Analytics } from "@vercel/analytics/react";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -63,7 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	return (
 		<html lang="en">
 			<body className={inter.className}>
-				<Provider>
+				<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
 					<div className="fixed h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-100 dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-900 dark:to-slate-900" />
 					{/* @ts-expect-error Async Server Component */}
 					<Header />
@@ -72,7 +73,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 					</main>
 					<Footer />
 					<Toaster />
-				</Provider>
+				</ThemeProvider>
+				<Analytics />
 			</body>
 		</html>
 	);

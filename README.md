@@ -27,6 +27,7 @@ ChadNext is a quick starter template for your Next.js project. It's very minimal
 
 - [Vercel](https://vercel.com/) – Easily preview & deploy changes with git
 - [Vercel Postgres](https://vercel.com/postgres) – Serverless Postgres at the Edge
+- [Vercel Analytics](https://vercel.com/analytics) – Realtime Analytics for your Next.js app
 
 ### UI
 
