@@ -1,5 +1,5 @@
 <a href="https://chadnext.moinulmoin.com">
-  <img alt="Precedent – Building blocks for your Next project" src="https://chadnext.moinulmoin.com/opengraph-image">
+  <img alt="Precedent – Building blocks for your Next project" src="https://repository-images.githubusercontent.com/644861240/6456392e-a1d1-40b3-876f-62aff274b3ae">
   <h1 align="center">ChadNext</h1>
 </a>
 
@@ -40,6 +40,12 @@ ChadNext is a quick starter template for your Next.js project. It's very minimal
 - [TypeScript](https://www.typescriptlang.org/) – Static type checker for end-to-end typesafety
 - [Prettier](https://prettier.io/) – Opinionated code formatter for consistent code style
 - [ESLint](https://eslint.org/) – Pluggable linter for Next.js and TypeScript
+
+## One Click Deploy
+
+You can deploy this project with one click on Vercel. Just click on the button below and follow the instructions.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmoinulmoin%2Fchadnext&env=POSTGRES_PRISMA_URL,POSTGRES_URL_NON_POOLING,GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET,NEXTAUTH_SECRET,NEXTAUTH_URL&envDescription=These%20env%20vars%20are%20for%20authentication%20%26%20database%20to%20work&envLink=https%3A%2F%2Fgithub.com%2Fmoinulmoin%2Fchadnext%2Fblob%2Fmain%2F.env.example&project-name=chadnext&repository-name=chadnext)
 
 ## Stay tuned for more updates!
 
