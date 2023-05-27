@@ -7,12 +7,6 @@
  Quick Starter Template for your Next.js project.
 </p>
 
-<p align="center">
-  <a href="https://github.com/moinulmoin/chadnext">
-    <img src="https://img.shields.io/github/stars/moinulmoin/chadnext?label=moinulmoin/chadnext" alt="Precedent repo star count" />
-  </a>
-</p>
-
 ## Introduction
 
 ChadNext is a quick starter template for your Next.js project. It's very minimal and has all the basic features you need to get started to build your next project.
