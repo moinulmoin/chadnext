@@ -70,9 +70,6 @@ dependencies:
   tailwindcss:
     specifier: 3.3.2
     version: 3.3.2
-  tailwindcss-animate:
-    specifier: ^1.0.5
-    version: 1.0.5(tailwindcss@3.3.2)
   typescript:
     specifier: 5.0.4
     version: 5.0.4
@@ -3549,14 +3546,6 @@ packages:
 
   /tailwind-merge@1.12.0:
     resolution: {integrity: sha512-Y17eDp7FtN1+JJ4OY0Bqv9OA41O+MS8c1Iyr3T6JFLnOgLg3EvcyMKZAnQ8AGyvB5Nxm3t9Xb5Mhe139m8QT/g==}
-    dev: false
-
-  /tailwindcss-animate@1.0.5(tailwindcss@3.3.2):
-    resolution: {integrity: sha512-UU3qrOJ4lFQABY+MVADmBm+0KW3xZyhMdRvejwtXqYOL7YjHYxmuREFAZdmVG5LPe5E9CAst846SLC4j5I3dcw==}
-    peerDependencies:
-      tailwindcss: '>=3.0.0 || insiders'
-    dependencies:
-      tailwindcss: 3.3.2
     dev: false
 
   /tailwindcss@3.3.2:
