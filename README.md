@@ -83,3 +83,8 @@ If you'd like to contribute to ChadNext, please follow these steps:
 ## License 📄
 
 ChadNext is licensed under the MIT License. See [LICENSE](https://github.com/moinulmoin/chadnext/blob/main/LICENSE) for more information.
+
+
+## Author
+
+- Moinul Moin ([@immoinulmoin](https://twitter.com/immoinulmoin)). You can follow me on twitter to get new feature updates.
