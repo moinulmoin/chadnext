@@ -23,7 +23,7 @@
     "autoprefixer": "10.4.14",
     "class-variance-authority": "^0.6.0",
     "clsx": "^1.2.1",
-    "lucide-react": "^0.220.0",
+    "lucide-react": "^0.224.0",
     "next": "13.4.3",
     "next-auth": "^4.22.1",
     "next-themes": "^0.2.1",
