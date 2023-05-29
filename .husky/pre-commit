@@ -1,4 +1,8 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+# Run lint and format before each commit
 pnpm lint:fix && pnpm format
+
+# Add the changes to the staging area
+git add .
