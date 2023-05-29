@@ -6,7 +6,7 @@
 
 ChadNext is a quick starter template for your Next.js project. It provides a minimal setup with all the basic features you need to build your next project, including a UI component library, authentication, database integration, analytics, and more.
 
-## Motivation to Use ChadNext 🚀
+## Motivation 🚀
 
 If you have an idea and want to quickly build a Proof of Concept (PoC) or Minimal Viable Product (MVP) to test the market, ChadNext can help you overcome several pain points:
 
@@ -69,6 +69,21 @@ We're planning to add more features to this project, including:
 If you find this project useful, please consider giving it a star ⭐️ to show your support. And don't forget to watch this repo to stay updated on future releases!
 
 Thank you for checking out ChadNext! 😊
+
+## Frequently Asked Questions (FAQs) 🤔
+
+**Q: How is ChadNext different from other templates?**
+
+A: ChadNext provides a comprehensive set of features, including a UI component library, authentication, database integration, analytics, and deployment. It offers a quick start with a minimal setup, leveraging the power of Next.js, a full-stack React framework. TypeScript ensures type safety, and linting and formatting tools maintain code consistency and readability. I didn't find any template combining all these together. That's why I connected the dots and made ChadNext.
+
+**Q: Why isn't a specific feature or tool included in ChadNext?**
+
+A: ChadNext aims to provide a lightweight template with essential features. Additional features and tools can be customized and added based on project requirements. The flexibility allows developers to choose and integrate their preferred tools or libraries according to their specific needs and preferences. ChadNext encourages modular development practices, enabling easy addition or removal of features as the project evolves.
+
+**Q: Why it has no state management tool?**
+
+A: With Nextjs 13, you would hardly feel the neccesity of a state management library. Even if you need any, feel free to add one you prefer. [Zustand](https://github.com/pmndrs/zustand) or [Jotai](https://jotai.org/) is hgihly recommended.
+
 
 ## Contributing 🤝
 
