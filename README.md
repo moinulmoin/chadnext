@@ -53,20 +53,18 @@ or
 
 You can deploy the template with one click! 
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmoinulmoin%2Fchadnext&env=POSTGRES_PRISMA_URL,POSTGRES_URL_NON_POOLING,GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET,NEXTAUTH_SECRET,NEXTAUTH_URL&envDescription=These%20env%20vars%20are%20for%20authentication%20%26%20database%20to%20work&envLink=https%3A%2F%2Fgithub.com%2Fmoinulmoin%2Fchadnext%2Fblob%2Fmain%2F.env.example&project-name=chadnext&repository-name=chadnext)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmoinulmoin%2Fchadnext&env=POSTGRES_PRISMA_URL,POSTGRES_URL_NON_POOLING,GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET,NEXTAUTH_SECRET,NEXTAUTH_URL,RESEND_API_KEY&envDescription=These%20env%20vars%20are%20for%20authentication%20%26%20database%20to%20work&envLink=https%3A%2F%2Fgithub.com%2Fmoinulmoin%2Fchadnext%2Fblob%2Fmain%2F.env.example&project-name=chadnext&repository-name=chadnext)
 
 ## Stay Tuned for More! 📢
 
-We're planning to add more features to this project, including:
+I'm planning to add more features to this template, including:
 
-- ✉️ Welcome mail to a new user
-- 📊 Basic dashboard with CRUD functionality
-- 🗃️ Tables for displaying, filtering, and sorting data
-- 🧪 Testing framework support
-- 🐳 Docker support
+- [x] ✉️ Welcome mail to a new user
+- [ ] 📊 Basic dashboard with CRUD functionality
+- [ ] 🗃️ Tables for displaying, filtering, and sorting data
 - and more!
 
-If you find this project useful, please consider giving it a star ⭐️ to show your support. And don't forget to watch this repo to stay updated on future releases!
+If you find this template useful, please consider giving it a star ⭐️ to show your support. And don't forget to watch this repo to stay updated on future releases!
 
 Thank you for checking out ChadNext! 😊
 
