@@ -55,9 +55,9 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
           <Section className="mt-8 text-center">
             <Button
               className="bg-bg-white inline-block rounded-md bg-slate-900 px-6 py-3 text-base text-gray-100"
-              href={baseUrl}
+              href="https://github.com/moinulmoin/chadnext"
             >
-              Get started
+              Star on GitHub
             </Button>
           </Section>
           <Text className="mt-8 text-base leading-6">
