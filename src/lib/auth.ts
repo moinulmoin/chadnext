@@ -34,7 +34,7 @@ export const authOptions: NextAuthOptions = {
 
       if (!dbUser) {
         if (user) {
-          token.id = user?.id;
+          token.id = user.id;
         }
         return token;
       }
@@ -45,6 +45,26 @@ export const authOptions: NextAuthOptions = {
         email: dbUser.email,
         picture: dbUser.image,
       };
+    },
+  },
+  events: {
+    async signIn({ user, isNewUser }) {
+      if (user && isNewUser) {
+        try {
+          await fetch(process.env.NEXTAUTH_URL + "/api/send-mail", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: user.email,
+              name: user.name,
+            }),
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
     },
   },
 };
