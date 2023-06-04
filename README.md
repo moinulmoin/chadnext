@@ -1,10 +1,10 @@
 <a href="https://chadnext.moinulmoin.com">
-  <img alt="Precedent – Building blocks for your Next project" src="https://repository-images.githubusercontent.com/644861240/6456392e-a1d1-40b3-876f-62aff274b3ae">
+  <img alt="Precedent – Building blocks for your Next.js project" src="https://repository-images.githubusercontent.com/644861240/6456392e-a1d1-40b3-876f-62aff274b3ae">
 </a>
 
-# ChadNext ✨ 
+# ChadNext ✨
 
-ChadNext is a quick starter template for your Next.js project. It provides a minimal setup with all the basic features you need to build your next project, including a UI component library, authentication, database integration, analytics, and more.
+ChadNext is a quick starter template for your Next.js project. It provides a minimal setup with all the basic features you need to build your next.js project, including a UI component library, authentication, database integration, analytics, and more.
 
 ## Motivation 🚀
 
@@ -21,7 +21,7 @@ If you have an idea and want to quickly build a Proof of Concept (PoC) or Minima
 
 By addressing these pain points, ChadNext saves you time and effort, providing a solid starter template for building performant apps with an excellent developer experience.
 
-## ChadNext Stack 🛠️
+## Tech Stack 🛠️
 
 ChadNext utilizes the following technologies:
 
@@ -49,9 +49,9 @@ To get started with ChadNext, you'll need to have [Node.js](https://nodejs.org/e
 4. Copy `.env.example` file to `.env` file. then follow the instructions inside.
 5. Start the development server: `pnpm dev`
 
-or 
+or
 
-You can deploy the template with one click! 
+You can deploy the template with one click!
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmoinulmoin%2Fchadnext&env=POSTGRES_PRISMA_URL,POSTGRES_URL_NON_POOLING,GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET,NEXTAUTH_SECRET,NEXTAUTH_URL,RESEND_API_KEY&envDescription=These%20env%20vars%20are%20for%20authentication%20%26%20database%20to%20work&envLink=https%3A%2F%2Fgithub.com%2Fmoinulmoin%2Fchadnext%2Fblob%2Fmain%2F.env.example&project-name=chadnext&repository-name=chadnext)
 
@@ -80,8 +80,7 @@ A: ChadNext aims to provide a lightweight template with essential features. Addi
 
 **Q: Why it has no state management tool?**
 
-A: With Nextjs 13, you would hardly feel the neccesity of a state management library. Even if you need any, feel free to add one you prefer. [Zustand](https://github.com/pmndrs/zustand) or [Jotai](https://jotai.org/) is hgihly recommended.
-
+A: With Nextjs 13 App Directory, you would hardly feel the neccesity of a state management library. Even if you need any, feel free to add one you prefer. [Zustand](https://github.com/pmndrs/zustand) or [Jotai](https://jotai.org/) is hgihly recommended.
 
 ## Contributing 🤝
 
@@ -96,7 +95,6 @@ If you'd like to contribute to ChadNext, please follow these steps:
 ## License 📄
 
 ChadNext is licensed under the MIT License. See [LICENSE](https://github.com/moinulmoin/chadnext/blob/main/LICENSE) for more information.
-
 
 ## Author
 

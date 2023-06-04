@@ -53,7 +53,7 @@ export default async function OG() {
             letterSpacing: "-0.02em",
           }}
         >
-          Quick Starter Template for your Next project
+          Quick Starter Template for your Next.js project
         </h2>
         <p>Developed by Moinul Moin</p>
       </div>

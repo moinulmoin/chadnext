@@ -10,15 +10,14 @@ import SignInModal from "../signin-modal";
 import UserNav from "../user-nav";
 
 export default function Navbar({ session }: { session: Session | null }) {
-  const scrolled = useScroll(50);
+  const scrolled = useScroll(30);
   return (
     <header
       className={cn(
-        "fixed top-0 w-full",
+        " bg-transparen z-30 w-full ",
         scrolled
-          ? "h-16 border-b border-gray-200 bg-transparent backdrop-blur-xl transition-all"
-          : "h-20 bg-white/0",
-        "z-30"
+          ? "t fixed  top-0 h-16 border-b border-gray-200 backdrop-blur-xl transition-all duration-300 ease-in-out"
+          : "relative h-20"
       )}
     >
       <div className="container h-full">
