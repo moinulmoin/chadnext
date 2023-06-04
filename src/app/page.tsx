@@ -13,7 +13,7 @@ export default async function Home() {
     .catch((e) => console.log(e));
   return (
     <div className="container">
-      <div className="flex min-h-[calc(100vh-161px)] w-full flex-col items-center justify-center py-14 xl:py-24">
+      <div className="flex min-h-[calc(100vh-160px)] w-full flex-col items-center justify-center py-14 xl:py-24">
         <div className=" mx-auto w-full max-w-2xl">
           <a
             href="https://twitter.com/immoinulmoin/status/1661645764697919489"
