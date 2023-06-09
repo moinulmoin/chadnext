@@ -14,9 +14,9 @@ export default function Navbar({ session }: { session: Session | null }) {
   return (
     <header
       className={cn(
-        " bg-transparen z-30 w-full ",
+        "z-30 w-full bg-transparent",
         scrolled
-          ? "t fixed  top-0 h-16 border-b border-gray-200 backdrop-blur-xl transition-all duration-300 ease-in-out"
+          ? "sticky top-0 h-16 border-b backdrop-blur-xl  transition-all duration-300 ease-in-out"
           : "relative h-20"
       )}
     >
