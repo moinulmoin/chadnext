@@ -24,5 +24,8 @@
         "argsIgnorePattern": "^_"
       }
     ]
-  }
+  },
+  "ignorePatterns": [
+    "next.config.js"
+  ]
 }

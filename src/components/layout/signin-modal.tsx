@@ -1,5 +1,6 @@
 "use client";
 
+import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import { useState } from "react";
@@ -12,7 +13,6 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import Icons from "../shared/icons";
-import LoadingDots from "../shared/loading-dots";
 
 export default function SignInModal() {
   const [loading, setLoading] = useState(false);
@@ -48,7 +48,10 @@ export default function SignInModal() {
             disabled={loading}
           >
             {loading ? (
-              <LoadingDots />
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Please wait
+              </>
             ) : (
               <>
                 <Icons.gitHub width={16} className=" mr-2" />
