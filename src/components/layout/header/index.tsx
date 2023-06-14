@@ -1,10 +1,10 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "~/lib/auth";
+import { getUser } from "~/server/user";
+import { type CurrentUser } from "~/types";
 import Navbar from "./navbar";
 
-async function Header() {
-  const session = await getServerSession(authOptions);
-  return <Navbar session={session} />;
-}
+export const revalidate = 0;
 
-export default Header;
+export default async function Header() {
+  const currentUser = (await getUser()) as CurrentUser;
+  return <Navbar currentUser={currentUser} />;
+}

@@ -8,6 +8,8 @@ import {
   ClipboardCheck,
   Copy,
   CreditCard,
+  DownloadCloud,
+  Edit3,
   File,
   FileText,
   HelpCircle,
@@ -68,6 +70,8 @@ const Icons = {
   sun: SunMedium,
   moon: Moon,
   laptop: Laptop,
+  download: DownloadCloud,
+  edit: Edit3,
   gitHub: (props: LucideProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path

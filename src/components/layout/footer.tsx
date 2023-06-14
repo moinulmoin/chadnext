@@ -3,7 +3,7 @@ import { siteConfig } from "~/config/site";
 
 export default function Footer() {
   return (
-    <footer className="relative z-10 w-full py-6 md:py-0">
+    <footer className="relative z-10 w-full py-4 md:py-0">
       <div className="container flex flex-col items-center justify-center gap-4 md:h-20 md:flex-row">
         <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
           <Image

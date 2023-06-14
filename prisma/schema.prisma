@@ -49,6 +49,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  shortBio      String?
   accounts      Account[]
   sessions      Session[]
 }

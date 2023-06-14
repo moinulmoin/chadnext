@@ -1,15 +1,15 @@
 "use client";
 
-import { type Session } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
-import useScroll from "~/lib/hooks/use-scroll";
+import useScroll from "~/hooks/use-scroll";
 import { cn } from "~/lib/utils";
+import { type CurrentUser } from "~/types";
 import ThemeToggle from "../../shared/theme-toggle";
 import SignInModal from "../signin-modal";
 import UserNav from "../user-nav";
 
-export default function Navbar({ session }: { session: Session | null }) {
+export default function Navbar({ currentUser }: { currentUser: CurrentUser }) {
   const scrolled = useScroll(30);
   return (
     <header
@@ -34,7 +34,7 @@ export default function Navbar({ session }: { session: Session | null }) {
           </Link>
           <div className=" flex items-center gap-x-2">
             <ThemeToggle />
-            {session ? <UserNav session={session} /> : <SignInModal />}
+            {currentUser ? <UserNav user={currentUser} /> : <SignInModal />}
           </div>
         </div>
       </div>
