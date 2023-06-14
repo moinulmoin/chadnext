@@ -1,5 +1,7 @@
 import { getToken } from "next-auth/jwt";
+import { revalidatePath } from "next/cache";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
+import { utapi } from "uploadthing/server";
 import db from "~/lib/db";
 
 const f = createUploadthing();
@@ -27,16 +29,19 @@ export const ourFileRouter = {
 
       if (!foundUser) throw new Error("User not found!");
 
+      const url = foundUser.image as string;
+      const parts = url.split("/");
+      const fileName = parts[parts.length - 1];
+
+      await utapi.deleteFiles(fileName);
+
       await db.user.update({
         where: { id: metadata.userId },
         data: {
           image: file.url,
         },
       });
-
-      await fetch(
-        process.env.NEXTAUTH_URL + "/api/revalidate?path=/dashboard/settings"
-      );
+      revalidatePath("/dashboard/settings");
     }),
 } satisfies FileRouter;
 

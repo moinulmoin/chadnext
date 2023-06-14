@@ -54,20 +54,23 @@ export default function SettingsForm({
   currentUser: CurrentUser;
 }) {
   const { toast } = useToast();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const [pending, startTransition] = useTransition();
   const form = useForm<SettingsValues>({
     resolver: zodResolver(settingsSchema),
     mode: "onChange",
   });
 
+  const { reset, formState } = form;
+  const { name, email, shortBio, image } = currentUser;
+
   useEffect(() => {
-    form.reset({
-      name: currentUser.name || "",
-      email: currentUser.email || "",
-      shortBio: currentUser.shortBio || "",
+    reset({
+      name,
+      email,
+      shortBio,
     });
-  }, [currentUser, form]);
+  }, [email, name, reset, shortBio]);
 
   function onSubmit(data: SettingsValues) {
     startTransition(() =>
@@ -89,8 +92,8 @@ export default function SettingsForm({
   return (
     <Form {...form}>
       <Avatar className="group relative mb-5 h-28  w-28 rounded-full">
-        <AvatarImage src={currentUser.image} />
-        <AvatarFallback>{currentUser.name?.[0]}</AvatarFallback>
+        <AvatarImage src={image} />
+        <AvatarFallback>{name?.[0]}</AvatarFallback>
         <ImageUploadModal />
       </Avatar>
 
@@ -144,7 +147,7 @@ export default function SettingsForm({
           )}
         />
 
-        <Button type="submit" disabled={!form.formState.isDirty}>
+        <Button type="submit" disabled={!formState.isDirty}>
           {pending ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

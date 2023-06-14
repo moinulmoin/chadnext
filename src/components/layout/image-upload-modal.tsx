@@ -2,6 +2,7 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import type { FileWithPath } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
@@ -23,6 +24,7 @@ const fileTypes = ["image"];
 
 export default function ImageUploadModal() {
   const { toast } = useToast();
+  const router = useRouter();
 
   const [files, setFiles] = useState<File[]>([]);
   const [preview, setPreview] = useState<string | null>(null);
@@ -43,8 +45,9 @@ export default function ImageUploadModal() {
 
   const { startUpload } = useUploadThing({
     endpoint: "imageUploader",
-    onClientUploadComplete: () => {
+    onClientUploadComplete: async () => {
       setIsUploading(false);
+      router.refresh();
       toast({
         title: "Image Updated successfully!",
       });
@@ -59,15 +62,18 @@ export default function ImageUploadModal() {
     },
   });
 
-  useEffect(() => {
-    if (showModal) return;
-    handleCancel();
-  }, [showModal]);
-
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     setFiles([]);
+    URL.revokeObjectURL(preview as string);
     setPreview(null);
-  };
+  }, [preview]);
+
+  useEffect(() => {
+    if (!showModal) {
+      handleCancel();
+    }
+  }, [handleCancel, showModal]);
+
   const handleUpload = () => {
     setIsUploading(true);
     startUpload(files);
