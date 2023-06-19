@@ -16,8 +16,6 @@ If you have an idea and want to quickly build a Proof of Concept (PoC) or Minima
 - Finding a tool to interact with the database effortlessly
 - Finding a fast and reliable cloud-hosted database service
 - Finding a user-friendly platform for deploying your application
-- Creating a robust codebase architecture
-- Implementing code quality assurance tools
 
 By addressing these pain points, ChadNext saves you time and effort, providing a solid starter template for building performant apps with an excellent developer experience.
 
@@ -53,13 +51,13 @@ or
 
 You can deploy the template with one click!
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmoinulmoin%2Fchadnext&env=POSTGRES_PRISMA_URL,POSTGRES_URL_NON_POOLING,GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET,NEXTAUTH_SECRET,NEXTAUTH_URL,RESEND_API_KEY&envDescription=These%20env%20vars%20are%20for%20authentication%20%26%20database%20to%20work&envLink=https%3A%2F%2Fgithub.com%2Fmoinulmoin%2Fchadnext%2Fblob%2Fmain%2F.env.example&project-name=chadnext&repository-name=chadnext)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmoinulmoin%2Fchadnext&env=POSTGRES_PRISMA_URL,POSTGRES_URL_NON_POOLING,GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET,NEXTAUTH_SECRET,NEXTAUTH_URL,RESEND_API_KEY,UPLOADTHING_SECRET,UPLOADTHING_APP_ID&envDescription=These%20env%20vars%20are%20for%20authentication%20%26%20database%20to%20work&envLink=https%3A%2F%2Fgithub.com%2Fmoinulmoin%2Fchadnext%2Fblob%2Fmain%2F.env.example&project-name=chadnext&repository-name=chadnext)
 
 ## Frequently Asked Questions (FAQs) 🤔
 
 **Q: How is ChadNext different from other templates?**
 
-A: ChadNext provides a comprehensive set of features, including a UI component library, authentication, database integration, analytics, and deployment. It offers a quick start with a minimal setup, leveraging the power of Next.js, a full-stack React framework. TypeScript ensures type safety, and linting and formatting tools maintain code consistency and readability. I didn't find any template combining all these together. That's why I connected the dots and made ChadNext.
+A: ChadNext provides a comprehensive set of features, including a UI component library, authentication, database integration, analytics, and deployment. It offers a quick start with a minimal setup, leveraging the power of Next.js, a full-stack React framework. TypeScript ensures type safety, and linting and formatting tools maintain code consistency and readability. I didn't find any template combining all of these together. That's why I connected the dots and made ChadNext.
 
 **Q: Why isn't a specific feature or tool included in ChadNext?**
 
@@ -67,7 +65,7 @@ A: ChadNext aims to provide a lightweight template with essential features. Addi
 
 **Q: Why it has no state management tool?**
 
-A: With Nextjs 13 App Directory, you would hardly feel the neccesity of a state management library. Even if you need any, feel free to add one you prefer. [Zustand](https://github.com/pmndrs/zustand) or [Jotai](https://jotai.org/) is hgihly recommended.
+A: With Nextjs 13 App Directory, you would hardly feel the necessity of a state management library. If you need any, feel free to add one you prefer. [Zustand](https://github.com/pmndrs/zustand) or [Jotai](https://jotai.org/) is hgihly recommended.
 
 ## Stay Tuned for More! 📢
 
@@ -91,4 +89,4 @@ ChadNext is licensed under the MIT License. See [LICENSE](https://github.com/moi
 
 ## Author
 
-- Moinul Moin ([@immoinulmoin](https://twitter.com/immoinulmoin)). You can follow me on twitter to get new feature updates.
+- Moinul Moin ([@immoinulmoin](https://twitter.com/immoinulmoin)). You can follow me on twitter to get all the updates.
