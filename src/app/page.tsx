@@ -19,29 +19,20 @@ export default async function Home() {
             href="https://twitter.com/immoinulmoin/status/1661645764697919489"
             target="_blank"
             rel="noreferrer"
-            className="mx-auto mb-5 flex max-w-fit animate-fade-up items-center justify-center space-x-2 overflow-hidden rounded-full bg-blue-100 px-7 py-2 transition-colors hover:bg-blue-200"
+            className="  mx-auto mb-5 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full bg-blue-100 px-7 py-2 transition-colors animate-in slide-in-from-top duration-500  hover:bg-blue-200"
           >
             <Icons.twitter className="h-5 w-5 text-[#1d9bf0]" />
             <p className="text-sm font-semibold text-[#1d9bf0]">
               Introducing ChadNext
             </p>
           </a>
-          <h1
-            className="font-display animate-fade-up bg-gradient-to-br from-black to-stone-500 bg-clip-text text-center text-4xl font-bold tracking-[-0.02em] text-transparent opacity-0 drop-shadow-sm dark:bg-gradient-to-br dark:from-gray-100 dark:to-gray-900 md:text-7xl md:leading-[5rem]"
-            style={{ animationDelay: "0.15s", animationFillMode: "forwards" }}
-          >
+          <h1 className="font-display bg-gradient-to-br from-black to-stone-500 bg-clip-text text-center text-4xl font-bold tracking-[-0.02em] text-transparent drop-shadow-sm animate-in zoom-in duration-500 dark:bg-gradient-to-br dark:from-gray-100 dark:to-gray-900 md:text-7xl md:leading-[5rem]">
             <Balancer>Quick Starter Template for your Next.js project</Balancer>
           </h1>
-          <p
-            className="mt-6 animate-fade-up text-center text-gray-500 opacity-0 md:text-xl"
-            style={{ animationDelay: "0.25s", animationFillMode: "forwards" }}
-          >
+          <p className="mt-6 text-center text-gray-500 animate-in slide-in-from-top duration-500 md:text-xl">
             <Balancer>Packed with all necessary tools to get started.</Balancer>
           </p>
-          <div
-            className="mx-auto mt-6 flex animate-fade-up items-center justify-center space-x-5 opacity-0"
-            style={{ animationDelay: "0.3s", animationFillMode: "forwards" }}
-          >
+          <div className="mx-auto mt-6 flex items-center justify-center space-x-5 animate-in slide-in-from-top">
             <a
               className="group flex max-w-fit items-center justify-center space-x-2 rounded-md border border-primary bg-primary px-5 py-2 text-sm text-primary-foreground"
               href="https://github.com/moinulmoin/chadnext"
