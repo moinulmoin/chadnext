@@ -86,9 +86,9 @@ export default function ImageUploadModal() {
           <Button
             size="sm"
             variant="ghost"
-            className="text-sm hover:bg-transparent hover:text-white"
+            className="text-xs hover:bg-transparent hover:text-white"
           >
-            <Icons.edit className="mr-1 h-3.5 w-3.5" /> Change
+            <Icons.edit className="mr-1 h-3 w-3" /> Change
           </Button>
         </div>
       </DialogTrigger>
