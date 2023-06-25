@@ -1,9 +1,6 @@
 "use client";
 
-import { Loader2 } from "lucide-react";
-import { signIn } from "next-auth/react";
 import Image from "next/image";
-import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
@@ -12,11 +9,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import Icons from "../shared/icons";
+import AuthForm from "./auth-form";
 
 export default function SignInModal() {
-  const [loading, setLoading] = useState(false);
-
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -37,29 +32,7 @@ export default function SignInModal() {
             </div>
           </DialogTitle>
         </DialogHeader>
-        <div className="py-4">
-          <Button
-            onClick={() => {
-              setLoading(true);
-              signIn("github");
-            }}
-            type="submit"
-            className="w-full"
-            disabled={loading}
-          >
-            {loading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Please wait
-              </>
-            ) : (
-              <>
-                <Icons.gitHub width={16} className=" mr-2" />
-                Sign In With GitHub
-              </>
-            )}
-          </Button>
-        </div>
+        <AuthForm />
       </DialogContent>
     </Dialog>
   );
