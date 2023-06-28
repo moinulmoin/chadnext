@@ -65,8 +65,8 @@ export const ThanksTemp: React.FC<Readonly<ThanksTemplateProps>> = ({
             <br />
             ChadNext team
           </Text>
-          <Hr className="my-8 border-gray-300" />
-          <Text className="text-sm text-gray-600">
+          <Hr className="my-6 border-gray-300" />
+          <Text className="text-x text-gray-600">
             Developed by{" "}
             <Link href="https://twitter.com/immoinulmoin">Moinul Moin</Link>
           </Text>

@@ -10,7 +10,7 @@ import SignInModal from "../signin-modal";
 import UserNav from "../user-nav";
 
 export default function Navbar({ currentUser }: { currentUser: CurrentUser }) {
-  const scrolled = useScroll(30);
+  const scrolled = useScroll(50);
   return (
     <header
       className={cn(
