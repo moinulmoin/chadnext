@@ -6,5 +6,6 @@ version: 1.3.0
 
 - Updated Shadcn/ui lib to the latest version.
 - Added Passwordless Email Authentication.
+- Fix opengraph image path issue.
 - Added Changelog Page using **[Contentlayer](https://www.contentlayer.dev/)**.
 - Added PWA Support.
