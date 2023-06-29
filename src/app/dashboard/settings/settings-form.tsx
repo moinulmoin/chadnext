@@ -5,7 +5,6 @@ import { Loader2 } from "lucide-react";
 import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import ImageUploadModal from "~/components/layout/image-upload-modal";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
@@ -89,16 +88,17 @@ export default function SettingsForm({
 
   return (
     <Form {...form}>
-      <Avatar className="group relative  h-28  w-28 rounded-full">
+      <Avatar className="group relative mb-5 h-28  w-28 rounded-full">
         <AvatarImage src={image} />
         <AvatarFallback>{name?.[0]}</AvatarFallback>
-        <ImageUploadModal />
+        {/* TODO: fix uploadthing api issue */}
+        {/* <ImageUploadModal /> */}
       </Avatar>
-      <p className="mb-5 mt-3.5 text-xs text-muted-foreground">
+      {/* <p className="mt-3.5 text-xs text-muted-foreground">
         Click on the avatar to change it.
-      </p>
+      </p> */}
 
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
         <FormField
           control={form.control}
           name="name"

@@ -31,17 +31,22 @@ export const ourFileRouter = {
 
       const url = foundUser.image as string;
       const parts = url.split("/");
-      const fileName = parts[parts.length - 1];
+      const fileKey = parts[parts.length - 1];
 
-      await utapi.deleteFiles(fileName);
+      try {
+        await utapi.deleteFiles(fileKey);
 
-      await db.user.update({
-        where: { id: metadata.userId },
-        data: {
-          image: file.url,
-        },
-      });
-      revalidatePath("/dashboard/settings");
+        await db.user.update({
+          where: { id: metadata.userId },
+          data: {
+            image: file.url,
+          },
+        });
+        revalidatePath("/dashboard/settings");
+      } catch (e) {
+        await utapi.deleteFiles(file.key);
+        throw new Error("Failed to delete old image!");
+      }
     }),
 } satisfies FileRouter;
 
