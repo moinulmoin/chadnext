@@ -6,8 +6,8 @@ import useScroll from "~/hooks/use-scroll";
 import { cn } from "~/lib/utils";
 import { type CurrentUser } from "~/types";
 import ThemeToggle from "../../shared/theme-toggle";
-import SignInModal from "../signin-modal";
 import UserNav from "../user-nav";
+import { buttonVariants } from "~/components/ui/button";
 
 export default function Navbar({ currentUser }: { currentUser: CurrentUser }) {
   const scrolled = useScroll(50);
@@ -34,7 +34,13 @@ export default function Navbar({ currentUser }: { currentUser: CurrentUser }) {
           </Link>
           <div className=" flex items-center gap-x-2">
             <ThemeToggle />
-            {currentUser ? <UserNav user={currentUser} /> : <SignInModal />}
+            {currentUser ? (
+              <UserNav user={currentUser} />
+            ) : (
+              <Link href="/signin" className={buttonVariants()}>
+                Sign In
+              </Link>
+            )}
           </div>
         </div>
       </div>
