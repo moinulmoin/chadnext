@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import AuthForm from "~/components/layout/auth-form";
 
-export default function page() {
+export default function Signin() {
   return (
     <Card className="flex min-h-[calc(100vh-140px)] items-center justify-center md:min-h-[calc(100vh-160px)]">
       <CardContent className="w-[400px]">
