@@ -44,7 +44,7 @@ export default function ImageUploadModal() {
 
   const { startUpload } = useUploadThing({
     endpoint: "imageUploader",
-    onClientUploadComplete: async () => {
+    onClientUploadComplete: () => {
       setIsUploading(false);
       router.refresh();
       toast({

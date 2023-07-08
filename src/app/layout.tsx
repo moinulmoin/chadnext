@@ -16,7 +16,14 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  keywords: ["Next.js", "shadcn/ui", "NextAuth", "Prisma", "Vercel"],
+  keywords: [
+    "Next.js",
+    "shadcn/ui",
+    "NextAuth",
+    "Prisma",
+    "Vercel",
+    "Tailwind",
+  ],
   authors: [
     {
       name: "moinulmoin",

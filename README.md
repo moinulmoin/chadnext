@@ -1,5 +1,5 @@
 <a href="https://chadnext.moinulmoin.com">
-  <img alt="Precedent – Building blocks for your Next.js project" src="https://repository-images.githubusercontent.com/644861240/6456392e-a1d1-40b3-876f-62aff274b3ae">
+  <img alt="Precedent – Building blocks for your Next.js project" src="https://repository-images.githubusercontent.com/644861240/ca9f83d7-ea55-4078-aa27-c9948fd780a1">
 </a>
 
 # ChadNext ✨
@@ -59,14 +59,6 @@ You can deploy the template with one click!
 
 A: ChadNext provides a comprehensive set of features, including a UI component library, authentication, database integration, analytics, and deployment. It offers a quick start with a minimal setup, leveraging the power of Next.js, a full-stack React framework. TypeScript ensures type safety, and linting and formatting tools maintain code consistency and readability. I didn't find any template combining all of these together. That's why I connected the dots and made ChadNext.
 
-**Q: Why isn't a specific feature or tool included in ChadNext?**
-
-A: ChadNext aims to provide a lightweight template with essential features. Additional features and tools can be customized and added based on project requirements. The flexibility allows developers to choose and integrate their preferred tools or libraries according to their specific needs and preferences. ChadNext encourages modular development practices, enabling easy addition or removal of features as the project evolves.
-
-**Q: Why it has no state management tool?**
-
-A: With Nextjs 13 App Directory, you would hardly feel the necessity of a state management library. If you need any, feel free to add one you prefer. [Zustand](https://github.com/pmndrs/zustand) or [Jotai](https://jotai.org/) is hgihly recommended.
-
 ## Stay Tuned for More! 📢
 
 If you find this template useful, please consider giving it a star ⭐️ to show your support. And don't forget to watch this repo to stay updated on future releases!
@@ -87,6 +79,6 @@ If you'd like to contribute to ChadNext, please follow these steps:
 
 ChadNext is licensed under the MIT License. See [LICENSE](https://github.com/moinulmoin/chadnext/blob/main/LICENSE) for more information.
 
-## Author
+## Author ✍️
 
-- Moinul Moin ([@immoinulmoin](https://twitter.com/immoinulmoin)). You can follow me on twitter to get all the updates.
+- Moinul Moin ([@immoinulmoin](https://twitter.com/immoinulmoin)). Follow me on twitter for all the latest updates or [check here](https://chadnext.moinulmoin.com/changelog)

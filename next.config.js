@@ -12,4 +12,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withContentlayer(withPWA(nextConfig));
+module.exports = withPWA(withContentlayer(nextConfig));
