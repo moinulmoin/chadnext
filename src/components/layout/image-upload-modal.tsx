@@ -18,12 +18,11 @@ import {
 import { useUploadThing } from "~/lib/uploadthing";
 import Icons from "../shared/icons";
 import { Button } from "../ui/button";
-import { useToast } from "../ui/use-toast";
+import { toast } from "../ui/use-toast";
 
 const fileTypes = ["image"];
 
 export default function ImageUploadModal() {
-  const { toast } = useToast();
   const router = useRouter();
 
   const [files, setFiles] = useState<File[]>([]);
@@ -45,7 +44,7 @@ export default function ImageUploadModal() {
 
   const { startUpload } = useUploadThing({
     endpoint: "imageUploader",
-    onClientUploadComplete: async () => {
+    onClientUploadComplete: () => {
       setIsUploading(false);
       router.refresh();
       toast({
@@ -88,7 +87,7 @@ export default function ImageUploadModal() {
             variant="ghost"
             className="text-xs hover:bg-transparent hover:text-white"
           >
-            <Icons.edit className="mr-1 h-3 w-3" /> Change
+            <Icons.edit className="mr-1 h-3 w-3" />
           </Button>
         </div>
       </DialogTrigger>
@@ -135,9 +134,9 @@ export default function ImageUploadModal() {
             >
               <input className="" {...getInputProps()} />
               <div className=" space-y-2 text-center">
-                <div className="flex cursor-pointer flex-col items-center">
+                <div className="flex cursor-pointer flex-col items-center gap-y-2">
                   <span className=" text-sm">Drop Here</span>
-                  <Icons.download size={50} />
+                  <Icons.download size={40} />
                 </div>
                 <p className=" text-muted-foreground">OR</p>
                 <p className=" cursor-pointer text-sm">Click here</p>

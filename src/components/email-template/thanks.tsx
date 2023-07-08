@@ -15,7 +15,7 @@ import {
   Text,
 } from "@react-email/components";
 
-interface EmailTemplateProps {
+interface ThanksTemplateProps {
   userName: string;
 }
 
@@ -23,12 +23,12 @@ const baseUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "https://chadnext.moinulmoin.com/";
 
-export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
+export const ThanksTemp: React.FC<Readonly<ThanksTemplateProps>> = ({
   userName,
 }) => (
   <Html>
     <Head />
-    <Preview>Build your next.js app 10x faster with ChadNext</Preview>
+    <Preview>Welcome to ChadNext.</Preview>
     <Tailwind>
       <Body className="bg-white">
         <Container className="mx-auto py-20">
@@ -49,8 +49,8 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
           </Section>
           <Text className="my-4 text-base leading-6">Hi {userName},</Text>
           <Text className="text-base leading-6">
-            Welcome to ChadNext. Now you can save your time and develop your
-            full stack app 10x faster.
+            Welcome to ChadNext. Now you can build your Next.js project 10x
+            faster.
           </Text>
           <Section className="mt-8 text-center">
             <Button
@@ -65,8 +65,8 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
             <br />
             ChadNext team
           </Text>
-          <Hr className="my-8 border-gray-300" />
-          <Text className="text-sm text-gray-600">
+          <Hr className="my-6 border-gray-300" />
+          <Text className="text-x text-gray-600">
             Developed by{" "}
             <Link href="https://twitter.com/immoinulmoin">Moinul Moin</Link>
           </Text>
@@ -75,5 +75,3 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
     </Tailwind>
   </Html>
 );
-
-export default EmailTemplate;

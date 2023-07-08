@@ -16,7 +16,14 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  keywords: ["Next.js", "shadcn/ui", "NextAuth", "Prisma", "Vercel"],
+  keywords: [
+    "Next.js",
+    "shadcn/ui",
+    "NextAuth",
+    "Prisma",
+    "Vercel",
+    "Tailwind",
+  ],
   authors: [
     {
       name: "moinulmoin",
@@ -56,7 +63,7 @@ export const metadata: Metadata = {
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
-  manifest: `${siteConfig.url}/site.webmanifest`,
+  manifest: `${siteConfig.url}/manifest.json`,
   metadataBase: new URL(siteConfig.url),
 };
 

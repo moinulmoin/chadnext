@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from "next/server";
+import Logo from "../../public/chad-next.png";
 
 export const runtime = "edge";
 export const alt = "ChadNext - Quick Starter Template for your Next.js project";
@@ -22,10 +23,7 @@ export default async function OG() {
         }}
       >
         <img
-          src={new URL(
-            "../../public/chad-next.png",
-            import.meta.url
-          ).toString()}
+          src={process.env.NEXTAUTH_URL + Logo.src}
           alt="ChadNext Logo"
           tw="w-20 h-20 mb-4 opacity-95"
           width={80}
@@ -33,7 +31,7 @@ export default async function OG() {
         />
         <h1
           style={{
-            fontSize: "100px",
+            fontSize: "80px",
             fontWeight: 900,
             background:
               "linear-gradient(to bottom right, #000000 21.66%, #78716c 86.47%)",
@@ -55,7 +53,6 @@ export default async function OG() {
         >
           Quick Starter Template for your Next.js project
         </h2>
-        <p>Developed by Moinul Moin</p>
       </div>
     ),
     {

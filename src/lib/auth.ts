@@ -1,11 +1,44 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { type NextAuthOptions } from "next-auth";
+import EmailProvider, {
+  type SendVerificationRequestParams,
+} from "next-auth/providers/email";
 import GithubProvider from "next-auth/providers/github";
 import db from "~/lib/db";
+import { sendMail } from "~/lib/resend";
+
+const sendVerificationRequest = async ({
+  identifier,
+  url,
+}: SendVerificationRequestParams) => {
+  const user = await db.user.findFirst({
+    where: {
+      email: identifier,
+    },
+    select: {
+      emailVerified: true,
+      name: true,
+    },
+  });
+
+  if (!Boolean(user?.emailVerified)) {
+    await sendMail({
+      toMail: identifier,
+      type: "verification",
+      data: {
+        name: user?.name as string,
+        url,
+      },
+    });
+  }
+};
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   providers: [
+    EmailProvider({
+      sendVerificationRequest,
+    }),
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
@@ -50,20 +83,13 @@ export const authOptions: NextAuthOptions = {
   events: {
     async signIn({ user, isNewUser }) {
       if (user && isNewUser) {
-        try {
-          await fetch(process.env.NEXTAUTH_URL + "/api/send-mail", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: user.email,
-              name: user.name,
-            }),
-          });
-        } catch (error) {
-          console.error(error);
-        }
+        await sendMail({
+          toMail: user.email as string,
+          type: "new-signin",
+          data: {
+            name: user.name as string,
+          },
+        });
       }
     },
   },

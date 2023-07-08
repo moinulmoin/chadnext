@@ -35,6 +35,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# custom workspace settings
 .vscode
 
-pnpm-lock.yaml
+# contentlayer
+.contentlayer
+
+# worker
+sw.*
+workbox-*.*

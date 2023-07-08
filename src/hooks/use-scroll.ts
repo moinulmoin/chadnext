@@ -8,6 +8,10 @@ export default function useScroll(threshold: number) {
   }, [threshold]);
 
   useEffect(() => {
+    onScroll();
+  }, [onScroll]);
+
+  useEffect(() => {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, [onScroll]);
