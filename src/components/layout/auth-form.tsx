@@ -11,6 +11,7 @@ import { cn } from "~/lib/utils";
 import Icons from "../shared/icons";
 import { Input } from "../ui/input";
 import { toast } from "../ui/use-toast";
+import { useSearchParams } from "next/navigation";
 
 const userAuthSchema = z.object({
   email: z.string().email("Please enter a valid email address."),
@@ -21,6 +22,8 @@ type FormData = z.infer<typeof userAuthSchema>;
 export default function AuthForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGithubLoading, setIsGithubLoading] = useState(false);
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const {
     register,
@@ -37,6 +40,7 @@ export default function AuthForm() {
     const res = await signIn("email", {
       email: data.email.toLowerCase(),
       redirect: false,
+      callbackUrl,
     });
 
     setIsLoading(false);
@@ -101,7 +105,7 @@ export default function AuthForm() {
         className={cn(buttonVariants({ variant: "outline" }))}
         onClick={() => {
           setIsGithubLoading(true);
-          signIn("github");
+          signIn("github", { callbackUrl });
         }}
         disabled={isLoading || isGithubLoading}
       >

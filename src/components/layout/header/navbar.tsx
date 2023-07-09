@@ -8,9 +8,14 @@ import { type CurrentUser } from "~/types";
 import ThemeToggle from "../../shared/theme-toggle";
 import UserNav from "../user-nav";
 import { buttonVariants } from "~/components/ui/button";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export default function Navbar({ currentUser }: { currentUser: CurrentUser }) {
   const scrolled = useScroll(50);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const callbackUrl = `${pathname}?${searchParams.toString()}`;
+
   return (
     <header
       className={cn(
@@ -37,7 +42,13 @@ export default function Navbar({ currentUser }: { currentUser: CurrentUser }) {
             {currentUser ? (
               <UserNav user={currentUser} />
             ) : (
-              <Link href="/signin" className={buttonVariants()}>
+              <Link
+                href={{
+                  pathname: `/signin`,
+                  query: { callbackUrl },
+                }}
+                className={buttonVariants()}
+              >
                 Sign In
               </Link>
             )}
