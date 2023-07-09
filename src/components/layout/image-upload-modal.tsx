@@ -2,8 +2,8 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import type { FileWithPath } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
 import { generateClientDropzoneAccept } from "uploadthing/client";
@@ -16,21 +16,26 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import { useUploadThing } from "~/lib/uploadthing";
+import { hasFileNameSpaces } from "~/lib/utils";
+import { updateUserImageInDb } from "~/server/actions";
 import Icons from "../shared/icons";
 import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
 
 const fileTypes = ["image"];
 
-export default function ImageUploadModal() {
+export default function ImageUploadModal({ userId }: { userId: string }) {
   const router = useRouter();
+  const pathname = usePathname();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, startTransition] = useTransition();
 
   const [files, setFiles] = useState<File[]>([]);
   const [preview, setPreview] = useState<string | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
+    if (acceptedFiles.length === 0) return;
     setFiles(acceptedFiles);
     setPreview(URL.createObjectURL(acceptedFiles[0]));
   }, []);
@@ -40,31 +45,63 @@ export default function ImageUploadModal() {
     accept: fileTypes ? generateClientDropzoneAccept(fileTypes) : undefined,
     maxFiles: 1,
     multiple: false,
+    validator(file) {
+      if (hasFileNameSpaces(file.name)) {
+        return {
+          code: "Spaces in file name",
+          message: "Spaces in file names are not acceptable!",
+        };
+      }
+      return null;
+    },
   });
 
-  const { startUpload } = useUploadThing({
-    endpoint: "imageUploader",
-    onClientUploadComplete: () => {
-      setIsUploading(false);
-      router.refresh();
-      toast({
-        title: "Image Updated successfully!",
-      });
-      setShowModal(false);
-    },
-    onUploadError: () => {
-      setIsUploading(false);
-      toast({
-        title: "Error occurred while updating!",
-        variant: "destructive",
-      });
-    },
-  });
+  const { startUpload, isUploading, permittedFileInfo } = useUploadThing(
+    "imageUploader",
+    {
+      onClientUploadComplete: (res) => {
+        toast({
+          title: "Uploaded successfully!",
+        });
+        if (res) {
+          startTransition(() =>
+            updateUserImageInDb(userId, {
+              url: res[0].fileUrl,
+              key: res[0].fileKey,
+            })
+              .then(() => {
+                toast({
+                  title: "Updated successfully!",
+                });
+                router.push(pathname);
+              })
+              .catch(() => {
+                toast({
+                  title: "Error occurred while updating!",
+                  variant: "destructive",
+                });
+              })
+              .finally(() => {
+                setShowModal(false);
+              })
+          );
+        }
+      },
+      onUploadError: () => {
+        toast({
+          title: "Error occurred while uploading!",
+          variant: "destructive",
+        });
+      },
+    }
+  );
 
   const handleCancel = useCallback(() => {
-    setFiles([]);
-    URL.revokeObjectURL(preview as string);
-    setPreview(null);
+    if (preview) {
+      setFiles([]);
+      URL.revokeObjectURL(preview);
+      setPreview(null);
+    }
   }, [preview]);
 
   useEffect(() => {
@@ -74,7 +111,6 @@ export default function ImageUploadModal() {
   }, [handleCancel, showModal]);
 
   const handleUpload = () => {
-    setIsUploading(true);
     startUpload(files);
   };
 
@@ -93,7 +129,7 @@ export default function ImageUploadModal() {
       </DialogTrigger>
       <DialogContent className="max-w-[450px]">
         <DialogHeader>
-          <DialogTitle>Upload</DialogTitle>
+          <DialogTitle>Image Upload</DialogTitle>
         </DialogHeader>
         <div>
           {preview ? (
@@ -129,13 +165,13 @@ export default function ImageUploadModal() {
             </div>
           ) : (
             <div
-              className=" flex h-60 items-center justify-center border border-dashed "
+              className=" flex h-60 items-center justify-center border border-dashed focus-visible:outline-none "
               {...getRootProps()}
             >
               <input className="" {...getInputProps()} />
               <div className=" space-y-2 text-center">
                 <div className="flex cursor-pointer flex-col items-center gap-y-2">
-                  <span className=" text-sm">Drop Here</span>
+                  <span className=" text-md">Drop Here</span>
                   <Icons.download size={40} />
                 </div>
                 <p className=" text-muted-foreground">OR</p>
@@ -145,9 +181,16 @@ export default function ImageUploadModal() {
           )}
         </div>
         <DialogFooter>
-          <p className=" text-xs">
-            Only images are supported. Max file size is 4MB.
-          </p>
+          <div className=" text-right text-xs leading-normal">
+            <p>
+              <span className=" text-sm text-destructive">*</span>
+              {`Only Images are supported. Max file size is ${permittedFileInfo?.config.image?.maxFileSize}.`}
+            </p>
+            <p>
+              <span className=" text-sm text-destructive">*</span>
+              <strong>File name with spaces is not acceptable</strong>!
+            </p>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

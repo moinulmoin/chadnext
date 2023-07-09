@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { useEffect, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import ImageUploadModal from "~/components/layout/image-upload-modal";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
@@ -18,7 +19,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import { toast } from "~/components/ui/use-toast";
-import { updateUserToDb } from "~/server/actions";
+import { updateUserInDb } from "~/server/actions";
 import { type CurrentUser } from "~/types";
 
 const settingsSchema = z.object({
@@ -71,7 +72,7 @@ export default function SettingsForm({
 
   function onSubmit(data: SettingsValues) {
     startTransition(() =>
-      updateUserToDb(currentUser.id, data)
+      updateUserInDb(currentUser.id, data)
         .then(() => {
           toast({
             title: "Updated successfully.",
@@ -88,15 +89,14 @@ export default function SettingsForm({
 
   return (
     <Form {...form}>
-      <Avatar className="group relative mb-5 h-28  w-28 rounded-full">
+      <Avatar className="group relative h-28  w-28 rounded-full">
         <AvatarImage src={image} />
         <AvatarFallback>{name?.[0]}</AvatarFallback>
-        {/* TODO: fix uploadthing api issue */}
-        {/* <ImageUploadModal /> */}
+        <ImageUploadModal userId={currentUser.id} />
       </Avatar>
-      {/* <p className="mt-3.5 text-xs text-muted-foreground">
+      <p className="mb-5 mt-3.5 text-xs text-muted-foreground">
         Click on the avatar to change it.
-      </p> */}
+      </p>
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
         <FormField
