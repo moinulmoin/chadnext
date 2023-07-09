@@ -53,7 +53,6 @@ export async function updateUserImage(
     if (isOurCdnUrl(currentImageUrl)) {
       const parts = currentImageUrl?.split("/");
       const currentImageFileKey = parts?.at(-1);
-      console.log("currentImageFileKey", currentImageFileKey);
 
       await utapi.deleteFiles(currentImageFileKey as string);
     }
