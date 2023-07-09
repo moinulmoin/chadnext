@@ -1,22 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "~/components/ui/dialog";
 import AuthForm from "./auth-form";
+import { useRouter } from "next/navigation";
 
 export default function SignInModal() {
+  const router = useRouter();
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>Sign In</Button>
-      </DialogTrigger>
+    <Dialog open onOpenChange={() => router.back()}>
       <DialogContent className="max-w-[400px]">
         <DialogHeader>
           <DialogTitle>
