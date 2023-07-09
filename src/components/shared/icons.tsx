@@ -10,6 +10,7 @@ import {
   File,
   FileText,
   HelpCircle,
+  Home,
   Image,
   Laptop,
   Loader2,
@@ -24,6 +25,7 @@ import {
   User,
   X,
   type Icon as LucideIcon,
+  LayoutDashboard,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -64,6 +66,8 @@ const Icons = {
   laptop: Laptop,
   download: DownloadCloud,
   edit: Edit3,
+  home: Home,
+  dashboard: LayoutDashboard,
   gitHub: (props: LucideProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path

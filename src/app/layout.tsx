@@ -23,6 +23,7 @@ export const metadata: Metadata = {
     "Prisma",
     "Vercel",
     "Tailwind",
+    "Radix UI",
   ],
   authors: [
     {

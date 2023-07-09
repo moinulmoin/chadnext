@@ -21,16 +21,14 @@ const sendVerificationRequest = async ({
     },
   });
 
-  if (!Boolean(user?.emailVerified)) {
-    await sendMail({
-      toMail: identifier,
-      type: "verification",
-      data: {
-        name: user?.name as string,
-        url,
-      },
-    });
-  }
+  await sendMail({
+    toMail: identifier,
+    type: "verification",
+    data: {
+      name: user?.name as string,
+      url,
+    },
+  });
 };
 
 export const authOptions: NextAuthOptions = {

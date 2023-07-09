@@ -4,15 +4,26 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { buttonVariants } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
+import Icons from "../shared/icons";
+
+const navItems = [
+  {
+    title: "Overview",
+    href: "/dashboard",
+    icon: Icons.dashboard,
+  },
+  {
+    title: "Settings",
+    href: "/dashboard/settings",
+    icon: Icons.settings,
+  },
+];
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
-  items: {
-    href: string;
-    title: string;
-  }[];
+  className?: string;
 }
 
-export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
+export function SidebarNav({ className, ...props }: SidebarNavProps) {
   const pathname = usePathname();
 
   return (
@@ -23,7 +34,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
       )}
       {...props}
     >
-      {items.map((item) => (
+      {navItems.map((item) => (
         <Link
           key={item.href}
           href={item.href}
@@ -35,7 +46,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
             "justify-start"
           )}
         >
-          {item.title}
+          {<item.icon className=" mr-2 h-4 w-4" />} {item.title}
         </Link>
       ))}
     </nav>

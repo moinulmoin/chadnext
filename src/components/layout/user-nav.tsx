@@ -1,5 +1,4 @@
-import { LogOut, User } from "lucide-react";
-
+import { LayoutDashboardIcon, LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
@@ -37,7 +36,7 @@ export default function UserNav({ user }: { user: CurrentUser }) {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/dashboard">
-            <User className="mr-2 h-4 w-4" />
+            <LayoutDashboardIcon className="mr-2 h-4 w-4" />
             <span>Dashboard</span>
           </Link>
         </DropdownMenuItem>
