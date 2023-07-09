@@ -83,17 +83,17 @@ export const authOptions: NextAuthOptions = {
       };
     },
   },
-  // events: {
-  //   async signIn({ user, isNewUser }) {
-  //     if (user && isNewUser) {
-  //       await sendMail({
-  //         toMail: user.email as string,
-  //         type: "new-signin",
-  //         data: {
-  //           name: user.name as string,
-  //         },
-  //       });
-  //     }
-  //   },
-  // },
+  events: {
+    async signIn({ user, isNewUser }) {
+      if (user && isNewUser) {
+        await sendMail({
+          toMail: user.email as string,
+          type: "new-signin",
+          data: {
+            name: user.name as string,
+          },
+        });
+      }
+    },
+  },
 };
