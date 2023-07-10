@@ -12,7 +12,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@ducanh2912/next-pwa": "^9.0.1",
+    "@ducanh2912/next-pwa": "^9.1.4",
     "@hookform/resolvers": "^3.1.0",
     "@next-auth/prisma-adapter": "^1.0.6",
     "@prisma/client": "^4.14.1",
