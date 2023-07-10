@@ -34,26 +34,30 @@ export default function AuthForm() {
   async function onSubmit(data: FormData) {
     setIsLoading(true);
 
-    const res = await signIn("email", {
-      email: data.email.toLowerCase(),
-      redirect: false,
-    });
-
-    setIsLoading(false);
-
-    if (!res?.ok) {
-      return toast({
-        title: "Something went wrong.",
-        description: "Your signin request failed. Please try again.",
-        variant: "destructive",
+    try {
+      const res = await signIn("email", {
+        email: data.email.toLowerCase(),
+        redirect: false,
       });
-    } else {
+
+      if (!res?.ok) {
+        throw new Error("Something went wrong.");
+      }
+
       toast({
         title: "Check your email",
         description:
           "We sent you a sign in link. Be sure to check your spam too.",
       });
-      return reset();
+      reset();
+    } catch (err) {
+      toast({
+        title: "Something went wrong.",
+        description: "Your signin request failed. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
   }
   return (

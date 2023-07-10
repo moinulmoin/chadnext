@@ -70,8 +70,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  signinDialog,
 }: {
   children: React.ReactNode;
+  signinDialog: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -79,7 +81,10 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="fixed h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-100 dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-900 dark:to-slate-900" />
           <Header />
-          <main className="relative z-10">{children}</main>
+          <main className="relative z-10">
+            {children}
+            {signinDialog}
+          </main>
           <Footer />
           <Toaster />
         </ThemeProvider>
