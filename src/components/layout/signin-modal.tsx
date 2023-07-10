@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -8,26 +8,18 @@ import {
   DialogTitle,
 } from "~/components/ui/dialog";
 import AuthForm from "./auth-form";
-import { useRouter } from "next/navigation";
 
 export default function SignInModal() {
   const router = useRouter();
 
   return (
     <Dialog open onOpenChange={() => router.back()}>
-      <DialogContent className="max-w-[400px]">
+      <DialogContent className="w-full max-w-[400px] rounded-md">
         <DialogHeader>
           <DialogTitle>
-            <div className="flex items-center">
-              <Image
-                src="/chad-next.png"
-                alt="ChadNext logo"
-                width="24"
-                height="24"
-                className="mr-2 rounded-sm object-contain"
-              />
-              <p>ChadNext</p>
-            </div>
+            <h2 className=" font-semibold tracking-tight transition-colors">
+              Welcome Back 👋
+            </h2>
           </DialogTitle>
         </DialogHeader>
         <AuthForm />

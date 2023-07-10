@@ -2,19 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { buttonVariants } from "~/components/ui/button";
 import useScroll from "~/hooks/use-scroll";
 import { cn } from "~/lib/utils";
 import { type CurrentUser } from "~/types";
 import ThemeToggle from "../../shared/theme-toggle";
 import UserNav from "../user-nav";
-import { buttonVariants } from "~/components/ui/button";
-import { usePathname, useSearchParams } from "next/navigation";
 
 export default function Navbar({ currentUser }: { currentUser: CurrentUser }) {
   const scrolled = useScroll(50);
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const callbackUrl = `${pathname}?${searchParams.toString()}`;
 
   return (
     <header
@@ -42,13 +38,7 @@ export default function Navbar({ currentUser }: { currentUser: CurrentUser }) {
             {currentUser ? (
               <UserNav user={currentUser} />
             ) : (
-              <Link
-                href={{
-                  pathname: `/signin`,
-                  query: { callbackUrl },
-                }}
-                className={buttonVariants()}
-              >
+              <Link href="/signin" className={buttonVariants()}>
                 Sign In
               </Link>
             )}

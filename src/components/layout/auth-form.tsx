@@ -11,7 +11,6 @@ import { cn } from "~/lib/utils";
 import Icons from "../shared/icons";
 import { Input } from "../ui/input";
 import { toast } from "../ui/use-toast";
-import { useSearchParams } from "next/navigation";
 
 const userAuthSchema = z.object({
   email: z.string().email("Please enter a valid email address."),
@@ -22,8 +21,6 @@ type FormData = z.infer<typeof userAuthSchema>;
 export default function AuthForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGithubLoading, setIsGithubLoading] = useState(false);
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const {
     register,
@@ -37,27 +34,30 @@ export default function AuthForm() {
   async function onSubmit(data: FormData) {
     setIsLoading(true);
 
-    const res = await signIn("email", {
-      email: data.email.toLowerCase(),
-      redirect: false,
-      callbackUrl,
-    });
-
-    setIsLoading(false);
-
-    if (!res?.ok) {
-      return toast({
-        title: "Something went wrong.",
-        description: "Your signin request failed. Please try again.",
-        variant: "destructive",
+    try {
+      const res = await signIn("email", {
+        email: data.email.toLowerCase(),
+        redirect: false,
       });
-    } else {
+
+      if (!res?.ok) {
+        throw new Error("Something went wrong.");
+      }
+
       toast({
         title: "Check your email",
         description:
           "We sent you a sign in link. Be sure to check your spam too.",
       });
-      return reset();
+      reset();
+    } catch (err) {
+      toast({
+        title: "Something went wrong.",
+        description: "Your signin request failed. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
   }
   return (
@@ -105,7 +105,7 @@ export default function AuthForm() {
         className={cn(buttonVariants({ variant: "outline" }))}
         onClick={() => {
           setIsGithubLoading(true);
-          signIn("github", { callbackUrl });
+          signIn("github");
         }}
         disabled={isLoading || isGithubLoading}
       >
