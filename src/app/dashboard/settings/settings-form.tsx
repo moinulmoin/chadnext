@@ -89,16 +89,20 @@ export default function SettingsForm({
 
   return (
     <Form {...form}>
-      <Avatar className="group relative h-28  w-28 rounded-full">
-        <AvatarImage src={image} />
-        <AvatarFallback>{name?.[0]}</AvatarFallback>
-        <ImageUploadModal userId={currentUser.id} />
-      </Avatar>
-      <p className="mb-5 mt-3.5 text-xs text-muted-foreground">
-        Click on the avatar to change it.
-      </p>
-
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="max-w-2xl space-y-8 "
+      >
+        <div>
+          <Avatar className="group relative h-28 w-28 rounded-full">
+            <AvatarImage src={image} />
+            <AvatarFallback>{name?.[0]}</AvatarFallback>
+            <ImageUploadModal userId={currentUser.id} />
+          </Avatar>
+          <p className="mt-4 text-xs text-muted-foreground">
+            Click on the avatar to change it.
+          </p>
+        </div>
         <FormField
           control={form.control}
           name="name"
