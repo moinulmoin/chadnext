@@ -1,12 +1,13 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { Loader2 } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useState, useTransition } from "react";
+import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
 import type { FileWithPath } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
+import { type ControllerRenderProps } from "react-hook-form";
 import { generateClientDropzoneAccept } from "uploadthing/client";
+import { type SettingsValues } from "~/app/dashboard/settings/settings-form";
 import {
   Dialog,
   DialogContent,
@@ -17,19 +18,17 @@ import {
 } from "~/components/ui/dialog";
 import { useUploadThing } from "~/lib/uploadthing";
 import { hasFileNameSpaces } from "~/lib/utils";
-import { updateUserImageInDb } from "~/server/actions";
 import Icons from "../shared/icons";
 import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
 
 const fileTypes = ["image"];
 
-export default function ImageUploadModal({ userId }: { userId: string }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_, startTransition] = useTransition();
-
+export default function ImageUploadModal({
+  onChange,
+}: {
+  onChange: ControllerRenderProps<SettingsValues, "image">["onChange"];
+}) {
   const [files, setFiles] = useState<File[]>([]);
   const [preview, setPreview] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -60,31 +59,12 @@ export default function ImageUploadModal({ userId }: { userId: string }) {
     "imageUploader",
     {
       onClientUploadComplete: (res) => {
-        toast({
-          title: "Uploaded successfully!",
-        });
         if (res) {
-          startTransition(() =>
-            updateUserImageInDb(userId, {
-              url: res[0].fileUrl,
-              key: res[0].fileKey,
-            })
-              .then(() => {
-                toast({
-                  title: "Updated successfully!",
-                });
-                router.push(pathname);
-              })
-              .catch(() => {
-                toast({
-                  title: "Error occurred while updating!",
-                  variant: "destructive",
-                });
-              })
-              .finally(() => {
-                setShowModal(false);
-              })
-          );
+          onChange(res[0].fileUrl);
+          toast({
+            title: "Uploaded successfully!",
+          });
+          setShowModal(false);
         }
       },
       onUploadError: () => {
@@ -134,11 +114,12 @@ export default function ImageUploadModal({ userId }: { userId: string }) {
         <div>
           {preview ? (
             <div className=" flex flex-col items-center justify-center">
-              <div className=" h-40 w-40 ">
-                <img
+              <div className=" relative h-40 w-40 ">
+                <Image
                   src={preview}
                   alt="File preview"
-                  className="h-full w-full rounded-full"
+                  className="rounded-full"
+                  fill
                   loading="lazy"
                 />
               </div>
@@ -146,8 +127,8 @@ export default function ImageUploadModal({ userId }: { userId: string }) {
                 <Button
                   disabled={isUploading}
                   onClick={handleCancel}
-                  className=" mr-2 text-destructive"
-                  variant="ghost"
+                  className="mr-10 text-destructive hover:text-destructive"
+                  variant="outline"
                 >
                   Cancel
                 </Button>
