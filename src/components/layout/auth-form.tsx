@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { buttonVariants } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
+import { saCheckEmailExists } from "~/server/actions";
 import Icons from "../shared/icons";
 import { Input } from "../ui/input";
 import { toast } from "../ui/use-toast";
@@ -34,31 +35,43 @@ export default function AuthForm() {
   async function onSubmit(data: FormData) {
     setIsLoading(true);
 
-    try {
-      const res = await signIn("email", {
-        email: data.email.toLowerCase(),
-        redirect: false,
-      });
+    saCheckEmailExists(data.email.toLowerCase())
+      .then(async () => {
+        try {
+          const res = await signIn("email", {
+            email: data.email.toLowerCase(),
+            redirect: false,
+          });
 
-      if (!res?.ok) {
-        throw new Error("Something went wrong.");
-      }
+          if (!res?.ok) {
+            throw new Error("Something went wrong.");
+          }
 
-      toast({
-        title: "Check your email",
-        description:
-          "We sent you a sign in link. Be sure to check your spam too.",
+          toast({
+            title: "Check your email",
+            description:
+              "We sent you a sign in link. Be sure to check your spam too.",
+          });
+          reset();
+        } catch (err) {
+          toast({
+            title: "Something went wrong.",
+            description: "Your signin request failed. Please try again.",
+            variant: "destructive",
+          });
+        } finally {
+          setIsLoading(false);
+        }
+      })
+      .catch(() => {
+        toast({
+          title: "Account not found.",
+          description:
+            "You have to use the email already linked to your account.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
       });
-      reset();
-    } catch (err) {
-      toast({
-        title: "Something went wrong.",
-        description: "Your signin request failed. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
   }
   return (
     <div className={cn("mt-4 flex flex-col gap-4")}>
@@ -76,19 +89,20 @@ export default function AuthForm() {
               {...register("email")}
             />
             {errors?.email && (
-              <p className="px-1 text-xs text-destructive">
+              <p className="mt-2 text-xs text-destructive">
                 {errors.email.message}
               </p>
             )}
           </div>
           <button
+            type="submit"
             className={cn(buttonVariants())}
             disabled={isLoading || isGithubLoading}
           >
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign In with Email
+            Send magic link
           </button>
         </div>
       </form>

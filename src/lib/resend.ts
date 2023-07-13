@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import { type ReactElement } from "react";
 import { Resend } from "resend";
 import { ThanksTemp } from "~/components/email-template/thanks";
@@ -5,11 +6,16 @@ import { VerificationTemp } from "~/components/email-template/verification";
 
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
+const randomId = crypto.randomBytes(8).toString("hex");
+
 interface Data {
   to: string;
   from: string;
   subject: string;
   react: ReactElement;
+  headers?: {
+    "X-Entity-Ref-ID": string | number;
+  };
 }
 
 interface SendMailProps {
@@ -41,6 +47,9 @@ export const sendMail = async ({ toMail, type, data }: SendMailProps) => {
       to: toMail,
       subject: subject,
       react: reactEl,
+      headers: {
+        "X-Entity-Ref-ID": randomId,
+      },
     } as Data);
   } catch (error) {
     console.error(error);

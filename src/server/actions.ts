@@ -2,11 +2,13 @@
 
 import { revalidatePath } from "next/cache";
 import { type payload } from "~/types";
+import { updateUser } from "./user";
+
 import {
+  checkEmailExists,
   removeNewImageFromCDN,
   removeUserOldImageCDN,
-  updateUser,
-} from "./user";
+} from "./utils";
 
 export async function saUpdateUserInDb(id: string, data: payload) {
   await updateUser(id, data);
@@ -20,4 +22,8 @@ export async function saRemoveUserOldImageFromCDN(id: string, image: string) {
 
 export async function saRemoveNewImageFromCDN(image: string) {
   await removeNewImageFromCDN(image);
+}
+
+export async function saCheckEmailExists(email: string) {
+  await checkEmailExists(email);
 }
