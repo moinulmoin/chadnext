@@ -7,15 +7,15 @@
     "build": "prisma generate && prisma db push && next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write ./src/**/*.{ts,tsx,js,jsx,json}",
+    "format": "prettier --write ./src/**/*.{ts,tsx,js,jsx}",
     "lint:fix": "eslint src/**/*.{js,jsx,ts,tsx} --fix",
     "prepare": "husky install"
   },
   "dependencies": {
-    "@ducanh2912/next-pwa": "^9.0.1",
+    "@ducanh2912/next-pwa": "^9.2.1",
     "@hookform/resolvers": "^3.1.1",
     "@next-auth/prisma-adapter": "^1.0.6",
-    "@prisma/client": "^4.14.1",
+    "@prisma/client": "^5.0.0",
     "@radix-ui/react-alert-dialog": "^1.0.4",
     "@radix-ui/react-avatar": "^1.0.2",
     "@radix-ui/react-dialog": "^1.0.3",
@@ -64,7 +64,7 @@
     "eslint": "8.43.0",
     "eslint-config-next": "13.4.7",
     "husky": "^8.0.3",
-    "prettier": "^3.0.0",
+    "prettier": "2.8.8",
     "prettier-plugin-tailwindcss": "^0.3.0"
   }
 }
