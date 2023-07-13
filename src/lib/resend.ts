@@ -1,23 +1,12 @@
 import crypto from "crypto";
-import { type ReactElement } from "react";
 import { Resend } from "resend";
+import { type CreateEmailOptions } from "resend/build/src/emails/interfaces";
 import { ThanksTemp } from "~/components/email-template/thanks";
 import { VerificationTemp } from "~/components/email-template/verification";
 
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
 const randomId = crypto.randomBytes(8).toString("hex");
-
-interface Data {
-  to: string;
-  from: string;
-  subject: string;
-  react: ReactElement;
-  headers?: {
-    "X-Entity-Ref-ID": string | number;
-  };
-}
-
 interface SendMailProps {
   toMail: string;
   type: "verification" | "new-signin";
@@ -50,7 +39,7 @@ export const sendMail = async ({ toMail, type, data }: SendMailProps) => {
       headers: {
         "X-Entity-Ref-ID": randomId,
       },
-    } as Data);
+    } as CreateEmailOptions);
   } catch (error) {
     console.error(error);
   }
