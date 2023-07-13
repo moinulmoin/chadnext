@@ -5,3 +5,10 @@ export type CurrentUser = {
   image: string;
   shortBio: string;
 };
+
+export interface payload {
+  name: string;
+  email: string;
+  shortBio: string;
+  image?: string;
+}

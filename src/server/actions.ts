@@ -1,21 +1,23 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { updateUser, updateUserImage, type payload } from "./user";
+import { type payload } from "~/types";
+import {
+  removeNewImageFromCDN,
+  removeUserOldImageCDN,
+  updateUser,
+} from "./user";
 
-export async function updateUserInDb(id: string, data: payload) {
-  "use server";
-
+export async function saUpdateUserInDb(id: string, data: payload) {
   await updateUser(id, data);
   revalidatePath("/dashboard/settings");
 }
 
-export async function updateUserImageInDb(
-  id: string,
-  data: { url: string; key: string }
-) {
-  "use server";
-
-  await updateUserImage(id, data);
+export async function saRemoveUserOldImageFromCDN(id: string, image: string) {
+  await removeUserOldImageCDN(id, image);
   revalidatePath("/dashboard/settings");
+}
+
+export async function saRemoveNewImageFromCDN(image: string) {
+  await removeNewImageFromCDN(image);
 }

@@ -2,15 +2,16 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { useEffect, useTransition } from "react";
+import dynamic from "next/dynamic";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import ImageUploadModal from "~/components/layout/image-upload-modal";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,10 +20,23 @@ import {
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import { toast } from "~/components/ui/use-toast";
-import { updateUserInDb } from "~/server/actions";
+import {
+  saRemoveNewImageFromCDN,
+  saRemoveUserOldImageFromCDN,
+  saUpdateUserInDb,
+} from "~/server/actions";
 import { type CurrentUser } from "~/types";
 
+const ImageUploadModal = dynamic(
+  () => import("~/components/layout/image-upload-modal")
+);
+
+const CancelConfirmModal = dynamic(
+  () => import("~/components/layout/cancel-confirm-modal")
+);
+
 const settingsSchema = z.object({
+  image: z.string().url(),
   name: z
     .string({
       required_error: "Please type your name.",
@@ -46,45 +60,84 @@ const settingsSchema = z.object({
     }),
 });
 
-type SettingsValues = z.infer<typeof settingsSchema>;
+export type SettingsValues = z.infer<typeof settingsSchema>;
 
 export default function SettingsForm({
   currentUser,
 }: {
   currentUser: CurrentUser;
 }) {
-  const [pending, startTransition] = useTransition();
+  const oldImage = useRef("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [pendingForSubmit, startTransitionForSubmit] = useTransition();
+
   const form = useForm<SettingsValues>({
     resolver: zodResolver(settingsSchema),
     mode: "onChange",
+    values: {
+      name: currentUser.name,
+      email: currentUser.email,
+      shortBio: currentUser.shortBio,
+      image: currentUser.image,
+    },
   });
 
-  const { reset, formState } = form;
-  const { name, email, shortBio, image } = currentUser;
+  const { formState, getFieldState } = form;
+  const { isDirty: isImageChanged } = getFieldState("image");
+
+  const [showConfirmAlert, setShowConfirmAlert] = useState(false);
 
   useEffect(() => {
-    reset({
-      name,
-      email,
-      shortBio,
-    });
-  }, [email, name, reset, shortBio]);
+    if (isImageChanged && currentUser.image !== oldImage.current) {
+      oldImage.current = currentUser.image;
+    }
+  }, [currentUser.image, isImageChanged]);
 
   function onSubmit(data: SettingsValues) {
-    startTransition(() =>
-      updateUserInDb(currentUser.id, data)
-        .then(() => {
-          toast({
-            title: "Updated successfully.",
-          });
-        })
-        .catch(() => {
-          toast({
-            title: "Something went wrong.",
-            variant: "destructive",
-          });
-        })
-    );
+    if (!formState.isDirty) return;
+
+    if (isImageChanged) {
+      startTransitionForSubmit(() =>
+        saRemoveUserOldImageFromCDN(currentUser.id, data.image)
+          .then(() => saUpdateUserInDb(currentUser.id, data))
+          .then(() => {
+            toast({
+              title: "Updated successfully!",
+            });
+          })
+          .catch(() => {
+            toast({
+              title: "Something went wrong.",
+              variant: "destructive",
+            });
+          })
+      );
+    } else {
+      startTransitionForSubmit(() =>
+        saUpdateUserInDb(currentUser.id, data)
+          .then(() => {
+            toast({
+              title: "Updated successfully!",
+            });
+          })
+          .catch(() => {
+            toast({
+              title: "Something went wrong.",
+              variant: "destructive",
+            });
+          })
+      );
+    }
+  }
+
+  function handleReset() {
+    if (isImageChanged) {
+      saRemoveNewImageFromCDN(form.getValues().image)
+        .then(() => form.reset())
+        .catch((error) => console.error(error));
+    } else {
+      form.reset();
+    }
   }
 
   return (
@@ -93,16 +146,27 @@ export default function SettingsForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="max-w-2xl space-y-8 "
       >
-        <div>
-          <Avatar className="group relative h-28 w-28 rounded-full">
-            <AvatarImage src={image} />
-            <AvatarFallback>{name?.[0]}</AvatarFallback>
-            <ImageUploadModal userId={currentUser.id} />
-          </Avatar>
-          <p className="mt-4 text-xs text-muted-foreground">
-            Click on the avatar to change it.
-          </p>
-        </div>
+        <FormField
+          control={form.control}
+          name="image"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Image</FormLabel>
+              <FormControl>
+                <Avatar className="group relative h-28 w-28 rounded-full">
+                  <AvatarImage src={field.value} alt={form.getValues().name} />
+                  <AvatarFallback className=" text-xs">
+                    {form.getValues().name}
+                  </AvatarFallback>
+                  <ImageUploadModal onChange={field.onChange} />
+                </Avatar>
+              </FormControl>
+              <FormDescription>
+                Click on the avatar to upload new one.
+              </FormDescription>
+            </FormItem>
+          )}
+        ></FormField>
         <FormField
           control={form.control}
           name="name"
@@ -152,16 +216,25 @@ export default function SettingsForm({
           )}
         />
 
-        <Button type="submit" disabled={!formState.isDirty}>
-          {pending ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Updating...
-            </>
-          ) : (
-            "Update"
-          )}
-        </Button>
+        <div>
+          <CancelConfirmModal
+            setShow={setShowConfirmAlert}
+            show={showConfirmAlert}
+            reset={handleReset}
+            isDirty={formState.isDirty}
+          />
+
+          <Button type="submit" disabled={!formState.isDirty}>
+            {formState.isSubmitting || pendingForSubmit ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Updating...
+              </>
+            ) : (
+              "Update"
+            )}
+          </Button>
+        </div>
       </form>
     </Form>
   );
