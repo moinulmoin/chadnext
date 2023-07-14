@@ -5,7 +5,6 @@ import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
@@ -25,7 +24,7 @@ import {
   saRemoveUserOldImageFromCDN,
   saUpdateUserInDb,
 } from "~/server/actions";
-import { type CurrentUser } from "~/types";
+import { settingsSchema, type CurrentUser, type SettingsValues } from "~/types";
 
 const ImageUploadModal = dynamic(
   () => import("~/components/layout/image-upload-modal")
@@ -35,41 +34,13 @@ const CancelConfirmModal = dynamic(
   () => import("~/components/layout/cancel-confirm-modal")
 );
 
-const settingsSchema = z.object({
-  image: z.string().url(),
-  name: z
-    .string({
-      required_error: "Please type your name.",
-    })
-    .min(3, {
-      message: "Name must be at least 3 characters.",
-    })
-    .max(50, {
-      message: "Name must be at most 50 characters.",
-    }),
-  email: z.string().email(),
-  shortBio: z
-    .string({
-      required_error: "Please type a short bio.",
-    })
-    .max(150, {
-      message: "Short bio must be at most 150 characters.",
-    })
-    .min(10, {
-      message: "Short bio must be at least 10 characters.",
-    }),
-});
-
-export type SettingsValues = z.infer<typeof settingsSchema>;
-
 export default function SettingsForm({
   currentUser,
 }: {
   currentUser: CurrentUser;
 }) {
   const oldImage = useRef("");
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [pendingForSubmit, startTransitionForSubmit] = useTransition();
+  const [pending, startTransition] = useTransition();
 
   const form = useForm<SettingsValues>({
     resolver: zodResolver(settingsSchema),
@@ -97,7 +68,7 @@ export default function SettingsForm({
     if (!formState.isDirty) return;
 
     if (isImageChanged) {
-      startTransitionForSubmit(() =>
+      startTransition(() =>
         saRemoveUserOldImageFromCDN(currentUser.id, data.image)
           .then(() => saUpdateUserInDb(currentUser.id, data))
           .then(() => {
@@ -113,7 +84,7 @@ export default function SettingsForm({
           })
       );
     } else {
-      startTransitionForSubmit(() =>
+      startTransition(() =>
         saUpdateUserInDb(currentUser.id, data)
           .then(() => {
             toast({
@@ -207,7 +178,7 @@ export default function SettingsForm({
               <FormControl>
                 <Textarea
                   placeholder="Tell us a little bit about yourself"
-                  className="resize-none"
+                  className="resize-none bg-background"
                   {...field}
                 />
               </FormControl>
@@ -224,8 +195,8 @@ export default function SettingsForm({
             isDirty={formState.isDirty}
           />
 
-          <Button type="submit" disabled={!formState.isDirty}>
-            {formState.isSubmitting || pendingForSubmit ? (
+          <Button type="submit" disabled={formState.isSubmitting || pending}>
+            {formState.isSubmitting || pending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Updating...
