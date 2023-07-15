@@ -7,7 +7,7 @@ import type { FileWithPath } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
 import { type ControllerRenderProps } from "react-hook-form";
 import { generateClientDropzoneAccept } from "uploadthing/client";
-import { type SettingsValues } from "~/app/dashboard/settings/settings-form";
+import { type SettingsValues } from "~/types";
 import {
   Dialog,
   DialogContent,

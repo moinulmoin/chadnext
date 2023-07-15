@@ -1,5 +1,5 @@
 ---
-title: Added New Settings page and more...
+title: Added New Settings page and more
 date: 2023-06-15
 version: 1.2.0
 ---
