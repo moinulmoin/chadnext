@@ -29,7 +29,7 @@
     "@uploadthing/react": "^5.1.0",
     "@vercel/analytics": "^1.0.1",
     "autoprefixer": "10.4.14",
-    "class-variance-authority": "^0.6.0",
+    "class-variance-authority": "^0.7.0",
     "clsx": "^1.2.1",
     "contentlayer": "^0.3.3",
     "date-fns": "^2.30.0",
