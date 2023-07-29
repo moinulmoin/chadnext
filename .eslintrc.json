@@ -26,6 +26,6 @@
     ]
   },
   "ignorePatterns": [
-    "next.config.js"
+    "*.config.js"
   ]
 }

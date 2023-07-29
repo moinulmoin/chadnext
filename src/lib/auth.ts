@@ -1,42 +1,48 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { type NextAuthOptions } from "next-auth";
-import EmailProvider, {
-  type SendVerificationRequestParams,
-} from "next-auth/providers/email";
+import { type SendVerificationRequestParams } from "next-auth/providers/email";
 import GithubProvider from "next-auth/providers/github";
 import db from "~/lib/db";
 import { sendMail } from "~/lib/resend";
 
 const sendVerificationRequest = async ({
-  identifier,
+  identifier: email,
   url,
 }: SendVerificationRequestParams) => {
   const user = await db.user.findFirst({
     where: {
-      email: identifier,
+      email,
     },
     select: {
-      emailVerified: true,
       name: true,
     },
   });
 
-  await sendMail({
-    toMail: identifier,
-    type: "verification",
-    data: {
-      name: user?.name as string,
-      url,
-    },
-  });
+  try {
+    await sendMail({
+      toMail: email,
+      type: "verification",
+      data: {
+        name: user?.name as string,
+        url,
+      },
+    });
+  } catch (error) {
+    throw new Error(JSON.stringify(error));
+  }
 };
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   providers: [
-    EmailProvider({
+    {
+      id: "resend",
+      type: "email",
+      name: "Email Provider",
+      server: null,
+      options: {},
       sendVerificationRequest,
-    }),
+    },
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,

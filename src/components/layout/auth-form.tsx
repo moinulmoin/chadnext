@@ -38,7 +38,7 @@ export default function AuthForm() {
     saCheckEmailExists(data.email.toLowerCase())
       .then(async () => {
         try {
-          const res = await signIn("email", {
+          const res = await signIn("resend", {
             email: data.email.toLowerCase(),
             redirect: false,
           });
