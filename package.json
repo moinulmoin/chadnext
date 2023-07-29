@@ -9,7 +9,7 @@
     "lint": "next lint",
     "format": "prettier --write ./src/**/*.{ts,tsx,js,jsx}",
     "lint:fix": "eslint src/**/*.{js,jsx,ts,tsx} --fix",
-    "prepare": "husky install"
+    "postinstall": "lefthook install"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^9.2.1",
@@ -62,7 +62,7 @@
     "@typescript-eslint/parser": "^5.59.7",
     "eslint": "8.43.0",
     "eslint-config-next": "13.4.7",
-    "husky": "^8.0.3",
+    "lefthook": "^1.4.7",
     "prettier": "2.8.8",
     "prettier-plugin-tailwindcss": "^0.3.0"
   }
