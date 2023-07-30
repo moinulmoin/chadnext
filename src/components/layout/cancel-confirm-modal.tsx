@@ -16,14 +16,14 @@ interface CancelConfirmModalProps {
   show: boolean;
   setShow: (show: boolean) => void;
   reset: () => void;
-  isDirty: boolean;
+  isDisabled: boolean;
 }
 
 export default function CancelConfirmModal({
   show,
   setShow,
   reset,
-  isDirty,
+  isDisabled,
 }: CancelConfirmModalProps) {
   return (
     <AlertDialog open={show} onOpenChange={setShow}>
@@ -32,7 +32,7 @@ export default function CancelConfirmModal({
           variant="outline"
           className="mr-4 text-destructive hover:text-destructive"
           type="reset"
-          disabled={!isDirty}
+          disabled={isDisabled}
         >
           Cancel
         </Button>
