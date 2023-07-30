@@ -99,6 +99,7 @@ export default function ImageUploadModal({
       <DialogTrigger asChild>
         <div className="absolute left-0 top-0 flex h-28 w-28 cursor-pointer items-center justify-center rounded-full bg-primary/40 text-white opacity-0 group-hover:opacity-100 dark:bg-secondary/40">
           <Button
+            type="button"
             size="sm"
             variant="ghost"
             className="text-xs hover:bg-transparent hover:text-white"
@@ -123,7 +124,7 @@ export default function ImageUploadModal({
                   loading="lazy"
                 />
               </div>
-              <div className=" mt-10">
+              <div className="mt-10 flex">
                 <Button
                   disabled={isUploading}
                   onClick={handleCancel}
