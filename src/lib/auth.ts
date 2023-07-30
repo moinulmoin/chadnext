@@ -1,6 +1,8 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { type NextAuthOptions } from "next-auth";
-import { type SendVerificationRequestParams } from "next-auth/providers/email";
+import EmailProvider, {
+  type SendVerificationRequestParams,
+} from "next-auth/providers/email";
 import GithubProvider from "next-auth/providers/github";
 import db from "~/lib/db";
 import { sendMail } from "~/lib/resend";
@@ -35,14 +37,9 @@ const sendVerificationRequest = async ({
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   providers: [
-    {
-      id: "resend",
-      type: "email",
-      name: "Email Provider",
-      server: null,
-      options: {},
+    EmailProvider({
       sendVerificationRequest,
-    },
+    }),
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
