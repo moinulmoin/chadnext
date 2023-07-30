@@ -48,7 +48,7 @@ export default function SettingsForm({
     values: {
       name: currentUser.name,
       email: currentUser.email,
-      shortBio: currentUser.shortBio,
+      shortBio: currentUser.shortBio || "",
       image: currentUser.image,
     },
   });

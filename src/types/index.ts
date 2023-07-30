@@ -29,15 +29,14 @@ export const settingsSchema = z.object({
     }),
   email: z.string().email(),
   shortBio: z
-    .string({
-      required_error: "Please type a short bio.",
-    })
+    .string()
     .max(150, {
       message: "Short bio must be at most 150 characters.",
     })
     .min(10, {
       message: "Short bio must be at least 10 characters.",
-    }),
+    })
+    .or(z.literal("")),
 });
 
 export type SettingsValues = z.infer<typeof settingsSchema>;
