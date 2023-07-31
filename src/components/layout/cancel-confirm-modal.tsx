@@ -28,12 +28,7 @@ export default function CancelConfirmModal({
   return (
     <AlertDialog open={show} onOpenChange={setShow}>
       <AlertDialogTrigger asChild>
-        <Button
-          variant="outline"
-          className="mr-4 text-destructive hover:text-destructive"
-          type="reset"
-          disabled={isDisabled}
-        >
+        <Button variant="destructive" type="reset" disabled={isDisabled}>
           Cancel
         </Button>
       </AlertDialogTrigger>

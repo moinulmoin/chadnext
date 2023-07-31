@@ -48,7 +48,7 @@ export default function SettingsForm({
     values: {
       name: currentUser.name,
       email: currentUser.email,
-      shortBio: currentUser.shortBio || "",
+      shortBio: currentUser.shortBio,
       image: currentUser.image,
     },
   });
@@ -187,7 +187,7 @@ export default function SettingsForm({
           )}
         />
 
-        <div className="flex">
+        <div className="inline-flex gap-x-4">
           <CancelConfirmModal
             setShow={setShowConfirmAlert}
             show={showConfirmAlert}

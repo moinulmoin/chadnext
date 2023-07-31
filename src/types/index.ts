@@ -11,7 +11,7 @@ export type CurrentUser = {
 export interface payload {
   name: string;
   email: string;
-  shortBio: string;
+  shortBio?: string;
   image?: string;
 }
 
@@ -28,15 +28,7 @@ export const settingsSchema = z.object({
       message: "Name must be at most 50 characters.",
     }),
   email: z.string().email(),
-  shortBio: z
-    .string()
-    .max(150, {
-      message: "Short bio must be at most 150 characters.",
-    })
-    .min(10, {
-      message: "Short bio must be at least 10 characters.",
-    })
-    .or(z.literal("")),
+  shortBio: z.string().optional(),
 });
 
 export type SettingsValues = z.infer<typeof settingsSchema>;

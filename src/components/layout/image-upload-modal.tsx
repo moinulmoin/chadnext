@@ -7,7 +7,6 @@ import type { FileWithPath } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
 import { type ControllerRenderProps } from "react-hook-form";
 import { generateClientDropzoneAccept } from "uploadthing/client";
-import { type SettingsValues } from "~/types";
 import {
   Dialog,
   DialogContent,
@@ -18,6 +17,7 @@ import {
 } from "~/components/ui/dialog";
 import { useUploadThing } from "~/lib/uploadthing";
 import { hasFileNameSpaces } from "~/lib/utils";
+import { type SettingsValues } from "~/types";
 import Icons from "../shared/icons";
 import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
@@ -124,7 +124,7 @@ export default function ImageUploadModal({
                   loading="lazy"
                 />
               </div>
-              <div className="mt-10 flex">
+              <div className="mt-10">
                 <Button
                   disabled={isUploading}
                   onClick={handleCancel}
