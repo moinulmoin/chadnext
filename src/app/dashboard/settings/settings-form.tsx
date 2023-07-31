@@ -187,15 +187,18 @@ export default function SettingsForm({
           )}
         />
 
-        <div>
+        <div className="inline-flex gap-x-4">
           <CancelConfirmModal
             setShow={setShowConfirmAlert}
             show={showConfirmAlert}
             reset={handleReset}
-            isDirty={formState.isDirty}
+            isDisabled={formState.isSubmitting || pending || !formState.isDirty}
           />
 
-          <Button type="submit" disabled={formState.isSubmitting || pending}>
+          <Button
+            type="submit"
+            disabled={formState.isSubmitting || pending || !formState.isDirty}
+          >
             {formState.isSubmitting || pending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
