@@ -26,7 +26,7 @@
     "@radix-ui/react-toast": "^1.1.4",
     "@react-email/components": "^0.0.7",
     "@tailwindcss/typography": "^0.5.9",
-    "@uploadthing/react": "^5.1.0",
+    "@uploadthing/react": "^5.2.0",
     "@vercel/analytics": "^1.0.1",
     "autoprefixer": "10.4.14",
     "class-variance-authority": "^0.7.0",
