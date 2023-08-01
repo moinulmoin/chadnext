@@ -49,7 +49,7 @@ dependencies:
     version: 0.5.9(tailwindcss@3.3.3)
   '@uploadthing/react':
     specifier: ^5.2.0
-    version: 5.2.0(react-dropzone@14.2.3)(react@18.2.0)(uploadthing@5.1.0)(zod@3.21.4)
+    version: 5.2.0(react-dropzone@14.2.3)(react@18.2.0)(uploadthing@5.2.1)(zod@3.21.4)
   '@vercel/analytics':
     specifier: ^1.0.1
     version: 1.0.1
@@ -123,8 +123,8 @@ dependencies:
     specifier: 5.1.6
     version: 5.1.6
   uploadthing:
-    specifier: ^5.1.0
-    version: 5.1.0(zod@3.21.4)
+    specifier: ^5.2.1
+    version: 5.2.1(zod@3.21.4)
   zod:
     specifier: ^3.21.4
     version: 3.21.4
@@ -3906,36 +3906,23 @@ packages:
     resolution: {integrity: sha512-nRcdyM622+GYT9SdaJIVLknqoc8i7krItinfuBPtvmPc+UNGDJ+pMkr4AatYp88cEc4iYtPlN8flJvZ3dNtgrg==}
     dev: false
 
-  /@uploadthing/react@5.2.0(react-dropzone@14.2.3)(react@18.2.0)(uploadthing@5.1.0)(zod@3.21.4):
+  /@uploadthing/react@5.2.0(react-dropzone@14.2.3)(react@18.2.0)(uploadthing@5.2.1)(zod@3.21.4):
     resolution: {integrity: sha512-kVM/3JZJhMgk2QGvyhyqPA5Zycq9TaqgCg/MNWvWDSgzw5MKeMyiXsEAJEQ7jO1BBjAfZ0O0NCM0VXCXuMLkPQ==}
     peerDependencies:
       react: ^17.0.2 || ^18.0.0
       react-dropzone: ^14.2.3
       uploadthing: ^5.0.0
     dependencies:
-      '@uploadthing/shared': 5.1.0(zod@3.21.4)
+      '@uploadthing/shared': 5.1.0(@uploadthing/mime-types@0.2.0)(zod@3.21.4)
       react: 18.2.0
       react-dropzone: 14.2.3(react@18.2.0)
-      uploadthing: 5.1.0(zod@3.21.4)
+      uploadthing: 5.2.1(zod@3.21.4)
     transitivePeerDependencies:
       - '@uploadthing/mime-types'
       - zod
     dev: false
 
-  /@uploadthing/shared@5.0.1(@uploadthing/mime-types@0.2.0)(zod@3.21.4):
-    resolution: {integrity: sha512-SMIM9Dyxu/LuKZCM0w/yCXL/wrZedUHKiEK022y5LXhbG7uApVFBPChC2+CCY7ZRU3O9sCCNsDj6OjdygIOEQw==}
-    peerDependencies:
-      '@uploadthing/mime-types': ^0.2.0
-      zod: ^3.21.4
-    peerDependenciesMeta:
-      '@uploadthing/mime-types':
-        optional: true
-    dependencies:
-      '@uploadthing/mime-types': 0.2.0
-      zod: 3.21.4
-    dev: false
-
-  /@uploadthing/shared@5.1.0(zod@3.21.4):
+  /@uploadthing/shared@5.1.0(@uploadthing/mime-types@0.2.0)(zod@3.21.4):
     resolution: {integrity: sha512-3pt9PFN0QuAvCv2LZyC66Bcn+zDUbh8Ws3noYHIlr2BFIvsH0zs2oVG+WXhb+9Nunu8+DER6iol7frza5rldIA==}
     peerDependencies:
       '@uploadthing/mime-types': ^0.2.0
@@ -3944,6 +3931,7 @@ packages:
       '@uploadthing/mime-types':
         optional: true
     dependencies:
+      '@uploadthing/mime-types': 0.2.0
       zod: 3.21.4
     dev: false
 
@@ -9297,11 +9285,11 @@ packages:
       picocolors: 1.0.0
     dev: false
 
-  /uploadthing@5.1.0(zod@3.21.4):
-    resolution: {integrity: sha512-adWd3D0/r25EspS1s+p2RLvSpDPLOQC+AM+mH1JomsTdEDiderjxMeo6juZUWnq96O/Dsumh97SeFJXDLWI+Qw==}
+  /uploadthing@5.2.1(zod@3.21.4):
+    resolution: {integrity: sha512-vav6UwvEOzBSoPYHGsM6PksyAmyUoPPylkcveTgAUWVS5kKWaaxcOlgStShveTUo3JnoKD2E9Z2+z1BWXALv8A==}
     dependencies:
       '@uploadthing/mime-types': 0.2.0
-      '@uploadthing/shared': 5.0.1(@uploadthing/mime-types@0.2.0)(zod@3.21.4)
+      '@uploadthing/shared': 5.1.0(@uploadthing/mime-types@0.2.0)(zod@3.21.4)
     transitivePeerDependencies:
       - zod
     dev: false
