@@ -39,7 +39,7 @@
     "next-contentlayer": "^0.3.3",
     "next-themes": "^0.2.1",
     "postcss": "8.4.24",
-    "prisma": "^5.0.0",
+    "prisma": "^5.1.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
