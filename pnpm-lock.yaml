@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@ducanh2912/next-pwa':
-    specifier: ^9.2.1
-    version: 9.2.1(esbuild@0.18.12)(next@13.4.12)
+    specifier: ^9.4.0
+    version: 9.4.0(esbuild@0.18.12)(next@13.4.12)(webpack@5.88.1)
   '@hookform/resolvers':
     specifier: ^3.1.1
     version: 3.1.1(react-hook-form@7.45.2)
@@ -1492,10 +1492,11 @@ packages:
       type-fest: 3.13.0
     dev: false
 
-  /@ducanh2912/next-pwa@9.2.1(esbuild@0.18.12)(next@13.4.12):
-    resolution: {integrity: sha512-oucSNTBMIWorSgDPyffsckBxDCvn23buLFfwdSwtQlKQXjg+L3fNXhj6vNKDzDXHvEimoQNP3Pn8xrl1s+5cdw==}
+  /@ducanh2912/next-pwa@9.4.0(esbuild@0.18.12)(next@13.4.12)(webpack@5.88.1):
+    resolution: {integrity: sha512-FFA8UpfKRPHkUk33lyh9Smp9q8/e1s4ezTSVQXLFhj86GmSaCA71oxqe9AIbusa/fDK/EZTmoHUmKpwl/6j7iw==}
     peerDependencies:
       next: '>=11.0.0'
+      webpack: '>=5.9.0'
     dependencies:
       clean-webpack-plugin: 4.0.0(webpack@5.88.1)
       fast-glob: 3.3.0
@@ -1513,7 +1514,6 @@ packages:
       - esbuild
       - supports-color
       - uglify-js
-      - webpack-cli
     dev: false
 
   /@effect-ts/core@0.60.5:
@@ -4366,8 +4366,8 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001515
-      electron-to-chromium: 1.4.405
-      node-releases: 2.0.12
+      electron-to-chromium: 1.4.459
+      node-releases: 2.0.13
       update-browserslist-db: 1.0.11(browserslist@4.21.5)
     dev: false
 
@@ -4936,10 +4936,6 @@ packages:
     hasBin: true
     dependencies:
       jake: 10.8.7
-    dev: false
-
-  /electron-to-chromium@1.4.405:
-    resolution: {integrity: sha512-JdDgnwU69FMZURoesf9gNOej2Cms1XJFfLk24y1IBtnAdhTcJY/mXnokmpmxHN59PcykBP4bgUU98vLY44Lhuw==}
     dev: false
 
   /electron-to-chromium@1.4.459:
@@ -7410,10 +7406,6 @@ packages:
       data-uri-to-buffer: 4.0.1
       fetch-blob: 3.2.0
       formdata-polyfill: 4.0.10
-    dev: false
-
-  /node-releases@2.0.12:
-    resolution: {integrity: sha512-QzsYKWhXTWx8h1kIvqfnC++o0pEmpRQA/aenALsL2F4pqNVr7YzcdMlDij5WBnwftRbJCNJL/O7zdKaxKPHqgQ==}
     dev: false
 
   /node-releases@2.0.13:
