@@ -13,7 +13,9 @@ import {
   Home,
   Image,
   Laptop,
+  LayoutDashboard,
   Loader2,
+  LucideIcon,
   LucideProps,
   Moon,
   MoreVertical,
@@ -24,8 +26,6 @@ import {
   Twitter,
   User,
   X,
-  type Icon as LucideIcon,
-  LayoutDashboard,
 } from "lucide-react";
 
 export type Icon = LucideIcon;

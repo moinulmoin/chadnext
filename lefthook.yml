@@ -10,5 +10,5 @@ pre-commit:
       glob: "src/**/*.{ts,tsx,js,jsx}"
       run: npx eslint {staged_files} --fix && git add {staged_files}
     format:
-      glob: "src/**/*.{ts,tsx,js,jsx}"
+      glob: "src/**/*.{ts,tsx,js,jsx,css,json}"
       run: npx prettier --write {staged_files} && git add {staged_files}

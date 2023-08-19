@@ -16,19 +16,19 @@ export default async function Home() {
   return (
     <div className="container">
       <div className="flex h-full min-h-[calc(100vh-140px)] w-full flex-col items-center justify-center space-y-20 py-14 md:min-h-[calc(100vh-160px)] xl:py-24">
-        <div className=" mx-auto w-full max-w-2xl">
+        <div className="mx-auto w-full max-w-2xl ">
           <a
             href="https://twitter.com/immoinulmoin/status/1661645764697919489"
             target="_blank"
             rel="noreferrer"
-            className="  mx-auto mb-5 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full bg-blue-100 px-7 py-2 transition-colors animate-in slide-in-from-top duration-300 ease-linear  hover:bg-blue-200"
+            className="mx-auto mb-5 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full bg-blue-100 px-7 py-2 transition-colors duration-300 ease-linear animate-in slide-in-from-top hover:bg-blue-200"
           >
             <Icons.twitter className="h-5 w-5 text-blue-700" />
             <p className="text-sm font-semibold text-blue-700">
               Introducing ChadNext
             </p>
           </a>
-          <h1 className="font-display bg-gradient-to-br from-black to-stone-500 bg-clip-text text-center text-4xl font-bold tracking-[-0.02em] text-transparent drop-shadow-sm animate-in zoom-in-50 duration-300 ease-linear dark:bg-gradient-to-br dark:from-gray-100 dark:to-gray-900 md:text-7xl md:leading-[5rem]">
+          <h1 className="font-display bg-gradient-to-br from-black to-stone-500 bg-clip-text text-center text-4xl font-bold tracking-[-0.02em] text-transparent drop-shadow-sm duration-300 ease-linear animate-in zoom-in-50 dark:bg-gradient-to-br dark:from-gray-100 dark:to-gray-900 md:text-7xl md:leading-[5rem]">
             <Balancer>Quick Starter Template for your Next.js project</Balancer>
           </h1>
           <p className="mt-6 text-center text-muted-foreground md:text-xl">

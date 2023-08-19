@@ -1,7 +1,8 @@
 {
   "extends": [
     "next/core-web-vitals",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -12,14 +13,14 @@
   ],
   "rules": {
     "@typescript-eslint/consistent-type-imports": [
-      "warn",
+      "error",
       {
         "prefer": "type-imports",
         "fixStyle": "inline-type-imports"
       }
     ],
     "@typescript-eslint/no-unused-vars": [
-      "warn",
+      "error",
       {
         "argsIgnorePattern": "^_"
       }
