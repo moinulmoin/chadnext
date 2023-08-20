@@ -28,7 +28,7 @@ export default async function OG() {
         </h1>
         <div tw="flex items-center">
           <img
-            src={process.env.NEXTAUTH_URL + Logo.src}
+            src={process.env.NEXT_PUBLIC_APP_URL + Logo.src}
             alt="ChadNext Logo"
             tw="w-10 h-10 opacity-95 mr-4"
             width={40}

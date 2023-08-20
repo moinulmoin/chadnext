@@ -1,4 +1,3 @@
-import crypto from "crypto";
 import { Resend } from "resend";
 import { type CreateEmailOptions } from "resend/build/src/emails/interfaces";
 import { ThanksTemp } from "~/components/email-template/thanks";
@@ -6,7 +5,6 @@ import { VerificationTemp } from "~/components/email-template/verification";
 
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
-const randomId = crypto.randomBytes(8).toString("hex");
 interface SendMailProps {
   toMail: string;
   type: "verification" | "new-signin";
@@ -37,10 +35,13 @@ export const sendMail = async ({ toMail, type, data }: SendMailProps) => {
       subject: subject,
       react: reactEl,
       headers: {
-        "X-Entity-Ref-ID": randomId,
+        "X-Entity-Ref-ID": nanoid(),
       },
     } as CreateEmailOptions);
   } catch (error) {
     console.error(error);
   }
 };
+function nanoid(): string {
+  throw new Error("Function not implemented.");
+}

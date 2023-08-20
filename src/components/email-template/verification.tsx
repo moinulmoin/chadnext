@@ -14,15 +14,12 @@ import {
   Tailwind,
   Text,
 } from "@react-email/components";
+import { siteConfig } from "~/config/site";
 
 interface VerificationTemplateProps {
   userName: string;
   verificationUrl: string;
 }
-
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "https://chadnext.moinulmoin.com/";
 
 export const VerificationTemp: React.FC<
   Readonly<VerificationTemplateProps>
@@ -37,10 +34,10 @@ export const VerificationTemp: React.FC<
             <Row>
               <Column align="right">
                 <Img
-                  src={`${baseUrl}/chad-next.png`}
+                  src={`${siteConfig.url}/chad-next.png`}
                   height="50"
                   alt="ChadNext logo"
-                  className=" inline-block"
+                  className="inline-block "
                 />
               </Column>
               <Column align="left">
@@ -49,7 +46,7 @@ export const VerificationTemp: React.FC<
             </Row>
           </Section>
           <Text className="my-4 text-lg">Hi, {userName.split(" ")[0]}</Text>
-          <Text className=" text-center text-base font-semibold">
+          <Text className="text-center text-base font-semibold ">
             Click the link below to sign in to your account.
           </Text>
           <Section className="mt-8 text-center">

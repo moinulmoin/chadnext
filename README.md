@@ -35,11 +35,11 @@ ChadNext includes:
 1. Clone the repo.
 2. Install dependencies: `pnpm install`
 3. Copy `.env.example` file to `.env` file. then follow the instructions inside.
-4. Start the dev server: `pnpm dev` 
+4. Start the dev server: `pnpm dev`
 
 Or
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmoinulmoin%2Fchadnext&env=POSTGRES_PRISMA_URL,POSTGRES_URL_NON_POOLING,GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET,NEXTAUTH_SECRET,NEXTAUTH_URL,RESEND_API_KEY,UPLOADTHING_SECRET,UPLOADTHING_APP_ID)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmoinulmoin%2Fchadnext&env=POSTGRES_PRISMA_URL,POSTGRES_URL_NON_POOLING,GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET,NEXTAUTH_SECRET,NEXTAUTH_URL,NEXT_PUBLIC_APP_URL,RESEND_API_KEY,UPLOADTHING_SECRET,UPLOADTHING_APP_ID,UPLOADTHING_URL)
 
 ## FAQ 🤔
 

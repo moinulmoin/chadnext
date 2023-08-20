@@ -5,7 +5,7 @@ import EmailProvider, {
 } from "next-auth/providers/email";
 import GithubProvider from "next-auth/providers/github";
 import db from "~/lib/db";
-import { sendMail } from "~/lib/resend";
+import { sendMail } from "./resend";
 
 const sendVerificationRequest = async ({
   identifier: email,

@@ -14,14 +14,11 @@ import {
   Tailwind,
   Text,
 } from "@react-email/components";
+import { siteConfig } from "~/config/site";
 
 interface ThanksTemplateProps {
   userName: string;
 }
-
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "https://chadnext.moinulmoin.com/";
 
 export const ThanksTemp: React.FC<Readonly<ThanksTemplateProps>> = ({
   userName,
@@ -36,10 +33,10 @@ export const ThanksTemp: React.FC<Readonly<ThanksTemplateProps>> = ({
             <Row>
               <Column align="right">
                 <Img
-                  src={`${baseUrl}/chad-next.png`}
+                  src={`${siteConfig.url}/chad-next.png`}
                   height="50"
                   alt="ChadNext logo"
-                  className=" inline-block"
+                  className="inline-block "
                 />
               </Column>
               <Column align="left">
