@@ -1,4 +1,4 @@
-import { SidebarNav } from "~/components/layout/sidebar-nav";
+import SidebarNav from "~/components/layout/sidebar-nav";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

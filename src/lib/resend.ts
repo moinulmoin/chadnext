@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import { Resend } from "resend";
 import { type CreateEmailOptions } from "resend/build/src/emails/interfaces";
 import { ThanksTemp } from "~/components/email-template/thanks";
@@ -42,6 +43,3 @@ export const sendMail = async ({ toMail, type, data }: SendMailProps) => {
     console.error(error);
   }
 };
-function nanoid(): string {
-  throw new Error("Function not implemented.");
-}

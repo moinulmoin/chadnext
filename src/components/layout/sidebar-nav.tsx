@@ -8,9 +8,9 @@ import Icons from "../shared/icons";
 
 const navItems = [
   {
-    title: "Overview",
-    href: "/dashboard",
-    icon: Icons.dashboard,
+    title: "Projects",
+    href: "/dashboard/projects",
+    icon: Icons.projectPlus,
   },
   {
     title: "Settings",
@@ -23,9 +23,9 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   className?: string;
 }
 
-export function SidebarNav({ className, ...props }: SidebarNavProps) {
+export default function SidebarNav({ className, ...props }: SidebarNavProps) {
   const pathname = usePathname();
-
+  const isActive = (href: string) => pathname === href;
   return (
     <nav
       className={cn("flex gap-x-2 lg:flex-col lg:gap-y-1.5", className)}
@@ -37,13 +37,13 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
           href={item.href}
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            pathname === item.href
+            isActive(item.href)
               ? "bg-muted hover:bg-muted"
               : "hover:bg-transparent hover:underline",
             "justify-start"
           )}
         >
-          {<item.icon className=" mr-2 h-4 w-4" />} {item.title}
+          {<item.icon className="mr-2 h-4 w-4 " />} {item.title}
         </Link>
       ))}
     </nav>
