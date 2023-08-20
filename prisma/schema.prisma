@@ -51,6 +51,7 @@ model User {
   shortBio      String?
   accounts      Account[]
   sessions      Session[]
+  Project       Project[]
 }
 
 model VerificationToken {
@@ -59,4 +60,13 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Project {
+  id        String   @id @default(cuid())
+  name      String
+  website   String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }
