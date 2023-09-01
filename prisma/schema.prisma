@@ -51,7 +51,7 @@ model User {
   shortBio      String?
   accounts      Account[]
   sessions      Session[]
-  Project       Project[]
+  projects      Project[]
 }
 
 model VerificationToken {
