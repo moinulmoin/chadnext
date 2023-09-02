@@ -1,14 +1,25 @@
 import { Analytics } from "@vercel/analytics/react";
 import { type Metadata } from "next";
 import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import Footer from "~/components/layout/footer";
 import Header from "~/components/layout/header";
 import ThemeProvider from "~/components/shared/theme-provider";
 import { Toaster } from "~/components/ui/toaster";
 import { siteConfig } from "~/config/site";
+
+import { cn } from "~/lib/utils";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], display: "swap" });
+const fontSans = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
+const fontHeading = localFont({
+  src: "../assets/fonts/CalSans-SemiBold.woff2",
+  variable: "--font-heading",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -77,9 +88,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body
+        className={cn(
+          "font-sans antialiased",
+          fontSans.variable,
+          fontHeading.variable
+        )}
+      >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="fixed h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-cyan-100 dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-900 dark:to-slate-900" />
+          <div className="fixed h-screen w-full bg-gradient-to-br from-background to-blue-50 dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-900 dark:to-slate-900" />
           <Header />
           <main className="relative z-10">
             {children}
