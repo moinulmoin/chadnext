@@ -71,6 +71,9 @@ dependencies:
   next-themes:
     specifier: ^0.2.1
     version: 0.2.1(next@13.4.19)(react-dom@18.2.0)(react@18.2.0)
+  nodemailer:
+    specifier: ^6.9.4
+    version: 6.9.4
   postcss:
     specifier: 8.4.28
     version: 8.4.28
@@ -148,9 +151,6 @@ devDependencies:
   next-contentlayer:
     specifier: ^0.3.4
     version: 0.3.4(contentlayer@0.3.4)(esbuild@0.19.2)(next@13.4.19)(react-dom@18.2.0)(react@18.2.0)
-  nodemailer:
-    specifier: ^6.9.4
-    version: 6.9.4
   prettier:
     specifier: 3.0.2
     version: 3.0.2
@@ -6971,6 +6971,7 @@ packages:
   /nodemailer@6.9.4:
     resolution: {integrity: sha512-CXjQvrQZV4+6X5wP6ZIgdehJamI63MFoYFGGPtHudWym9qaEHDNdPzaj5bfMCvxG1vhAileSWW90q7nL0N36mA==}
     engines: {node: '>=6.0.0'}
+    dev: false
 
   /nopt@6.0.0:
     resolution: {integrity: sha512-ZwLpbTgdhuZUnZzjd7nb1ZV+4DoiC6/sfiVKok72ym/4Tlf+DFdlHYmT2JPmcNNWV6Pi3SDf1kT+A4r9RTuT9g==}
