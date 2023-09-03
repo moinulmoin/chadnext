@@ -24,7 +24,7 @@ export default async function OG() {
           }}
           tw="text-8xl font-bold leading-loose text-transparent"
         >
-          Changelog
+          About
         </h1>
         <div tw="flex items-center">
           <img
