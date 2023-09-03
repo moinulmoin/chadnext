@@ -1,9 +1,6 @@
 import Link from "next/link";
 import Balancer from "react-wrap-balancer";
 import { siteConfig } from "~/config/site";
-import { cn } from "~/lib/utils";
-import Icons from "../shared/icons";
-import { buttonVariants } from "../ui/button";
 
 export default function OpenSource() {
   return (
@@ -19,13 +16,12 @@ export default function OpenSource() {
           </Balancer>
         </p>
         <Link
-          className={cn(buttonVariants(), "h-auto w-auto gap-x-2.5")}
+          className={" underline underline-offset-8"}
           href={siteConfig.links.github}
           target="_blank"
           rel="noreferrer"
         >
-          <span>Star on</span>
-          <Icons.gitHub width={20} />
+          <span className="font-semibold">Star me</span>, Onii Chan {`>_<`}
         </Link>
       </div>
     </section>

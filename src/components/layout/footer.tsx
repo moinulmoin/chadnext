@@ -26,8 +26,17 @@ export default function Footer() {
             </Link>
           </p>
         </div>
-        <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-          <Link href="/changelog" className="font-semibold">
+        <p className="space-x-4 text-center text-sm leading-loose text-muted-foreground md:text-left">
+          <Link
+            href="/about"
+            className="font-semibold hover:underline hover:underline-offset-4"
+          >
+            About
+          </Link>
+          <Link
+            href="/changelog"
+            className="font-semibold hover:underline hover:underline-offset-4"
+          >
             Changelog
           </Link>
         </p>
