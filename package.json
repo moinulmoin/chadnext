@@ -42,7 +42,7 @@
     "react-hook-form": "^7.45.4",
     "react-wrap-balancer": "^1.1.0",
     "resend": "^1.0.0",
-    "uploadthing": "^5.3.3",
+    "uploadthing": "^5.5.2",
     "zod": "^3.22.2"
   },
   "devDependencies": {
