@@ -10,6 +10,8 @@ import { siteConfig } from "~/config/site";
 
 import { cn } from "~/lib/utils";
 import "./globals.css";
+import Script from "next/script";
+import * as process from "process";
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -107,6 +109,12 @@ export default function RootLayout({
         </ThemeProvider>
         <Analytics />
       </body>
+      {process.env.NODE_ENV === "production" && (
+        <Script
+          src="https://umami.moinulmoin.com/script.js"
+          data-website-id="bc66d96a-fc75-4ecd-b0ef-fdd25de8113c"
+        />
+      )}
     </html>
   );
 }

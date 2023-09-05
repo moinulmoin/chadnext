@@ -37,7 +37,7 @@ next-env.d.ts
 
 # custom workspace settings
 .vscode
-
+.idea
 # contentlayer
 .contentlayer
 
