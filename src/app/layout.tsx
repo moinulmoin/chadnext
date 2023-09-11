@@ -1,4 +1,3 @@
-import { Analytics } from "@vercel/analytics/react";
 import { type Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
@@ -8,10 +7,10 @@ import ThemeProvider from "~/components/shared/theme-provider";
 import { Toaster } from "~/components/ui/toaster";
 import { siteConfig } from "~/config/site";
 
-import { cn } from "~/lib/utils";
-import "./globals.css";
 import Script from "next/script";
 import * as process from "process";
+import { cn } from "~/lib/utils";
+import "./globals.css";
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -107,7 +106,6 @@ export default function RootLayout({
           <Footer />
           <Toaster />
         </ThemeProvider>
-        <Analytics />
       </body>
       {process.env.NODE_ENV === "production" && (
         <Script
