@@ -101,8 +101,8 @@ dependencies:
 
 devDependencies:
   '@tailwindcss/typography':
-    specifier: ^0.5.9
-    version: 0.5.9(tailwindcss@3.3.3)
+    specifier: ^0.5.10
+    version: 0.5.10(tailwindcss@3.3.3)
   '@types/node':
     specifier: 20.5.1
     version: 20.5.1
@@ -3274,8 +3274,8 @@ packages:
     dependencies:
       tslib: 2.6.2
 
-  /@tailwindcss/typography@0.5.9(tailwindcss@3.3.3):
-    resolution: {integrity: sha512-t8Sg3DyynFysV9f4JDOVISGsjazNb48AeIYQwcL+Bsq5uf4RYL75C1giZ43KISjeDGBaTN3Kxh7Xj/vRSMJUUg==}
+  /@tailwindcss/typography@0.5.10(tailwindcss@3.3.3):
+    resolution: {integrity: sha512-Pe8BuPJQJd3FfRnm6H0ulKIGoMEQS+Vq01R6M5aCrFB/ccR/shT+0kXLjouGC1gFLm9hopTFN+DMP0pfwRWzPw==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders'
     dependencies:
