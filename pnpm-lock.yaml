@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@ducanh2912/next-pwa':
-    specifier: ^9.4.0
-    version: 9.4.0(esbuild@0.19.2)(next@13.4.19)(webpack@5.88.2)
+    specifier: ^9.6.0
+    version: 9.6.0(esbuild@0.19.2)(next@13.4.19)(webpack@5.88.2)
   '@hookform/resolvers':
     specifier: ^3.2.0
     version: 3.2.0(react-hook-form@7.45.4)
@@ -1457,14 +1457,14 @@ packages:
       type-fest: 3.13.1
     dev: true
 
-  /@ducanh2912/next-pwa@9.4.0(esbuild@0.19.2)(next@13.4.19)(webpack@5.88.2):
-    resolution: {integrity: sha512-FFA8UpfKRPHkUk33lyh9Smp9q8/e1s4ezTSVQXLFhj86GmSaCA71oxqe9AIbusa/fDK/EZTmoHUmKpwl/6j7iw==}
+  /@ducanh2912/next-pwa@9.6.0(esbuild@0.19.2)(next@13.4.19)(webpack@5.88.2):
+    resolution: {integrity: sha512-aYq1C/Idi/nRm3uTmLO2Pw+2evuHy31uq2mD/XzhJ/ueB9FHrozf6TXuCd+m2yRmW1uZvlvqs7cwf23Gccufrw==}
     peerDependencies:
       next: '>=11.0.0'
       webpack: '>=5.9.0'
     dependencies:
       clean-webpack-plugin: 4.0.0(webpack@5.88.2)
-      fast-glob: 3.3.0
+      fast-glob: 3.3.1
       next: 13.4.19(@babel/core@7.22.10)(@opentelemetry/api@1.4.1)(react-dom@18.2.0)(react@18.2.0)
       semver: 7.5.4
       terser-webpack-plugin: 5.3.9(esbuild@0.19.2)(webpack@5.88.2)
@@ -5134,17 +5134,6 @@ packages:
   /fast-fifo@1.3.0:
     resolution: {integrity: sha512-IgfweLvEpwyA4WgiQe9Nx6VV2QkML2NkvZnk1oKnIzXgXdWxuhF7zw4DvLTPZJn6PIUneiAXPF24QmoEqHTjyw==}
     dev: true
-
-  /fast-glob@3.3.0:
-    resolution: {integrity: sha512-ChDuvbOypPuNjO8yIDf36x7BlZX1smcUMTTcyoIjycexOxd6DFsKsg21qVBzEmr3G7fUKIRy2/psii+CIUt7FA==}
-    engines: {node: '>=8.6.0'}
-    dependencies:
-      '@nodelib/fs.stat': 2.0.5
-      '@nodelib/fs.walk': 1.2.8
-      glob-parent: 5.1.2
-      merge2: 1.4.1
-      micromatch: 4.0.5
-    dev: false
 
   /fast-glob@3.3.1:
     resolution: {integrity: sha512-kNFPyjhh5cKjrUltxs+wFx+ZkbRaxxmZ+X0ZU31SOsxCEtP9VPgtq2teZw1DebupL5GmDaNQ6yKMMVcM41iqDg==}
