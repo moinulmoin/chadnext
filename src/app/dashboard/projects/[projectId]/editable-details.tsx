@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 import CopyButton from "~/components/copy-button";
 import Icons from "~/components/shared/icons";
 import { Button } from "~/components/ui/button";
@@ -16,10 +17,9 @@ import {
 import { Input } from "~/components/ui/input";
 import { toast } from "~/components/ui/use-toast";
 import { updateProjectById } from "../action";
-import { z } from "zod";
 
 const projectSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string().readonly(),
   name: z.string().max(50).nonempty({
     message: "Please enter a project name.",
   }),
@@ -44,7 +44,7 @@ export default function EditableDetails({
     try {
       await updateProjectById(initialValues.id, values);
       toast({
-        title: "Project created successfully.",
+        title: "Project Updated successfully.",
       });
       form.reset();
     } catch (error) {
