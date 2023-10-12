@@ -6,9 +6,8 @@
     "dev": "prisma generate && next dev",
     "build": "prisma generate && prisma db push && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint --dir src",
     "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,css,json}'",
-    "lint:fix": "eslint --fix 'src/**/*.{ts,tsx,js,jsx}'",
     "postinstall": "lefthook install"
   },
   "dependencies": {
