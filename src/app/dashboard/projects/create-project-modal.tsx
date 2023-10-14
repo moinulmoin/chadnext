@@ -27,16 +27,12 @@ import { Input } from "~/components/ui/input";
 import { toast } from "~/components/ui/use-toast";
 import { createProject } from "./action";
 
-const projectSchema = z.object({
-  name: z.string().max(50).nonempty({
-    message: "Please enter a project name.",
-  }),
-  website: z.string().url({
-    message: "Please enter a valid URL.",
-  }),
+export const projectSchema = z.object({
+  name: z.string().min(1, { message: "Please enter a project name." }),
+  domain: z.string().min(1, { message: "Please enter a project domain." }),
 });
 
-type ProjectFormValues = z.infer<typeof projectSchema>;
+export type ProjectFormValues = z.infer<typeof projectSchema>;
 
 export default function CreateProjectModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,7 +40,7 @@ export default function CreateProjectModal() {
     resolver: zodResolver(projectSchema),
     defaultValues: {
       name: "",
-      website: "",
+      domain: "",
     },
   });
 
@@ -89,7 +85,7 @@ export default function CreateProjectModal() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Project Name</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input placeholder="XYZ" {...field} />
                   </FormControl>
@@ -99,12 +95,12 @@ export default function CreateProjectModal() {
             />
             <FormField
               control={form.control}
-              name="website"
+              name="domain"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Project Website</FormLabel>
+                  <FormLabel>Domain</FormLabel>
                   <FormControl>
-                    <Input placeholder="https://xyz.com" {...field} />
+                    <Input placeholder="xyz.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

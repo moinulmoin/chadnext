@@ -3,12 +3,13 @@
 import { type Project } from "@prisma/client";
 import { getServerSession, type Session } from "next-auth";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { authOptions } from "~/lib/auth";
 import db from "~/lib/db";
 
 interface Payload {
   name: string;
-  website: string;
+  domain: string;
 }
 
 export async function createProject(payload: Payload) {
@@ -69,6 +70,7 @@ export async function deleteProjectById(id: string) {
     },
   });
   revalidatePath(`/dashboard/projects`);
+  redirect("/dashboard/projects");
 }
 
 export async function getUser() {

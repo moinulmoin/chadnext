@@ -1,5 +1,4 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import Icons from "~/components/shared/icons";
 import {
@@ -18,7 +17,6 @@ import { toast } from "~/components/ui/use-toast";
 import { deleteProjectById } from "../action";
 
 export default function DeleteCard({ id }: { id: string }) {
-  const router = useRouter();
   const [pending, startTransition] = useTransition();
   const handleDelete = async () => {
     startTransition(() =>
@@ -27,7 +25,6 @@ export default function DeleteCard({ id }: { id: string }) {
           toast({
             title: "Project deleted successfully.",
           });
-          router.push("/dashboard/projects");
         })
         .catch((error) => {
           console.error(error);

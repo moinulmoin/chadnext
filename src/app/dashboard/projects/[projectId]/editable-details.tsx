@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import CopyButton from "~/components/copy-button";
 import Icons from "~/components/shared/icons";
 import { Button } from "~/components/ui/button";
@@ -17,23 +16,18 @@ import {
 import { Input } from "~/components/ui/input";
 import { toast } from "~/components/ui/use-toast";
 import { updateProjectById } from "../action";
+import { projectSchema, type ProjectFormValues } from "../create-project-modal";
 
-const projectSchema = z.object({
-  id: z.string().readonly(),
-  name: z.string().max(50).nonempty({
-    message: "Please enter a project name.",
-  }),
-  website: z.string().url({
-    message: "Please enter a valid URL.",
-  }),
-});
+// const projectEditSchema = projectSchema.extend({
+//   id: z.string().readonly(),
+// });
 
-export type ProjectFormValues = z.infer<typeof projectSchema>;
+// type ProjectEditValues = z.infer<typeof projectEditSchema>;
 
 export default function EditableDetails({
   initialValues,
 }: {
-  initialValues: ProjectFormValues;
+  initialValues: ProjectFormValues & { id: string };
 }) {
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectSchema),
@@ -59,29 +53,23 @@ export default function EditableDetails({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="mt-5 space-y-6">
-        <FormField
-          control={form.control}
-          name="id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Project ID</FormLabel>
-              <FormControl>
-                <div className="relative ">
-                  <Input placeholder="XYZ" disabled {...field} />
-                  <CopyButton content={form.getValues("id")} />
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <FormItem>
+          <FormLabel>ID</FormLabel>
+          <FormControl>
+            <div className="relative ">
+              <Input value={initialValues.id} readOnly disabled />
+              <CopyButton content={initialValues.id} />
+            </div>
+          </FormControl>
+          <FormMessage />
+        </FormItem>
 
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Project Name</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input placeholder="XYZ" {...field} />
               </FormControl>
@@ -91,12 +79,12 @@ export default function EditableDetails({
         />
         <FormField
           control={form.control}
-          name="website"
+          name="domain"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Project Website</FormLabel>
+              <FormLabel>Domain</FormLabel>
               <FormControl>
-                <Input placeholder="https://xyz.com" {...field} />
+                <Input placeholder="xyz.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

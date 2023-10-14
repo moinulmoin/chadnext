@@ -15,7 +15,7 @@ export default async function Projects() {
           className="relative flex flex-col items-center justify-center gap-y-2.5 p-8 text-center hover:bg-accent"
         >
           <h4 className="font-medium ">{project.name}</h4>
-          <p className=" text-muted-foreground">{project.website}</p>
+          <p className=" text-muted-foreground">{`https://${project.domain}`}</p>
           <Link
             href={`/dashboard/projects/${project.id}`}
             className="absolute inset-0 "
