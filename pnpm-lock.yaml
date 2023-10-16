@@ -49,7 +49,7 @@ dependencies:
     version: 0.0.7
   '@uploadthing/react':
     specifier: ^5.6.2
-    version: 5.6.2(next@13.5.4)(react@18.2.0)(uploadthing@5.5.3)(zod@3.22.4)
+    version: 5.6.2(next@13.5.4)(react@18.2.0)(uploadthing@5.7.1)(zod@3.22.4)
   date-fns:
     specifier: ^2.30.0
     version: 2.30.0
@@ -93,8 +93,8 @@ dependencies:
     specifier: ^1.1.0
     version: 1.1.0
   uploadthing:
-    specifier: ^5.5.3
-    version: 5.5.3(zod@3.22.4)
+    specifier: ^5.7.1
+    version: 5.7.1(zod@3.22.4)
   zod:
     specifier: ^3.22.4
     version: 3.22.4
@@ -3546,7 +3546,7 @@ packages:
     resolution: {integrity: sha512-UDySsPbdi7wp52WG7mp5CiZwaTvokDubqhm1xhFm73Bqhp0PsGbwSSF5PdCXH4fe8Y4EKGrMyWQ4i1fF9+DVVQ==}
     dev: false
 
-  /@uploadthing/react@5.6.2(next@13.5.4)(react@18.2.0)(uploadthing@5.5.3)(zod@3.22.4):
+  /@uploadthing/react@5.6.2(next@13.5.4)(react@18.2.0)(uploadthing@5.7.1)(zod@3.22.4):
     resolution: {integrity: sha512-zW++ZJiIthEjcn0ZD5cYfQ+NR8Ez4P47gm7VNsAOeMmFz66JzdllHJ4AXQ9bnWl31M8L7mqxUrNlEc3jSd7CMg==}
     peerDependencies:
       next: '*'
@@ -3562,7 +3562,7 @@ packages:
       next: 13.5.4(@babel/core@7.23.2)(@opentelemetry/api@1.6.0)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       tailwind-merge: 1.14.0
-      uploadthing: 5.5.3(zod@3.22.4)
+      uploadthing: 5.7.1(zod@3.22.4)
     transitivePeerDependencies:
       - '@uploadthing/mime-types'
       - zod
@@ -8710,8 +8710,9 @@ packages:
       escalade: 3.1.1
       picocolors: 1.0.0
 
-  /uploadthing@5.5.3(zod@3.22.4):
-    resolution: {integrity: sha512-ixqkQ7q5LVe2BQ99nwkdD7ChVQ1bfl/eFVotvJAUjdlXvXPWLE6gqHtNh5ijgVOIAU+7clRSvbRUHPq3AZLSbw==}
+  /uploadthing@5.7.1(zod@3.22.4):
+    resolution: {integrity: sha512-oPrW3avxIEJd1rVBuOnQ6sV3sDmKPSqMnk02aXZSPrVxZPbYzJDOWkbL3iqT9qYMliaP44nGCt3UK7we4d2HCg==}
+    engines: {node: '>=18.13.0'}
     dependencies:
       '@uploadthing/mime-types': 0.2.1
       '@uploadthing/shared': 5.2.4(@uploadthing/mime-types@0.2.1)(zod@3.22.4)
