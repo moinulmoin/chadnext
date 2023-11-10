@@ -44,10 +44,6 @@ export const metadata: Metadata = {
     },
   ],
   creator: "moinulmoin",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -78,6 +74,14 @@ export const metadata: Metadata = {
   },
   manifest: `${siteConfig.url}/manifest.json`,
   metadataBase: new URL(siteConfig.url),
+};
+
+export const viewport = {
+  width: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "white" },
+    { media: "(prefers-color-scheme: dark)", color: "black" },
+  ],
 };
 
 export default function RootLayout({

@@ -16,11 +16,12 @@ const nextConfig = {
     ];
   },
   images: {
-    domains: ["placehold.co"],
-  },
-  experimental: {
-    serverActions: true,
-    serverComponentsExternalPackages: ["@prisma/client"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "placehold.co/**",
+      },
+    ],
   },
 };
 

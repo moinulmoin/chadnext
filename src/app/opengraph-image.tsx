@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { ImageResponse } from "next/server";
+import { ImageResponse } from "next/og";
 import Logo from "../../public/chad-next.png";
 
 export const runtime = "edge";
