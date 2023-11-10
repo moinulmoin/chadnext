@@ -102,7 +102,6 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="fixed h-screen w-full bg-gradient-to-br from-background to-blue-50 dark:bg-gradient-to-br dark:from-gray-800 dark:via-gray-900 dark:to-slate-900" />
-          {/* @ts-expect-error Type 'Promise<Element>' is not assignable to type 'ReactNode'.ts(2786) */}
           <Header />
           <main className="relative z-10">
             {children}
