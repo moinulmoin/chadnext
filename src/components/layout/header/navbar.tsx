@@ -1,50 +1,51 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { buttonVariants } from "~/components/ui/button";
-import useScroll from "~/hooks/use-scroll";
-import { cn } from "~/lib/utils";
 import { type CurrentUser } from "~/types";
-import ThemeToggle from "../../shared/theme-toggle";
 import UserNav from "../user-nav";
 
-export default function Navbar({ currentUser }: { currentUser: CurrentUser }) {
-  const scrolled = useScroll(50);
-
+export default function Navbar({
+  loggedInUser,
+}: {
+  loggedInUser: CurrentUser;
+}) {
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-30  w-full bg-transparent ",
-        scrolled
-          ? " h-16 border-b backdrop-blur-xl  transition-all duration-300 ease-in-out"
-          : " h-20"
-      )}
-    >
-      <div className="container h-full">
-        <div className="flex h-full  items-center justify-between">
-          <Link href="/" className="flex items-center text-2xl font-bold">
-            <Image
-              src="/chad-next.png"
-              alt="ChadNext logo"
-              width="30"
-              height="30"
-              className="mr-2 rounded-sm object-contain"
-            />
-            <p>ChadNext</p>
+    <nav className="flex h-full items-center justify-between">
+      <Link href="/" className="flex items-center text-2xl font-bold">
+        <Image
+          src="/chad-next.png"
+          alt="ChadNext logo"
+          width="30"
+          height="30"
+          className="mr-2 rounded-sm object-contain"
+        />
+        <p>ChadNext</p>
+      </Link>
+      <div className="flex items-center gap-12 2xl:gap-16">
+        <div className="hidden space-x-4 text-center text-sm leading-loose text-muted-foreground md:text-left">
+          <Link
+            href="/about"
+            className="font-semibold hover:underline hover:underline-offset-4"
+          >
+            About
           </Link>
-          <div className=" flex items-center gap-x-2">
-            <ThemeToggle />
-            {currentUser ? (
-              <UserNav user={currentUser} />
-            ) : (
-              <Link href="/signin" className={buttonVariants()}>
-                Sign In
-              </Link>
-            )}
-          </div>
+          <Link
+            href="/changelog"
+            className="font-semibold hover:underline hover:underline-offset-4"
+          >
+            Changelog
+          </Link>
+        </div>
+        <div className="flex items-center gap-x-2">
+          {loggedInUser ? (
+            <UserNav user={loggedInUser} />
+          ) : (
+            <Link href="/signin" className={buttonVariants()}>
+              Sign In
+            </Link>
+          )}
         </div>
       </div>
-    </header>
+    </nav>
   );
 }

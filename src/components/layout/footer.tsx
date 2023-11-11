@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { siteConfig } from "~/config/site";
+import ThemeToggle from "../shared/theme-toggle";
 
 export default function Footer() {
   return (
@@ -26,20 +27,8 @@ export default function Footer() {
             </Link>
           </p>
         </div>
-        <p className="space-x-4 text-center text-sm leading-loose text-muted-foreground md:text-left">
-          <Link
-            href="/about"
-            className="font-semibold hover:underline hover:underline-offset-4"
-          >
-            About
-          </Link>
-          <Link
-            href="/changelog"
-            className="font-semibold hover:underline hover:underline-offset-4"
-          >
-            Changelog
-          </Link>
-        </p>
+
+        <ThemeToggle />
       </div>
     </footer>
   );
