@@ -17,6 +17,14 @@ export default withAuth(
     if (!isAuth) {
       return NextResponse.redirect(new URL(`/`, req.url));
     }
+
+    if (req.nextUrl.pathname.startsWith("/dashboard")) {
+      if (!isAuth) {
+        return NextResponse.redirect(new URL(`/signin`, req.url));
+      }
+
+      return null;
+    }
   },
   {
     callbacks: {
@@ -28,5 +36,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/signin"],
+  matcher: ["/dashboard/:path*", "/signin", "/api/webhooks/stripe"],
 };

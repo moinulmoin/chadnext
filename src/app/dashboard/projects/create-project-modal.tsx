@@ -25,7 +25,8 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { toast } from "~/components/ui/use-toast";
-import { createProject } from "./action";
+import { FreePlanLimitError } from "~/server/utils";
+import { checkIfFreePlanLimitReached, createProject } from "./action";
 
 export const projectSchema = z.object({
   name: z.string().min(1, { message: "Please enter a project name." }),
@@ -46,6 +47,10 @@ export default function CreateProjectModal() {
 
   async function onSubmit(values: ProjectFormValues) {
     try {
+      const limitReached = await checkIfFreePlanLimitReached();
+      if (limitReached) {
+        throw new FreePlanLimitError();
+      }
       await createProject(values);
       toast({
         title: "Project created successfully.",
@@ -53,10 +58,15 @@ export default function CreateProjectModal() {
       form.reset();
       setIsOpen(false);
     } catch (error) {
-      console.error(error);
-      toast({
-        title: "Error creating project.",
-        description: "Please try again.",
+      console.error({ error });
+      if (error instanceof FreePlanLimitError) {
+        return toast({
+          title: "Free plan limit reached. Please upgrade your plan.",
+          variant: "destructive",
+        });
+      }
+      return toast({
+        title: "Error creating project. Please try again.",
         variant: "destructive",
       });
     }

@@ -1,3 +1,4 @@
+import { type User } from "@prisma/client";
 import { z } from "zod";
 
 export type CurrentUser = {
@@ -32,3 +33,15 @@ export const settingsSchema = z.object({
 });
 
 export type SettingsValues = z.infer<typeof settingsSchema>;
+
+export type SubscriptionPlan = {
+  name: string;
+  description: string;
+  stripePriceId: string;
+};
+
+export type UserSubscriptionPlan = SubscriptionPlan &
+  Pick<User, "stripeCustomerId" | "stripeSubscriptionId"> & {
+    stripeCurrentPeriodEnd: number;
+    isPro: boolean;
+  };

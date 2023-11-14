@@ -23,6 +23,8 @@ const nextConfig = {
       },
     ],
   },
+
+  experimental: {},
 };
 
 module.exports = withPWA(withContentlayer(nextConfig));
