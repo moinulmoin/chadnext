@@ -1,20 +1,16 @@
 import { AlertTriangleIcon } from "lucide-react";
-import { redirect } from "next/navigation";
 import { BillingForm } from "~/components/billing-form";
 import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { stripe } from "~/lib/stripe";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
 import { getUser } from "~/server/user";
+import { type CurrentUser } from "~/types";
 
 export const revalidate = 0;
 export const dynamic = "force-dynamic";
 
 export default async function Billing() {
-  const user = await getUser();
-
-  if (!user) {
-    redirect("/signin");
-  }
+  const user = (await getUser()) as CurrentUser;
 
   const subscriptionPlan = await getUserSubscriptionPlan(user.id);
 
@@ -27,13 +23,13 @@ export default async function Billing() {
     isCanceled = stripePlan.cancel_at_period_end;
   }
   return (
-    <div className="flex flex-col gap-8">
+    <div className="space-y-8 ">
       <Alert>
-        <AlertTriangleIcon className="h-6 w-6" />
+        <AlertTriangleIcon className="h-4 w-4" />
         <AlertTitle>This is a template.</AlertTitle>
         <AlertDescription>
-          ChadNext is a template using Stripe to show the implementation. You
-          can find a list of test card numbers on the{" "}
+          ChadNext just demonstrates how to use Stripe in Next.js App router.
+          Please use test cards from{" "}
           <a
             href="https://stripe.com/docs/testing#cards"
             target="_blank"

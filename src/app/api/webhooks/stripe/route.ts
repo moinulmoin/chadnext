@@ -1,10 +1,12 @@
+import { type NextApiRequest } from "next";
 import { headers } from "next/headers";
+import { buffer } from "node:stream/consumers";
 import type Stripe from "stripe";
 import db from "~/lib/db";
 import { stripe } from "~/lib/stripe";
 
-export async function POST(req: Request) {
-  const body = await req.text();
+export async function POST(req: NextApiRequest) {
+  const body = await buffer(req.body);
   const signature = headers().get("Stripe-Signature") as string;
 
   let event: Stripe.Event | undefined = undefined;
@@ -15,10 +17,6 @@ export async function POST(req: Request) {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET as string
     );
-
-    if (event) {
-      return new Response("Invalid event", { status: 400 });
-    }
   } catch (error) {
     if (error instanceof Error) {
       return new Response(`Webhook Error: ${error.message}`, { status: 400 });

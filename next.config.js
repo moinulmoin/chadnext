@@ -15,16 +15,6 @@ const nextConfig = {
       },
     ];
   },
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "placehold.co/**",
-      },
-    ],
-  },
-
-  experimental: {},
 };
 
 module.exports = withPWA(withContentlayer(nextConfig));

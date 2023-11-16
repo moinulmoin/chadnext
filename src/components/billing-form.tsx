@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Icons from "~/components/shared/icons";
-import { buttonVariants } from "~/components/ui/button";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -55,26 +55,25 @@ export function BillingForm({
     <form className={cn(className)} onSubmit={onSubmit} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle>Subscription Plan</CardTitle>
+          <CardTitle>Subscription</CardTitle>
           <CardDescription>
-            You are currently on the <strong>{subscriptionPlan.name}</strong>{" "}
-            plan.
+            <em>
+              Currently on the <strong>{subscriptionPlan.name}</strong> plan.
+            </em>
           </CardDescription>
         </CardHeader>
-        <CardContent>{subscriptionPlan.description}</CardContent>
+        <CardContent className="font-medium ">
+          {subscriptionPlan.description}
+        </CardContent>
         <CardFooter className="flex flex-col items-start space-y-2 md:flex-row md:justify-between md:space-x-0">
-          <button
-            type="submit"
-            className={cn(buttonVariants())}
-            disabled={isLoading}
-          >
+          <Button type="submit" disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
             {subscriptionPlan.isPro ? "Manage Subscription" : "Upgrade to PRO"}
-          </button>
+          </Button>
           {subscriptionPlan.isPro ? (
-            <p className="rounded-full text-xs font-medium">
+            <p className="rounded-full text-xs font-medium md:self-end ">
               {subscriptionPlan.isCanceled
                 ? "Your plan will be canceled on "
                 : "Your plan renews on "}
