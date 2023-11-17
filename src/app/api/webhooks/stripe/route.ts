@@ -23,8 +23,6 @@ export async function POST(req: NextApiRequest) {
     }
   }
 
-  console.log({ event });
-
   const session = event?.data.object as Stripe.Checkout.Session;
 
   if (event?.type === "checkout.session.completed") {
