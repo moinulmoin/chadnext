@@ -16,8 +16,8 @@ export default async function Hero() {
     .then((res) => res.json())
     .catch((e) => console.error(e));
   return (
-    <section className="container">
-      <div className="flex h-full min-h-[calc(100vh-140px)] w-full flex-col items-center justify-center space-y-20 py-14 md:min-h-[calc(100vh-160px)] xl:py-24">
+    <section>
+      <div className="container flex h-full min-h-[calc(100vh-140px)] w-full flex-col items-center justify-center space-y-20 py-14 md:min-h-[calc(100vh-160px)] xl:py-24">
         <div className="mx-auto w-full max-w-2xl ">
           <a
             href="https://twitter.com/immoinulmoin/status/1661645764697919489"

@@ -13,6 +13,11 @@ const navItems = [
     icon: Icons.projectPlus,
   },
   {
+    title: "Billing",
+    href: "/dashboard/billing",
+    icon: Icons.billing,
+  },
+  {
     title: "Settings",
     href: "/dashboard/settings",
     icon: Icons.settings,

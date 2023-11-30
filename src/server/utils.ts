@@ -46,3 +46,9 @@ export async function checkEmailExists(email: string) {
 
   if (!user) throw new Error("Email does not exist");
 }
+
+export class FreePlanLimitError extends Error {
+  constructor(message = "Upgrade your plan!") {
+    super(message);
+  }
+}
