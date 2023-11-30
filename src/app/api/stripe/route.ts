@@ -1,7 +1,6 @@
 // /api/stripe
 
 import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
 import { z } from "zod";
 import { proPlan } from "~/config/subscription";
 import { authOptions } from "~/lib/auth";
@@ -15,7 +14,7 @@ export async function GET() {
     const session = await getServerSession(authOptions);
 
     if (!session?.user || !session?.user.email) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return new Response("Unauthorized", { status: 401 });
     }
 
     const subscriptionPlan = await getUserSubscriptionPlan(session.user.id);
@@ -28,7 +27,7 @@ export async function GET() {
         return_url: billingUrl,
       });
 
-      return NextResponse.json({ url: stripeSession.url });
+      return Response.json({ url: stripeSession.url });
     }
 
     // The user is on the free plan.

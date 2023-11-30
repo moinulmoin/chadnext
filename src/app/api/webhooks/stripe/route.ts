@@ -1,11 +1,12 @@
-import { type NextApiRequest } from "next";
 import { headers } from "next/headers";
+import { type NextRequest } from "next/server";
 import { buffer } from "node:stream/consumers";
 import type Stripe from "stripe";
 import db from "~/lib/db";
 import { stripe } from "~/lib/stripe";
 
-export async function POST(req: NextApiRequest) {
+export async function POST(req: NextRequest) {
+  //@ts-expect-error Argument of type 'ReadableStream<any>' is not assignable to parameter of type 'ReadableStream | Readable | AsyncIterable<any>'
   const body = await buffer(req.body);
   const signature = headers().get("Stripe-Signature") as string;
 
