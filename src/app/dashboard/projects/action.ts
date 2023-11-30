@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { authOptions } from "~/lib/auth";
 import db from "~/lib/db";
+import { getUserSubscriptionPlan } from "~/lib/subscription";
 
 interface Payload {
   name: string;
@@ -14,6 +15,7 @@ interface Payload {
 
 export async function createProject(payload: Payload) {
   const user = await getUser();
+
   await db.project.create({
     data: {
       ...payload,
@@ -26,6 +28,23 @@ export async function createProject(payload: Payload) {
   });
 
   revalidatePath(`/dashboard/projects`);
+}
+
+export async function checkIfFreePlanLimitReached() {
+  const user = await getUser();
+  const subscriptionPlan = await getUserSubscriptionPlan(user.id);
+
+  // If user is on a free plan.
+  // Check if user has reached limit of 3 projects.
+  if (subscriptionPlan?.isPro) return false;
+
+  const count = await db.project.count({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  return count >= 3;
 }
 
 export async function getProjects() {
