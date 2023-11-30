@@ -31,7 +31,7 @@ export default async function Pricing() {
             </Balancer>
           </p>
         </div>
-        <div className="flex flex-col justify-center gap-8">
+        <div className="flex flex-col justify-center gap-8 md:flex-row">
           <Card
             className={cn(
               "w-full transition duration-200 ease-in-out hover:shadow-lg xl:w-[300px]",
