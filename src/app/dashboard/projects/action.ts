@@ -53,6 +53,9 @@ export async function getProjects() {
     where: {
       userId: user.id,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
   return projects as Project[];
 }

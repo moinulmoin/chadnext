@@ -22,18 +22,18 @@ export default function Navbar({
         <p>ChadNext</p>
       </Link>
       <div className="flex items-center gap-12 2xl:gap-16">
-        <div className="hidden space-x-4 text-center text-sm leading-loose text-muted-foreground md:text-left">
-          <Link
-            href="/about"
-            className="font-semibold hover:underline hover:underline-offset-4"
-          >
-            About
-          </Link>
+        <div className="space-x-4 text-center text-sm leading-loose text-muted-foreground md:text-left">
           <Link
             href="/changelog"
             className="font-semibold hover:underline hover:underline-offset-4"
           >
             Changelog
+          </Link>
+          <Link
+            href="/about"
+            className="font-semibold hover:underline hover:underline-offset-4"
+          >
+            About
           </Link>
         </div>
         <div className="flex items-center gap-x-2">

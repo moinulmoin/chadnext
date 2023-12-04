@@ -8,6 +8,7 @@ export default async function Projects() {
 
   return (
     <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 ">
+      <CreateProjectModal />
       {projects.map((project) => (
         <Card
           role="button"
@@ -24,8 +25,6 @@ export default async function Projects() {
           </Link>
         </Card>
       ))}
-
-      <CreateProjectModal />
     </div>
   );
 }
