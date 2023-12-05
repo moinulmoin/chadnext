@@ -115,14 +115,14 @@ export default function SettingsForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="max-w-2xl space-y-8 "
+        className="max-w-2xl space-y-8 rounded-md border p-6 "
       >
         <FormField
           control={form.control}
           name="image"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Image</FormLabel>
+              <FormLabel>Picture</FormLabel>
               <FormControl>
                 <Avatar className="group relative h-28 w-28 rounded-full">
                   <AvatarImage src={field.value} alt={form.getValues().name} />

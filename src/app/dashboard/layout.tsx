@@ -6,8 +6,8 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
-    <div className="container ">
-      <div className="flex min-h-[calc(100vh-140px)] flex-col gap-8 rounded-md border bg-primary-foreground px-5 py-8 md:min-h-[calc(100vh-160px)] lg:flex-row">
+    <div className="container">
+      <div className="flex min-h-[calc(100vh-140px)] flex-col gap-8 rounded-md py-8 md:min-h-[calc(100vh-160px)] lg:flex-row 2xl:gap-12">
         <aside className="lg:w-1/5">
           <SidebarNav />
         </aside>

@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { siteConfig } from "~/config/site";
+import ThemeToggle from "../shared/theme-toggle";
 
 export default function Footer() {
   return (
     <footer className="relative z-10 w-full py-4 md:py-0">
-      <div className="container flex flex-col items-center justify-between gap-4 md:h-20 md:flex-row">
-        <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+      <div className="container flex items-center justify-between gap-4 md:h-20 md:flex-row">
+        <div className="flex flex-col items-center gap-4 md:flex-row md:gap-2">
           <Image
             src="/chad-next.png"
             alt="ChadNext logo"
@@ -26,20 +27,8 @@ export default function Footer() {
             </Link>
           </p>
         </div>
-        <p className="space-x-4 text-center text-sm leading-loose text-muted-foreground md:text-left">
-          <Link
-            href="/about"
-            className="font-semibold hover:underline hover:underline-offset-4"
-          >
-            About
-          </Link>
-          <Link
-            href="/changelog"
-            className="font-semibold hover:underline hover:underline-offset-4"
-          >
-            Changelog
-          </Link>
-        </p>
+
+        <ThemeToggle />
       </div>
     </footer>
   );
