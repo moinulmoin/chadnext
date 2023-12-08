@@ -1,9 +1,6 @@
-// /api/stripe
-
-import { getServerSession } from "next-auth";
 import { z } from "zod";
 import { proPlan } from "~/config/subscription";
-import { authOptions } from "~/lib/auth";
+import { getPageSession } from "~/lib/auth";
 import { stripe } from "~/lib/stripe";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
 
@@ -11,13 +8,13 @@ const billingUrl = process.env.NEXT_PUBLIC_APP_URL + "/dashboard/billing";
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getPageSession();
 
     if (!session?.user || !session?.user.email) {
       return new Response("Unauthorized", { status: 401 });
     }
 
-    const subscriptionPlan = await getUserSubscriptionPlan(session.user.id);
+    const subscriptionPlan = await getUserSubscriptionPlan(session.user.userId);
 
     // The user is on the pro plan.
     // Create a portal session to manage subscription.
@@ -46,7 +43,7 @@ export async function GET() {
         },
       ],
       metadata: {
-        userId: session.user.id,
+        userId: session.user.userId,
       },
     });
 
