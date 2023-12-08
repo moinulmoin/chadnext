@@ -12,10 +12,10 @@ const getImageKeyFromUrl = (url: string) => {
 export async function removeUserOldImageCDN(id: string, newImageUrl: string) {
   const user = await db.user.findFirst({
     where: { id },
-    select: { image: true },
+    select: { picture: true },
   });
 
-  const currentImageUrl = user?.image;
+  const currentImageUrl = user?.picture;
 
   if (!currentImageUrl) return;
 

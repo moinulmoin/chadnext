@@ -1,7 +1,6 @@
 "use client";
 
 import { LayoutDashboardIcon, LogOut } from "lucide-react";
-import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
@@ -13,13 +12,14 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { type CurrentUser } from "~/types";
+import { Button } from "../ui/button";
 
 export default function UserNav({ user }: { user: CurrentUser }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="h-8 w-8">
-          <AvatarImage src={user.image || ""} alt={user.name || ""} />
+          <AvatarImage src={user.picture || ""} alt={user.name || ""} />
           <AvatarFallback>{user.name?.[0]}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
@@ -39,9 +39,17 @@ export default function UserNav({ user }: { user: CurrentUser }) {
             <span>Dashboard</span>
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => signOut()}>
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Log out</span>
+        <DropdownMenuItem asChild>
+          <form action="/api/auth/logout" method="post">
+            <Button
+              type="submit"
+              className=" h-auto w-full justify-start p-0 hover:bg-transparent"
+              variant="ghost"
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Log out</span>
+            </Button>
+          </form>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

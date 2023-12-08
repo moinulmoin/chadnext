@@ -27,7 +27,7 @@ const fileTypes = ["image"];
 export default function ImageUploadModal({
   onChange,
 }: {
-  onChange: ControllerRenderProps<SettingsValues, "image">["onChange"];
+  onChange: ControllerRenderProps<SettingsValues, "picture">["onChange"];
 }) {
   const [files, setFiles] = useState<File[]>([]);
   const [preview, setPreview] = useState<string | null>(null);

@@ -45,8 +45,8 @@ export default function Navbar({
           {loggedInUser ? (
             <UserNav user={loggedInUser} />
           ) : (
-            <Link href="/signin" className={buttonVariants()}>
-              Sign In
+            <Link href="/login" className={buttonVariants()}>
+              Login
             </Link>
           )}
         </div>
@@ -78,11 +78,11 @@ export default function Navbar({
                 <UserNav user={loggedInUser} />
               ) : (
                 <Link
-                  href="/signin"
+                  href="/login"
                   className={buttonVariants()}
                   onClick={() => setIsModalOpen(false)}
                 >
-                  Sign In
+                  Login
                 </Link>
               )}
             </div>

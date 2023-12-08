@@ -1,15 +1,14 @@
-import { getServerSession } from "next-auth";
 import { cache } from "react";
-import { authOptions } from "~/lib/auth";
 import db from "~/lib/db";
+import { getPageSession } from "~/lib/auth";
 import { type payload } from "~/types";
 
 export const getUser = cache(async () => {
-  const session = await getServerSession(authOptions);
+  const session = await getPageSession();
 
   if (session) {
     const user = await db.user.findFirst({
-      where: { id: session.user.id },
+      where: { id: session.user.userId },
     });
 
     if (user) {

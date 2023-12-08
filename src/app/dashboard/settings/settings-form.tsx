@@ -17,7 +17,6 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { Textarea } from "~/components/ui/textarea";
 import { toast } from "~/components/ui/use-toast";
 import {
   saRemoveNewImageFromCDN,
@@ -48,28 +47,27 @@ export default function SettingsForm({
     values: {
       name: currentUser.name,
       email: currentUser.email,
-      shortBio: currentUser.shortBio,
-      image: currentUser.image,
+      picture: currentUser.picture,
     },
   });
 
   const { formState, getFieldState } = form;
-  const { isDirty: isImageChanged } = getFieldState("image");
+  const { isDirty: isImageChanged } = getFieldState("picture");
 
   const [showConfirmAlert, setShowConfirmAlert] = useState(false);
 
   useEffect(() => {
-    if (isImageChanged && currentUser.image !== oldImage.current) {
-      oldImage.current = currentUser.image;
+    if (isImageChanged && currentUser.picture !== oldImage.current) {
+      oldImage.current = currentUser.picture;
     }
-  }, [currentUser.image, isImageChanged]);
+  }, [currentUser.picture, isImageChanged]);
 
   function onSubmit(data: SettingsValues) {
     if (!formState.isDirty) return;
 
     if (isImageChanged) {
       startTransition(() =>
-        saRemoveUserOldImageFromCDN(currentUser.id, data.image)
+        saRemoveUserOldImageFromCDN(currentUser.id, data.picture)
           .then(() => saUpdateUserInDb(currentUser.id, data))
           .then(() => {
             toast({
@@ -103,7 +101,7 @@ export default function SettingsForm({
 
   function handleReset() {
     if (isImageChanged) {
-      saRemoveNewImageFromCDN(form.getValues().image)
+      saRemoveNewImageFromCDN(form.getValues().picture)
         .then(() => form.reset())
         .catch((error) => console.error(error));
     } else {
@@ -119,7 +117,7 @@ export default function SettingsForm({
       >
         <FormField
           control={form.control}
-          name="image"
+          name="picture"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Picture</FormLabel>
@@ -162,23 +160,6 @@ export default function SettingsForm({
                   className=" bg-muted"
                   readOnly
                   placeholder="Your email address"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="shortBio"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Short Bio</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Tell us a little bit about yourself"
-                  className="resize-none bg-background"
                   {...field}
                 />
               </FormControl>

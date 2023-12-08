@@ -86,10 +86,10 @@ export const viewport = {
 
 export default function RootLayout({
   children,
-  signinDialog,
+  loginDialog,
 }: {
   children: React.ReactNode;
-  signinDialog: React.ReactNode;
+  loginDialog: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -104,7 +104,7 @@ export default function RootLayout({
           <Header />
           <main>
             {children}
-            {signinDialog}
+            {loginDialog}
           </main>
           <Footer />
           <Toaster />
