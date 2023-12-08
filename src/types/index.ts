@@ -5,19 +5,17 @@ export type CurrentUser = {
   id: string;
   name: string;
   email: string;
-  image: string;
-  shortBio: string;
+  picture: string;
 };
 
 export interface payload {
   name: string;
   email: string;
-  shortBio?: string;
-  image?: string;
+  picture?: string;
 }
 
 export const settingsSchema = z.object({
-  image: z.string().url(),
+  picture: z.string().url(),
   name: z
     .string({
       required_error: "Please type your name.",

@@ -1,100 +1,36 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { type NextAuthOptions } from "next-auth";
-import EmailProvider, {
-  type SendVerificationRequestParams,
-} from "next-auth/providers/email";
-import GithubProvider from "next-auth/providers/github";
-import db from "~/lib/db";
-import { sendMail } from "./resend";
+import { prisma } from "@lucia-auth/adapter-prisma";
+import { github } from "@lucia-auth/oauth/providers";
+import { lucia } from "lucia";
+import { nextjs_future } from "lucia/middleware";
+import "lucia/polyfill/node";
+import db from "./db";
+import { cache } from "react";
+import * as context from "next/headers";
 
-const sendVerificationRequest = async ({
-  identifier: email,
-  url,
-}: SendVerificationRequestParams) => {
-  const user = await db.user.findFirst({
-    where: {
-      email,
-    },
-    select: {
-      name: true,
-    },
-  });
-
-  try {
-    await sendMail({
-      toMail: email,
-      type: "verification",
-      data: {
-        name: user?.name as string,
-        url,
-      },
-    });
-  } catch (error) {
-    throw new Error(JSON.stringify(error));
-  }
-};
-
-export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(db),
-  providers: [
-    EmailProvider({
-      sendVerificationRequest,
-    }),
-    GithubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID as string,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-    }),
-  ],
-  pages: {
-    signIn: "/signin",
+export const auth = lucia({
+  adapter: prisma(db),
+  env: process.env.NODE_ENV === "production" ? "PROD" : "DEV",
+  middleware: nextjs_future(),
+  sessionCookie: {
+    expires: false,
   },
-  session: {
-    strategy: "jwt",
+  getUserAttributes: (user) => {
+    return {
+      name: user.name as string,
+      email: user.email as string,
+      picture: user.picture as string,
+    };
   },
-  callbacks: {
-    async session({ token, session }) {
-      if (token) {
-        session.user.id = token.id;
-        session.user.name = token.name;
-        session.user.email = token.email;
-        session.user.image = token.picture;
-      }
+});
 
-      return session;
-    },
-    async jwt({ token, user }) {
-      const dbUser = await db.user.findFirst({
-        where: {
-          email: token.email,
-        },
-      });
+export const githubAuth = github(auth, {
+  clientId: process.env.GITHUB_CLIENT_ID ?? "",
+  clientSecret: process.env.GITHUB_CLIENT_SECRET ?? "",
+});
 
-      if (!dbUser) {
-        if (user) {
-          token.id = user.id;
-        }
-        return token;
-      }
+export const getPageSession = cache(() => {
+  const authRequest = auth.handleRequest("GET", context);
+  return authRequest.validate();
+});
 
-      return {
-        id: dbUser.id,
-        name: dbUser.name,
-        email: dbUser.email,
-        picture: dbUser.image,
-      };
-    },
-  },
-  events: {
-    async signIn({ user, isNewUser }) {
-      if (user && isNewUser) {
-        await sendMail({
-          toMail: user.email as string,
-          type: "new-signin",
-          data: {
-            name: user.name as string,
-          },
-        });
-      }
-    },
-  },
-};
+export type Auth = typeof auth;
