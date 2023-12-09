@@ -30,8 +30,8 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   keywords: [
     "Next.js",
-    "shadcn/ui",
-    "NextAuth",
+    "Shadcn/ui",
+    "LuciaAuth",
     "Prisma",
     "Vercel",
     "Tailwind",

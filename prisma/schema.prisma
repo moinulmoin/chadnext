@@ -1,4 +1,3 @@
-// This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
@@ -7,8 +6,8 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  url       = env("DB_PRISMA_URL") // uses connection pooling
+  directUrl = env("DB_URL_NON_POOLING") // uses a direct connection
 }
 
 model Session {
@@ -36,7 +35,7 @@ model User {
   email        String?   @unique
   picture      String?
   auth_session Session[]
-  keys         Key[]
+  key          Key[]
   projects     Project[]
 
   stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
