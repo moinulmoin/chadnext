@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { buttonVariants } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
+import Icons from "../shared/icons";
 
 // const userAuthSchema = z.object({
 //   email: z.string().email("Please enter a valid email address."),
@@ -119,7 +120,7 @@ export default function AuthForm() {
         ) : (
           <Icons.gitHub className="mr-2 h-4 w-4" />
         )}{" "} */}
-        Continue with Github
+        Continue with <Icons.gitHub className="ml-2 h-4 w-4" />
       </Link>
     </div>
   );

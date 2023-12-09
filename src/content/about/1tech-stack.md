@@ -8,7 +8,7 @@ title: Tech Stack
 - Component Library: **[Shadcn/ui](https://ui.shadcn.com/)**
 - Database: **[Postgres](https://vercel.com/postgres)**
 - ORM: **[Prisma](https://www.prisma.io/)**
-- Authentication: **[NextAuth.js](https://next-auth.js.org/)**
+- Authentication: **[LuciaAuth](https://lucia-auth.com/)**
 - Deployment: **[Vercel](https://vercel.com/)**
 - Email: **[Resend](https://resend.com/)**
 - File Storage: **[UploadThing](https://uploadthing.com/)**
