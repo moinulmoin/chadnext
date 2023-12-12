@@ -18,9 +18,7 @@ export const ourFileRouter = {
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId: session.user.userId };
     })
-    .onUploadComplete(async () => {
-      // This code runs on your server after upload
-    }),
+    .onUploadComplete(() => {}),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
