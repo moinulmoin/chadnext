@@ -60,14 +60,15 @@ export default function ImageUploadModal({
     {
       onClientUploadComplete: (res) => {
         if (res) {
-          onChange(res[0].fileUrl);
+          onChange(res[0].url);
           toast({
             title: "Uploaded successfully!",
           });
           setShowModal(false);
         }
       },
-      onUploadError: () => {
+      onUploadError: (e) => {
+        console.error(e);
         toast({
           title: "Error occurred while uploading!",
           variant: "destructive",
