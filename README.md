@@ -21,7 +21,6 @@ Save time and effort, and build performant apps with an excellent developer expe
 1. Clone the repo.
 2. Install dependencies: `pnpm install`
 3. Copy `.env.example` file to `.env` file. then follow the instructions inside.
-4. Run prisma migrate: `pnpm prisma migrate dev --name init`
 5. Start the dev server: `pnpm dev`
 
 ### Or
