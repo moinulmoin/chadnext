@@ -10,7 +10,6 @@ import { getImageKeyFromUrl, isOurCdnUrl } from "./utils";
 
 import ThanksTemp from "emails/thanks";
 import { nanoid } from "nanoid";
-import { type CreateEmailOptions } from "resend/build/src/emails/interfaces";
 import { resend } from "~/lib/resend";
 
 export async function checkEmailExists(email: string) {
@@ -73,6 +72,7 @@ export const sendMail = async ({ toMail, data }: SendMailProps) => {
   const subject = "Thanks for using ChadNext!";
   const temp = ThanksTemp({ userName: data.name });
 
+  //@ts-expect-error text field is required
   await resend.emails.send({
     from: `ChadNext App <chadnext@moinulmoin.com>`,
     to: toMail,
@@ -81,5 +81,5 @@ export const sendMail = async ({ toMail, data }: SendMailProps) => {
       "X-Entity-Ref-ID": nanoid(),
     },
     react: temp,
-  } as CreateEmailOptions);
+  });
 };
