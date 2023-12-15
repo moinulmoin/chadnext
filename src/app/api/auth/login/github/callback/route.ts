@@ -35,12 +35,15 @@ export const GET = async (request: NextRequest) => {
 
     const user = await getUser();
 
-    sendMail({
-      toMail: user.email,
-      data: {
-        name: user.name,
-      },
-    });
+    const existingUser = await getExistingUser();
+    if (!existingUser) {
+      sendMail({
+        toMail: user.email,
+        data: {
+          name: user.name,
+        },
+      });
+    }
 
     const session = await auth.createSession({
       userId: user.userId,
