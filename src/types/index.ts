@@ -43,3 +43,10 @@ export type UserSubscriptionPlan = SubscriptionPlan &
     stripeCurrentPeriodEnd: number;
     isPro: boolean;
   };
+
+export interface SendMailProps {
+  toMail: string;
+  data: {
+    name: string;
+  };
+}

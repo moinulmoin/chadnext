@@ -44,3 +44,4 @@ next-env.d.ts
 # worker
 sw.*
 workbox-*.*
+.react-email
