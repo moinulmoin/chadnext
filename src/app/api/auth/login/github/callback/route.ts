@@ -3,6 +3,7 @@ import { cookies, headers } from "next/headers";
 import { auth, githubAuth } from "~/lib/auth";
 
 import type { NextRequest } from "next/server";
+import { sendMail } from "~/server/actions";
 
 export const GET = async (request: NextRequest) => {
   const storedState = cookies().get("github_oauth_state")?.value;
@@ -33,6 +34,14 @@ export const GET = async (request: NextRequest) => {
     };
 
     const user = await getUser();
+
+    sendMail({
+      toMail: user.email,
+      data: {
+        name: user.name,
+      },
+    });
+
     const session = await auth.createSession({
       userId: user.userId,
       attributes: {},

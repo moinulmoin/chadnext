@@ -1,12 +1,16 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { type payload } from "~/types";
+import { type SendMailProps, type payload } from "~/types";
 import { updateUser } from "./user";
 
 import db from "~/lib/db";
 import { utapi } from "./uploadthing";
 import { getImageKeyFromUrl, isOurCdnUrl } from "./utils";
+
+import ThanksTemp from "emails/thanks";
+import { nanoid } from "nanoid";
+import { resend } from "~/lib/resend";
 
 export async function checkEmailExists(email: string) {
   const user = await db.user.findFirst({
@@ -63,3 +67,19 @@ export async function removeNewImageFromCDN(image: string) {
   const imageFileKey = getImageKeyFromUrl(image);
   await utapi.deleteFiles(imageFileKey as string);
 }
+
+export const sendMail = async ({ toMail, data }: SendMailProps) => {
+  const subject = "Thanks for using ChadNext!";
+  const temp = ThanksTemp({ userName: data.name });
+
+  //@ts-expect-error text field is required
+  await resend.emails.send({
+    from: `ChadNext App <chadnext@moinulmoin.com>`,
+    to: toMail,
+    subject: subject,
+    headers: {
+      "X-Entity-Ref-ID": nanoid(),
+    },
+    react: temp,
+  });
+};

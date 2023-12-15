@@ -1,3 +1,5 @@
+// * INFO: Right now, this template is not being used in the project
+
 import {
   Body,
   Button,
@@ -14,18 +16,22 @@ import {
   Tailwind,
   Text,
 } from "@react-email/components";
-import { siteConfig } from "~/config/site";
 
-interface ThanksTemplateProps {
+const siteUrl =
+  process.env.NEXT_PUBLIC_URL ?? "https://chadnext.moinulmoin.com";
+
+interface VerificationTemplateProps {
   userName: string;
+  verificationUrl: string;
 }
 
-export const ThanksTemp: React.FC<Readonly<ThanksTemplateProps>> = ({
+const VerificationTemp: React.FC<Readonly<VerificationTemplateProps>> = ({
   userName,
+  verificationUrl,
 }) => (
   <Html>
     <Head />
-    <Preview>Welcome to ChadNext.</Preview>
+    <Preview>Click the link below to sign in to your account.</Preview>
     <Tailwind>
       <Body className="bg-white">
         <Container className="mx-auto py-20">
@@ -33,7 +39,7 @@ export const ThanksTemp: React.FC<Readonly<ThanksTemplateProps>> = ({
             <Row>
               <Column align="right">
                 <Img
-                  src={`${siteConfig.url}/chad-next.png`}
+                  src={`${siteUrl}/chad-next.png`}
                   height="50"
                   alt="ChadNext logo"
                   className="inline-block "
@@ -44,26 +50,28 @@ export const ThanksTemp: React.FC<Readonly<ThanksTemplateProps>> = ({
               </Column>
             </Row>
           </Section>
-          <Text className="my-4 text-base leading-6">Hi {userName},</Text>
-          <Text className="text-base leading-6">
-            Welcome to ChadNext. Now you can build your Next.js project 10x
-            faster.
+          <Text className="my-4 text-lg">Hi, {userName.split(" ")[0]}</Text>
+          <Text className="text-center text-base font-semibold ">
+            Click the link below to sign in to your account.
           </Text>
           <Section className="mt-8 text-center">
             <Button
               className="bg-bg-white inline-block rounded-md bg-slate-900 px-6 py-3 text-base text-gray-100"
-              href="https://github.com/moinulmoin/chadnext"
+              href={verificationUrl}
             >
-              Star on GitHub
+              Sign In
             </Button>
+            <Text className="mt-2.5 text-sm ">
+              This link expires in 24 hours and can only be used once.
+            </Text>
           </Section>
-          <Text className="mt-8 text-base leading-6">
+          <Text className="mt-8 ">
             Best,
             <br />
             ChadNext team
           </Text>
-          <Hr className="my-6 border-gray-300" />
-          <Text className="text-x text-gray-600">
+          <Hr className="my-8 border-gray-300" />
+          <Text className="text-sm text-gray-600">
             Developed by{" "}
             <Link href="https://twitter.com/immoinulmoin">Moinul Moin</Link>
           </Text>
@@ -72,3 +80,5 @@ export const ThanksTemp: React.FC<Readonly<ThanksTemplateProps>> = ({
     </Tailwind>
   </Html>
 );
+
+export default VerificationTemp;
