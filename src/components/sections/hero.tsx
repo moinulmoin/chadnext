@@ -40,7 +40,7 @@ export default async function Hero() {
             </Balancer>
           </p>
           <div className="mx-auto mt-6 flex items-center justify-center space-x-5">
-            <Link className={buttonVariants() + " gap-x-2"} href="/signin">
+            <Link className={buttonVariants() + " gap-x-2"} href="/login">
               Get Started
             </Link>
             <Link
