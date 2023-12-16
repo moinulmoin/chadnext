@@ -1,7 +1,6 @@
-import { Resend } from "resend";
-
 import ThanksTemp from "emails/thanks";
 import { nanoid } from "nanoid";
+import { Resend } from "resend";
 import { type SendMailProps } from "~/types";
 
 const resend = new Resend(process.env.RESEND_API_KEY);

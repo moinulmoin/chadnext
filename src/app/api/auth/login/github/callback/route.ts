@@ -29,20 +29,16 @@ export const GET = async (request: NextRequest) => {
           picture: githubUser.avatar_url,
         },
       });
-      return user;
-    };
-
-    const user = await getUser();
-
-    const existingUser = await getExistingUser();
-    if (!existingUser) {
       sendMail({
         toMail: user.email,
         data: {
           name: user.name,
         },
       });
-    }
+      return user;
+    };
+
+    const user = await getUser();
 
     const session = await auth.createSession({
       userId: user.userId,
