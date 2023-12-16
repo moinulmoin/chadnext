@@ -1,9 +1,9 @@
 import Link from "next/link";
 import Balancer from "react-wrap-balancer";
+import { getPageSession } from "~/lib/auth";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
 import { cn } from "~/lib/utils";
-import { getUser } from "~/server/user";
-import { type CurrentUser } from "~/types";
+import { Badge } from "../ui/badge";
 import { buttonVariants } from "../ui/button";
 import {
   Card,
@@ -15,10 +15,10 @@ import {
 } from "../ui/card";
 
 export default async function Pricing() {
-  const user = (await getUser()) as CurrentUser;
+  const session = await getPageSession();
 
-  const subscriptionPlan = user
-    ? await getUserSubscriptionPlan(user?.id)
+  const subscription = session
+    ? await getUserSubscriptionPlan(session?.user.userId)
     : null;
   return (
     <section>
@@ -34,14 +34,16 @@ export default async function Pricing() {
         <div className="flex flex-col justify-center gap-8 md:flex-row">
           <Card
             className={cn(
-              "w-full transition duration-200 ease-in-out hover:shadow-lg xl:w-[300px]",
-              subscriptionPlan !== null &&
-                !subscriptionPlan?.isPro &&
-                "bg-secondary"
+              "relative w-full transition duration-200 ease-in-out hover:shadow-lg xl:w-[300px]"
             )}
           >
             <CardHeader>
-              <CardTitle>Free Plan</CardTitle>
+              <CardTitle>
+                Free Plan{" "}
+                {subscription && !subscription?.isPro && (
+                  <Badge className=" absolute right-0 top-0 m-4">Current</Badge>
+                )}
+              </CardTitle>
               <CardDescription>Up to 3 projects</CardDescription>
             </CardHeader>
             <CardContent>
@@ -55,25 +57,28 @@ export default async function Pricing() {
               </p>
             </CardContent>
             <CardFooter className=" justify-center">
-              <Link href="/dashboard/billing" className={buttonVariants()}>
-                {subscriptionPlan === null
-                  ? "Get Started"
-                  : subscriptionPlan?.isPro
-                  ? "Switch Plan"
-                  : "Manage Plan"}
-              </Link>
+              {!subscription ? (
+                <Link href="/dashboard/billing" className={buttonVariants()}>
+                  Get Started
+                </Link>
+              ) : (
+                ""
+              )}
             </CardFooter>
           </Card>
           <Card
             className={cn(
-              "w-full transition duration-200 ease-in-out hover:shadow-lg xl:w-[300px]",
-              subscriptionPlan !== null &&
-                subscriptionPlan?.isPro &&
-                "bg-secondary"
+              "relative w-full transition duration-200 ease-in-out hover:shadow-lg xl:w-[300px]",
+              !subscription?.isPro && "bg-secondary"
             )}
           >
             <CardHeader>
-              <CardTitle>Pro Plan</CardTitle>
+              <CardTitle>
+                Pro Plan{" "}
+                {subscription && subscription?.isPro && (
+                  <Badge className=" absolute right-0 top-0 m-4">Current</Badge>
+                )}
+              </CardTitle>
               <CardDescription>Unlimited projects</CardDescription>
             </CardHeader>
             <CardContent>
@@ -88,11 +93,11 @@ export default async function Pricing() {
             </CardContent>
             <CardFooter className=" justify-center">
               <Link href="/dashboard/billing" className={buttonVariants()}>
-                {subscriptionPlan === null
+                {!subscription
                   ? "Get Started"
-                  : subscriptionPlan?.isPro
-                  ? "Manage Plan"
-                  : "Upgrade Plan"}
+                  : subscription?.isPro
+                    ? "Manage Plan"
+                    : "Upgrade Plan"}
               </Link>
             </CardFooter>
           </Card>

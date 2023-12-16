@@ -1,9 +1,8 @@
 import { OAuthRequestError } from "@lucia-auth/oauth";
 import { cookies, headers } from "next/headers";
-import { auth, githubAuth } from "~/lib/auth";
-
 import type { NextRequest } from "next/server";
-import { sendMail } from "~/server/actions";
+import { auth, githubAuth } from "~/lib/auth";
+import { sendMail } from "~/lib/resend";
 
 export const GET = async (request: NextRequest) => {
   const storedState = cookies().get("github_oauth_state")?.value;

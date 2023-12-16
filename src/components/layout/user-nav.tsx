@@ -1,5 +1,6 @@
 "use client";
 
+import { type User } from "lucia";
 import { LayoutDashboardIcon, LogOut } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
@@ -11,10 +12,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { type CurrentUser } from "~/types";
 import { Button } from "../ui/button";
 
-export default function UserNav({ user }: { user: CurrentUser }) {
+export default function UserNav({ user }: { user: User }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
