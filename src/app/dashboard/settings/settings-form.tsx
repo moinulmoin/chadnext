@@ -1,10 +1,16 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { type User } from "lucia";
 import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
+import {
+  removeNewImageFromCDN,
+  removeUserOldImageFromCDN,
+  updateUser,
+} from "~/app/dashboard/settings/actions";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
@@ -18,12 +24,7 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { toast } from "~/components/ui/use-toast";
-import {
-  saRemoveNewImageFromCDN,
-  saRemoveUserOldImageFromCDN,
-  saUpdateUserInDb,
-} from "~/server/actions";
-import { settingsSchema, type CurrentUser, type SettingsValues } from "~/types";
+import { settingsSchema, type SettingsValues } from "~/types";
 
 const ImageUploadModal = dynamic(
   () => import("~/components/layout/image-upload-modal")
@@ -33,11 +34,7 @@ const CancelConfirmModal = dynamic(
   () => import("~/components/layout/cancel-confirm-modal")
 );
 
-export default function SettingsForm({
-  currentUser,
-}: {
-  currentUser: CurrentUser;
-}) {
+export default function SettingsForm({ currentUser }: { currentUser: User }) {
   const oldImage = useRef("");
   const [pending, startTransition] = useTransition();
 
@@ -65,43 +62,31 @@ export default function SettingsForm({
   function onSubmit(data: SettingsValues) {
     if (!formState.isDirty) return;
 
-    if (isImageChanged) {
-      startTransition(() =>
-        saRemoveUserOldImageFromCDN(currentUser.id, data.picture)
-          .then(() => saUpdateUserInDb(currentUser.id, data))
-          .then(() => {
-            toast({
-              title: "Updated successfully!",
-            });
-          })
-          .catch(() => {
-            toast({
-              title: "Something went wrong.",
-              variant: "destructive",
-            });
-          })
-      );
-    } else {
-      startTransition(() =>
-        saUpdateUserInDb(currentUser.id, data)
-          .then(() => {
-            toast({
-              title: "Updated successfully!",
-            });
-          })
-          .catch(() => {
-            toast({
-              title: "Something went wrong.",
-              variant: "destructive",
-            });
-          })
-      );
-    }
+    startTransition(() => {
+      const updatePromise = isImageChanged
+        ? removeUserOldImageFromCDN(currentUser.userId, data.picture).then(() =>
+            updateUser(currentUser.userId, data)
+          )
+        : updateUser(currentUser.userId, data);
+
+      return updatePromise
+        .then(() => {
+          toast({
+            title: "Updated successfully!",
+          });
+        })
+        .catch(() => {
+          toast({
+            title: "Something went wrong.",
+            variant: "destructive",
+          });
+        });
+    });
   }
 
   function handleReset() {
     if (isImageChanged) {
-      saRemoveNewImageFromCDN(form.getValues().picture)
+      removeNewImageFromCDN(form.getValues().picture)
         .then(() => form.reset())
         .catch((error) => console.error(error));
     } else {

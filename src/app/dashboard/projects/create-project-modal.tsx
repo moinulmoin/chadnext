@@ -25,7 +25,7 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { toast } from "~/components/ui/use-toast";
-import { FreePlanLimitError } from "~/server/utils";
+import { FreePlanLimitError } from "~/lib/utils";
 import { checkIfFreePlanLimitReached, createProject } from "./action";
 
 export const projectSchema = z.object({

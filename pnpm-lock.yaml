@@ -109,6 +109,9 @@ dependencies:
     version: 3.22.4
 
 devDependencies:
+  '@tailwindcss/line-clamp':
+    specifier: ^0.4.4
+    version: 0.4.4(tailwindcss@3.3.6)
   '@tailwindcss/typography':
     specifier: ^0.5.10
     version: 0.5.10(tailwindcss@3.3.6)
@@ -3934,6 +3937,14 @@ packages:
     resolution: {integrity: sha512-E4KcWTpoLHqwPHLxidpOqQbcrZVgi0rsmmZXUle1jXmJfuIf/UWpczUJ7MZZ5tlxytgJXyp0w4PGkkeLiuIdZw==}
     dependencies:
       tslib: 2.6.2
+
+  /@tailwindcss/line-clamp@0.4.4(tailwindcss@3.3.6):
+    resolution: {integrity: sha512-5U6SY5z8N42VtrCrKlsTAA35gy2VSyYtHWCsg1H87NU1SXnEfekTVlrga9fzUDrrHcGi2Lb5KenUWb4lRQT5/g==}
+    peerDependencies:
+      tailwindcss: '>=2.0.0 || >=3.0.0 || >=3.0.0-alpha.1'
+    dependencies:
+      tailwindcss: 3.3.6
+    dev: true
 
   /@tailwindcss/typography@0.5.10(tailwindcss@3.3.6):
     resolution: {integrity: sha512-Pe8BuPJQJd3FfRnm6H0ulKIGoMEQS+Vq01R6M5aCrFB/ccR/shT+0kXLjouGC1gFLm9hopTFN+DMP0pfwRWzPw==}

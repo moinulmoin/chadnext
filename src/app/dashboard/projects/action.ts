@@ -3,9 +3,9 @@
 import { type Project } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { getPageSession } from "~/lib/auth";
 import db from "~/lib/db";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
-import { getUser } from "~/server/user";
 
 interface Payload {
   name: string;
@@ -13,14 +13,14 @@ interface Payload {
 }
 
 export async function createProject(payload: Payload) {
-  const user = await getUser();
+  const session = await getPageSession();
 
   await db.project.create({
     data: {
       ...payload,
       user: {
         connect: {
-          id: user?.id,
+          id: session?.user?.userId,
         },
       },
     },
@@ -30,8 +30,10 @@ export async function createProject(payload: Payload) {
 }
 
 export async function checkIfFreePlanLimitReached() {
-  const user = await getUser();
-  const subscriptionPlan = await getUserSubscriptionPlan(user?.id as string);
+  const session = await getPageSession();
+  const subscriptionPlan = await getUserSubscriptionPlan(
+    session?.user?.userId as string
+  );
 
   // If user is on a free plan.
   // Check if user has reached limit of 3 projects.
@@ -39,7 +41,7 @@ export async function checkIfFreePlanLimitReached() {
 
   const count = await db.project.count({
     where: {
-      userId: user?.id,
+      userId: session?.user?.userId,
     },
   });
 
@@ -47,10 +49,10 @@ export async function checkIfFreePlanLimitReached() {
 }
 
 export async function getProjects() {
-  const user = await getUser();
+  const session = await getPageSession();
   const projects = await db.project.findMany({
     where: {
-      userId: user?.id,
+      userId: session?.user?.userId,
     },
     orderBy: {
       createdAt: "desc",
@@ -60,22 +62,22 @@ export async function getProjects() {
 }
 
 export async function getProjectById(id: string) {
-  const user = await getUser();
+  const session = await getPageSession();
   const project = await db.project.findFirst({
     where: {
       id,
-      userId: user?.id,
+      userId: session?.user?.userId,
     },
   });
   return project as Project;
 }
 
 export async function updateProjectById(id: string, payload: Payload) {
-  const user = await getUser();
+  const session = await getPageSession();
   await db.project.update({
     where: {
       id,
-      userId: user?.id,
+      userId: session?.user?.userId,
     },
     data: payload,
   });
@@ -83,11 +85,11 @@ export async function updateProjectById(id: string, payload: Payload) {
 }
 
 export async function deleteProjectById(id: string) {
-  const user = await getUser();
+  const session = await getPageSession();
   await db.project.delete({
     where: {
       id,
-      userId: user?.id,
+      userId: session?.user?.userId,
     },
   });
   revalidatePath(`/dashboard/projects`);

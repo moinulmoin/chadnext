@@ -1,18 +1,14 @@
 "use client";
 
+import { type User } from "lucia";
 import { MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { buttonVariants } from "~/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";
-import { type CurrentUser } from "~/types";
 import UserNav from "../user-nav";
-export default function Navbar({
-  loggedInUser,
-}: {
-  loggedInUser: CurrentUser;
-}) {
+export default function Navbar({ loggedInUser }: { loggedInUser: User }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <nav className="flex h-full items-center justify-between">

@@ -1,8 +1,8 @@
 import { StarIcon } from "lucide-react";
 import Link from "next/link";
 import Balancer from "react-wrap-balancer";
+import { BrandIcons } from "~/components/shared/brand-icons";
 import Icons from "~/components/shared/icons";
-import { ToolIcons } from "~/components/shared/tool-icons";
 import { buttonVariants } from "~/components/ui/button";
 import { nFormatter } from "~/lib/utils";
 
@@ -40,7 +40,7 @@ export default async function Hero() {
             </Balancer>
           </p>
           <div className="mx-auto mt-6 flex items-center justify-center space-x-5">
-            <Link className={buttonVariants() + " gap-x-2"} href="/signin">
+            <Link className={buttonVariants() + " gap-x-2"} href="/login">
               Get Started
             </Link>
             <Link
@@ -76,22 +76,22 @@ export default async function Hero() {
 const tools = [
   {
     link: "https://www.typescriptlang.org/",
-    icon: ToolIcons.ts,
+    icon: BrandIcons.ts,
   },
   {
     link: "https://nextjs.org/",
-    icon: ToolIcons.nextjs,
+    icon: BrandIcons.nextjs,
   },
   {
     link: "https://tailwindcss.com/",
-    icon: ToolIcons.tailwind,
+    icon: BrandIcons.tailwind,
   },
   {
     link: "https://www.prisma.io/",
-    icon: ToolIcons.prisma,
+    icon: BrandIcons.prisma,
   },
   {
     link: "https://vercel.com/",
-    icon: ToolIcons.vercel,
+    icon: BrandIcons.vercel,
   },
 ];
