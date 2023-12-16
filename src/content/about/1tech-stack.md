@@ -9,6 +9,8 @@ title: Tech Stack
 - Database: **[Postgres](https://vercel.com/postgres)**
 - ORM: **[Prisma](https://www.prisma.io/)**
 - Authentication: **[LuciaAuth](https://lucia-auth.com/)**
+- Payment: **[Stripe](https://stripe.com/)**
+- Analytics: **[Umami](https://umami.is/)**
 - Deployment: **[Vercel](https://vercel.com/)**
 - Email: **[Resend](https://resend.com/)**
 - File Storage: **[UploadThing](https://uploadthing.com/)**
