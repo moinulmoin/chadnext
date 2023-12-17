@@ -11,7 +11,7 @@ export default function Features() {
           <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
             <Balancer>
               This template comes with features like Authentication, API routes,
-              File uploading and more in Next.js 13 app dir.
+              File uploading and more in Next.js App dir.
             </Balancer>
           </p>
         </div>
