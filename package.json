@@ -68,7 +68,7 @@
     "prettier": "3.1.1",
     "prettier-plugin-tailwindcss": "^0.5.9",
     "prisma": "^5.7.0",
-    "sharp": "^0.33.0",
+    "sharp": "^0.33.1",
     "tailwind-merge": "^2.1.0",
     "tailwindcss": "3.3.6",
     "tailwindcss-animate": "^1.0.7",
