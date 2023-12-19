@@ -12,6 +12,8 @@
     "postinstall": "lefthook install"
   },
   "dependencies": {
+    "@casl/ability": "^6.5.0",
+    "@casl/prisma": "^1.4.1",
     "@ducanh2912/next-pwa": "^10.0.0",
     "@hookform/resolvers": "^3.3.2",
     "@lucia-auth/adapter-prisma": "^3.0.2",

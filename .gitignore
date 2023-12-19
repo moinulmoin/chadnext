@@ -45,3 +45,6 @@ next-env.d.ts
 sw.*
 workbox-*.*
 .react-email
+
+
+/prisma/generated
