@@ -5,6 +5,6 @@ declare namespace Lucia {
     name: string;
     email: string;
     picture: string;
+    role: "member" | "admin";
   };
-  type DatabaseSessionAttributes = {};
 }

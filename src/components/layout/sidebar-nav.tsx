@@ -8,6 +8,11 @@ import Icons from "../shared/icons";
 
 const navItems = [
   {
+    title: "Overview",
+    href: "/dashboard/overview",
+    icon: Icons.dashboard,
+  },
+  {
     title: "Projects",
     href: "/dashboard/projects",
     icon: Icons.projectPlus,
@@ -33,7 +38,10 @@ export default function SidebarNav({ className, ...props }: SidebarNavProps) {
   const isActive = (href: string) => pathname === href;
   return (
     <nav
-      className={cn("flex gap-x-2 lg:flex-col lg:gap-y-1.5", className)}
+      className={cn(
+        "flex gap-x-2 overflow-x-scroll lg:flex-col lg:gap-y-1.5 lg:overflow-x-auto",
+        className
+      )}
       {...props}
     >
       {navItems.map((item) => (

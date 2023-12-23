@@ -2,7 +2,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "./generated/client"
 }
 
 datasource db {
@@ -38,8 +37,7 @@ model User {
   auth_session Session[]
   key          Key[]
   projects     Project[]
-  role         Role      @relation(fields: [roleId], references: [id])
-  roleId       String
+  role         Role      @default(member)
 
   stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
@@ -60,8 +58,7 @@ model Project {
   updatedAt DateTime @updatedAt
 }
 
-model Role {
-  id   String @id @default(cuid())
-  name String
-  User User[]
+enum Role {
+  member
+  admin
 }

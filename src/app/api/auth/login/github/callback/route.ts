@@ -4,6 +4,10 @@ import type { NextRequest } from "next/server";
 import { auth, githubAuth } from "~/lib/auth";
 import { sendMail } from "~/lib/resend";
 
+const isAdminMail = (mail: string) => {
+  return process.env.ADMIN_MAIL === mail;
+};
+
 export const GET = async (request: NextRequest) => {
   const storedState = cookies().get("github_oauth_state")?.value;
   const url = new URL(request.url);
@@ -27,6 +31,7 @@ export const GET = async (request: NextRequest) => {
           name: githubUser.name!,
           email: githubUser.email!,
           picture: githubUser.avatar_url,
+          role: isAdminMail(githubUser.email!) ? "admin" : "member",
         },
       });
       sendMail({
@@ -56,7 +61,7 @@ export const GET = async (request: NextRequest) => {
       },
     });
   } catch (e) {
-    console.log(e);
+    console.error(e);
 
     if (e instanceof OAuthRequestError) {
       // invalid code

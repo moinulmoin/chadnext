@@ -1,11 +1,12 @@
 import { prisma } from "@lucia-auth/adapter-prisma";
 import { github } from "@lucia-auth/oauth/providers";
-import { lucia } from "lucia";
+import { lucia, type User } from "lucia";
 import { nextjs_future } from "lucia/middleware";
 import "lucia/polyfill/node";
-import db from "./db";
-import { cache } from "react";
 import * as context from "next/headers";
+import { cache } from "react";
+import { defineAbilityFor } from "./casl";
+import db from "./db";
 
 export const auth = lucia({
   adapter: prisma(db),
@@ -16,9 +17,10 @@ export const auth = lucia({
   },
   getUserAttributes: (user) => {
     return {
-      name: user.name as string,
-      email: user.email as string,
-      picture: user.picture as string,
+      name: user.name,
+      email: user.email,
+      picture: user.picture,
+      role: user.role,
     };
   },
 });
@@ -34,3 +36,9 @@ export const getPageSession = cache(() => {
 });
 
 export type Auth = typeof auth;
+
+export const getAbility = async () => {
+  const session = await getPageSession();
+  const user = session?.user as User;
+  return defineAbilityFor(user);
+};
