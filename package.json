@@ -29,7 +29,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@react-email/components": "^0.0.12",
     "@uploadthing/react": "^6.0.2",
-    "date-fns": "^2.30.0",
+    "date-fns": "^3.0.6",
     "lucia": "^2.7.4",
     "lucide-react": "^0.294.0",
     "nanoid": "^5.0.4",
