@@ -1,5 +1,5 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { getPageSession } from "~/lib/auth";
+import { getUser } from "~/lib/auth";
 
 const f = createUploadthing();
 
@@ -10,13 +10,13 @@ export const ourFileRouter = {
     // Set permissions and file types for this FileRoute
     .middleware(async () => {
       // This code runs on your server before upload
-      const session = await getPageSession();
+      const user = await getUser();
 
       // If you throw, the user will not be able to upload
-      if (!session) throw new Error("Unauthorized!");
+      if (!user) throw new Error("Unauthorized!");
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: session.user.userId };
+      return { userId: user.id };
     })
     .onUploadComplete(() => {}),
 } satisfies FileRouter;

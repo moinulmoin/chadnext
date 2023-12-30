@@ -1,64 +1,77 @@
-import { OAuthRequestError } from "@lucia-auth/oauth";
-import { cookies, headers } from "next/headers";
+import { OAuth2RequestError } from "arctic";
+import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
-import { auth, githubAuth } from "~/lib/auth";
+import { github, lucia } from "~/lib/auth";
+import db from "~/lib/db";
 import { sendMail } from "~/lib/resend";
 
 export const GET = async (request: NextRequest) => {
-  const storedState = cookies().get("github_oauth_state")?.value;
   const url = new URL(request.url);
-  const state = url.searchParams.get("state");
   const code = url.searchParams.get("code");
-  // validate state
-  if (!storedState || !state || storedState !== state || !code) {
+  const state = url.searchParams.get("state");
+  const storedState = cookies().get("github_oauth_state")?.value ?? null;
+  if (!code || !state || !storedState || state !== storedState) {
     return new Response(null, {
       status: 400,
     });
   }
+
   try {
-    const { getExistingUser, githubUser, createUser } =
-      await githubAuth.validateCallback(code);
+    const tokens = await github.validateAuthorizationCode(code);
+    const githubUserResponse = await fetch("https://api.github.com/user", {
+      headers: {
+        Authorization: `Bearer ${tokens.accessToken}`,
+      },
+    });
+    const githubUser: GitHubUser = await githubUserResponse.json();
+    const existingUser = await db.user.findUnique({
+      where: {
+        github_id: githubUser.id,
+      },
+    });
 
-    const getUser = async () => {
-      const existingUser = await getExistingUser();
-      if (existingUser) return existingUser;
-      const user = await createUser({
-        attributes: {
-          name: githubUser.name!,
-          email: githubUser.email!,
-          picture: githubUser.avatar_url,
+    if (existingUser) {
+      const session = await lucia.createSession(existingUser.id, {});
+      const sessionCookie = lucia.createSessionCookie(session.id);
+      cookies().set(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes
+      );
+      return new Response(null, {
+        status: 302,
+        headers: {
+          Location: "/dashboard",
         },
       });
-      sendMail({
-        toMail: user.email,
-        data: {
-          name: user.name,
-        },
-      });
-      return user;
-    };
+    }
 
-    const user = await getUser();
-
-    const session = await auth.createSession({
-      userId: user.userId,
-      attributes: {},
+    const newUser = await db.user.create({
+      data: {
+        github_id: githubUser.id,
+        name: githubUser.name,
+        email: githubUser.email,
+        picture: githubUser.avatar_url,
+      },
     });
-    const authRequest = auth.handleRequest(request.method, {
-      cookies,
-      headers,
-    });
-    authRequest.setSession(session);
+    sendMail({ toMail: newUser.email!, data: { name: newUser.name! } });
+    const session = await lucia.createSession(newUser.id, {});
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    cookies().set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes
+    );
     return new Response(null, {
       status: 302,
       headers: {
-        Location: "/dashboard", // redirect to profile page
+        Location: "/dashboard",
       },
     });
   } catch (e) {
     console.log(e);
-
-    if (e instanceof OAuthRequestError) {
+    // the specific error message depends on the provider
+    if (e instanceof OAuth2RequestError) {
       // invalid code
       return new Response(null, {
         status: 400,
@@ -69,3 +82,10 @@ export const GET = async (request: NextRequest) => {
     });
   }
 };
+
+interface GitHubUser {
+  id: number;
+  name: string;
+  email: string;
+  avatar_url: string;
+}

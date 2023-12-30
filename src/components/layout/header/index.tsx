@@ -1,13 +1,13 @@
 import { type User } from "lucia";
-import { getPageSession } from "~/lib/auth";
+import { getUser } from "~/lib/auth";
 import Navbar from "./navbar";
 
 export default async function Header() {
-  const session = await getPageSession();
+  const user = await getUser();
   return (
     <header className="h-20 w-full">
       <div className="container h-full">
-        <Navbar loggedInUser={session?.user as User} />
+        <Navbar loggedInUser={user as User} />
       </div>
     </header>
   );

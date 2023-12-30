@@ -11,32 +11,20 @@ datasource db {
 }
 
 model Session {
-  id             String @id @unique @default(cuid())
-  user_id        String
-  active_expires BigInt
-  idle_expires   BigInt
-  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
-
-  @@index([user_id])
-}
-
-model Key {
-  id              String  @id @unique @default(cuid())
-  hashed_password String?
-  user_id         String
-  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
-
-  @@index([user_id])
+  id        String   @id
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model User {
-  id           String    @id @unique @default(cuid())
-  name         String?
-  email        String?   @unique
-  picture      String?
-  auth_session Session[]
-  key          Key[]
-  projects     Project[]
+  id        String    @id @unique @default(cuid())
+  name      String?
+  email     String?   @unique
+  picture   String?
+  github_id Int       @unique
+  sessions  Session[]
+  projects  Project[]
 
   stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
