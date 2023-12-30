@@ -3,7 +3,7 @@
 import { type Project } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { getUser } from "~/lib/auth";
+import { validateRequest } from "~/lib/auth";
 import db from "~/lib/db";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
 
@@ -13,7 +13,7 @@ interface Payload {
 }
 
 export async function createProject(payload: Payload) {
-  const user = await getUser();
+  const { user } = await validateRequest();
 
   await db.project.create({
     data: {
@@ -30,7 +30,7 @@ export async function createProject(payload: Payload) {
 }
 
 export async function checkIfFreePlanLimitReached() {
-  const user = await getUser();
+  const { user } = await validateRequest();
   const subscriptionPlan = await getUserSubscriptionPlan(user?.id as string);
 
   // If user is on a free plan.
@@ -47,7 +47,7 @@ export async function checkIfFreePlanLimitReached() {
 }
 
 export async function getProjects() {
-  const user = await getUser();
+  const { user } = await validateRequest();
   const projects = await db.project.findMany({
     where: {
       userId: user?.id,
@@ -60,7 +60,7 @@ export async function getProjects() {
 }
 
 export async function getProjectById(id: string) {
-  const user = await getUser();
+  const { user } = await validateRequest();
   const project = await db.project.findFirst({
     where: {
       id,
@@ -71,7 +71,7 @@ export async function getProjectById(id: string) {
 }
 
 export async function updateProjectById(id: string, payload: Payload) {
-  const user = await getUser();
+  const { user } = await validateRequest();
   await db.project.update({
     where: {
       id,
@@ -83,7 +83,7 @@ export async function updateProjectById(id: string, payload: Payload) {
 }
 
 export async function deleteProjectById(id: string) {
-  const user = await getUser();
+  const { user } = await validateRequest();
   await db.project.delete({
     where: {
       id,

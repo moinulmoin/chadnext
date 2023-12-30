@@ -1,6 +1,6 @@
 import { type User } from "lucia";
 import { type Metadata } from "next";
-import { getUser } from "~/lib/auth";
+import { validateRequest } from "~/lib/auth";
 import SettingsForm from "./settings-form";
 
 export const metadata: Metadata = {
@@ -8,6 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default async function Settings() {
-  const user = await getUser();
+  const { user } = await validateRequest();
   return <SettingsForm currentUser={user as User} />;
 }

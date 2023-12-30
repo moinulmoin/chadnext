@@ -1,7 +1,7 @@
 import { AlertTriangleIcon } from "lucide-react";
 import { BillingForm } from "~/components/billing-form";
 import { Alert, AlertDescription } from "~/components/ui/alert";
-import { getUser } from "~/lib/auth";
+import { validateRequest } from "~/lib/auth";
 import { stripe } from "~/lib/stripe";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
 
@@ -9,7 +9,7 @@ export const revalidate = 0;
 export const dynamic = "force-dynamic";
 
 export default async function Billing() {
-  const user = await getUser();
+  const { user } = await validateRequest();
 
   const subscriptionPlan = await getUserSubscriptionPlan(user?.id as string);
 

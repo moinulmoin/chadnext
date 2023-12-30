@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { proPlan } from "~/config/subscription";
-import { getUser } from "~/lib/auth";
+import { validateRequest } from "~/lib/auth";
 import { stripe } from "~/lib/stripe";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
 
@@ -8,9 +8,9 @@ const billingUrl = process.env.NEXT_PUBLIC_APP_URL + "/dashboard/billing";
 
 export async function GET() {
   try {
-    const user = await getUser();
+    const { user, session } = await validateRequest();
 
-    if (!user) {
+    if (!session) {
       return new Response("Unauthorized", { status: 401 });
     }
 

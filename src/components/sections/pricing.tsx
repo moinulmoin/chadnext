@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Balancer from "react-wrap-balancer";
-import { getUser } from "~/lib/auth";
+import { validateRequest } from "~/lib/auth";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
 import { cn } from "~/lib/utils";
 import { Badge } from "../ui/badge";
@@ -15,7 +15,7 @@ import {
 } from "../ui/card";
 
 export default async function Pricing() {
-  const user = await getUser();
+  const { user } = await validateRequest();
 
   const subscription = user ? await getUserSubscriptionPlan(user.id) : null;
   return (
