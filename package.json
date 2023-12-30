@@ -3,7 +3,7 @@
   "version": "1.5.0",
   "private": true,
   "scripts": {
-    "dev": "prisma generate && next dev",
+    "dev": "prisma generate && next dev --turbo",
     "dev:email": "email dev -p 9000",
     "build": "prisma generate && prisma db push && next build",
     "start": "next start",

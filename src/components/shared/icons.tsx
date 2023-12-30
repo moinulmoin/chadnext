@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import {
   AlertTriangle,
   ArrowRight,
@@ -17,8 +16,6 @@ import {
   Laptop,
   LayoutDashboard,
   Loader2,
-  LucideIcon,
-  LucideProps,
   Moon,
   MoreVertical,
   MoveLeft,
@@ -29,6 +26,8 @@ import {
   Twitter,
   User,
   X,
+  type LucideIcon,
+  type LucideProps,
 } from "lucide-react";
 
 export type Icon = LucideIcon;

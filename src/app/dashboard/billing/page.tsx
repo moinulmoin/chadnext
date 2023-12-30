@@ -1,6 +1,6 @@
 import { AlertTriangleIcon } from "lucide-react";
 import { BillingForm } from "~/components/billing-form";
-import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
+import { Alert, AlertDescription } from "~/components/ui/alert";
 import { getPageSession } from "~/lib/auth";
 import { stripe } from "~/lib/stripe";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
@@ -26,21 +26,24 @@ export default async function Billing() {
   return (
     <div className="space-y-8 ">
       <Alert>
-        <AlertTriangleIcon className="h-4 w-4" />
-        <AlertTitle>This is a template.</AlertTitle>
-        <AlertDescription>
-          ChadNext just demonstrates how to use Stripe in Next.js App router.
-          Please use test cards from{" "}
-          <a
-            href="https://stripe.com/docs/testing#cards"
-            target="_blank"
-            rel="noreferrer"
-            className="font-medium underline underline-offset-4"
-          >
-            Stripe docs
-          </a>
-          .
-        </AlertDescription>
+        <div className=" flex items-center gap-2">
+          <AlertTriangleIcon className="h-6 w-6 shrink-0" />
+          <div>
+            <AlertDescription>
+              <strong>ChadNext</strong> just demonstrates how to use Stripe in
+              Next.js App router. Please use test cards from{" "}
+              <a
+                href="https://stripe.com/docs/testing#cards"
+                target="_blank"
+                rel="noreferrer"
+                className="font-medium underline underline-offset-4"
+              >
+                Stripe docs
+              </a>
+              .
+            </AlertDescription>
+          </div>
+        </div>
       </Alert>
       <BillingForm
         subscriptionPlan={{
