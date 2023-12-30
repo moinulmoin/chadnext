@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { logout } from "~/server/logout";
 import { Button } from "../ui/button";
 
 export default function UserNav({ user }: { user: User }) {
@@ -40,7 +41,7 @@ export default function UserNav({ user }: { user: User }) {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <form action="/api/auth/logout" method="post">
+          <form action={logout}>
             <Button
               type="submit"
               className=" h-auto w-full justify-start p-0 hover:bg-transparent"

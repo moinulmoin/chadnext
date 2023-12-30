@@ -1,7 +1,7 @@
 import { AlertTriangleIcon } from "lucide-react";
 import { BillingForm } from "~/components/billing-form";
 import { Alert, AlertDescription } from "~/components/ui/alert";
-import { getPageSession } from "~/lib/auth";
+import { getUser } from "~/lib/auth";
 import { stripe } from "~/lib/stripe";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
 
@@ -9,11 +9,9 @@ export const revalidate = 0;
 export const dynamic = "force-dynamic";
 
 export default async function Billing() {
-  const session = await getPageSession();
+  const user = await getUser();
 
-  const subscriptionPlan = await getUserSubscriptionPlan(
-    session?.user?.userId as string
-  );
+  const subscriptionPlan = await getUserSubscriptionPlan(user?.id as string);
 
   // If user has a pro plan, check cancel status on Stripe.
   let isCanceled = false;
@@ -27,7 +25,7 @@ export default async function Billing() {
     <div className="space-y-8 ">
       <Alert>
         <div className=" flex items-center gap-2">
-          <AlertTriangleIcon className="h-6 w-6 shrink-0" />
+          <AlertTriangleIcon className="h-5 w-5 shrink-0" />
           <div>
             <AlertDescription>
               <strong>ChadNext</strong> just demonstrates how to use Stripe in

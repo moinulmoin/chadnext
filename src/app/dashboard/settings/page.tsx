@@ -1,6 +1,6 @@
 import { type User } from "lucia";
 import { type Metadata } from "next";
-import { getPageSession } from "~/lib/auth";
+import { getUser } from "~/lib/auth";
 import SettingsForm from "./settings-form";
 
 export const metadata: Metadata = {
@@ -8,6 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default async function Settings() {
-  const session = await getPageSession();
-  return <SettingsForm currentUser={session?.user as User} />;
+  const user = await getUser();
+  return <SettingsForm currentUser={user as User} />;
 }

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Balancer from "react-wrap-balancer";
-import { getPageSession } from "~/lib/auth";
+import { getUser } from "~/lib/auth";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
 import { cn } from "~/lib/utils";
 import { Badge } from "../ui/badge";
@@ -15,11 +15,9 @@ import {
 } from "../ui/card";
 
 export default async function Pricing() {
-  const session = await getPageSession();
+  const user = await getUser();
 
-  const subscription = session
-    ? await getUserSubscriptionPlan(session?.user.userId)
-    : null;
+  const subscription = user ? await getUserSubscriptionPlan(user.id) : null;
   return (
     <section>
       <div className="container space-y-6 py-8 md:py-12 lg:py-24">

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import SidebarNav from "~/components/layout/sidebar-nav";
-import { getPageSession } from "~/lib/auth";
+import { getUser } from "~/lib/auth";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -9,8 +9,8 @@ interface DashboardLayoutProps {
 export default async function DashboardLayout({
   children,
 }: DashboardLayoutProps) {
-  const session = await getPageSession();
-  if (!session) redirect("/login");
+  const user = await getUser();
+  if (!user) redirect("/login");
   return (
     <div className="container">
       <div className="flex min-h-[calc(100vh-140px)] flex-col gap-8 rounded-md py-8 md:min-h-[calc(100vh-160px)] lg:flex-row 2xl:gap-12">
