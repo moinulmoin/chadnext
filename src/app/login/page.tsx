@@ -1,7 +1,11 @@
+import { redirect } from "next/navigation";
 import AuthForm from "~/components/layout/auth-form";
 import { Card } from "~/components/ui/card";
+import { getUser } from "~/lib/auth";
 
 export default async function Signin() {
+  const user = await getUser();
+  if (user) redirect("/");
   return (
     <section>
       <div className="container ">
