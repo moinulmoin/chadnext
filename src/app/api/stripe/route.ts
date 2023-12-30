@@ -47,8 +47,6 @@ export async function GET() {
       },
     });
 
-    console.log({ stripeSession });
-
     return new Response(JSON.stringify({ url: stripeSession.url }));
   } catch (error) {
     if (error instanceof z.ZodError) {

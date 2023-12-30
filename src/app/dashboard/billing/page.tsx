@@ -13,8 +13,6 @@ export default async function Billing() {
 
   const subscriptionPlan = await getUserSubscriptionPlan(user?.id as string);
 
-  console.log({ subscriptionPlan });
-
   // If user has a pro plan, check cancel status on Stripe.
   let isCanceled = false;
   if (subscriptionPlan.isPro && subscriptionPlan.stripeSubscriptionId) {
@@ -27,7 +25,7 @@ export default async function Billing() {
     <div className="space-y-8 ">
       <Alert>
         <div className=" flex items-center gap-2">
-          <AlertTriangleIcon className="h-6 w-6 shrink-0" />
+          <AlertTriangleIcon className="h-5 w-5 shrink-0" />
           <div>
             <AlertDescription>
               <strong>ChadNext</strong> just demonstrates how to use Stripe in
