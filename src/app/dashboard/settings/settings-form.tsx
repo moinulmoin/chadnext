@@ -64,10 +64,10 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
 
     startTransition(() => {
       const updatePromise = isImageChanged
-        ? removeUserOldImageFromCDN(currentUser.userId, data.picture).then(() =>
-            updateUser(currentUser.userId, data)
+        ? removeUserOldImageFromCDN(currentUser.id, data.picture).then(() =>
+            updateUser(currentUser.id, data)
           )
-        : updateUser(currentUser.userId, data);
+        : updateUser(currentUser.id, data);
 
       return updatePromise
         .then(() => {
