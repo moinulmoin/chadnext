@@ -1,10 +1,6 @@
 import { type Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
-import Footer from "~/components/layout/footer";
-import Header from "~/components/layout/header";
-import ThemeProvider from "~/components/shared/theme-provider";
-import { Toaster } from "~/components/ui/toaster";
 import { siteConfig } from "~/config/site";
 
 import Script from "next/script";
@@ -86,13 +82,11 @@ export const viewport = {
 
 export default function RootLayout({
   children,
-  loginDialog,
 }: {
   children: React.ReactNode;
-  loginDialog: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html>
       <body
         className={cn(
           "font-sans antialiased",
@@ -100,15 +94,7 @@ export default function RootLayout({
           fontHeading.variable
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Header />
-          <main>
-            {children}
-            {loginDialog}
-          </main>
-          <Footer />
-          <Toaster />
-        </ThemeProvider>
+        {children}
       </body>
       {process.env.NODE_ENV === "production" && (
         <Script

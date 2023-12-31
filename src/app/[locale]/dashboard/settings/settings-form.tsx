@@ -6,11 +6,6 @@ import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import {
-  removeNewImageFromCDN,
-  removeUserOldImageFromCDN,
-  updateUser,
-} from "~/app/dashboard/settings/actions";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
@@ -25,6 +20,11 @@ import {
 import { Input } from "~/components/ui/input";
 import { toast } from "~/components/ui/use-toast";
 import { settingsSchema, type SettingsValues } from "~/types";
+import {
+  removeNewImageFromCDN,
+  removeUserOldImageFromCDN,
+  updateUser,
+} from "./actions";
 
 const ImageUploadModal = dynamic(
   () => import("~/components/layout/image-upload-modal")
