@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { logout } from "~/server/logout";
+import { logout } from "~/server/auth";
 import { Button } from "../ui/button";
 
 export default function UserNav({ user }: { user: User }) {

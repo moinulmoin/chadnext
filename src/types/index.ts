@@ -44,9 +44,11 @@ export type UserSubscriptionPlan = SubscriptionPlan &
     isPro: boolean;
   };
 
-export interface SendMailProps {
+export interface SendWelcomeEmailProps {
   toMail: string;
-  data: {
-    name: string;
-  };
+  userName: string;
+}
+
+export interface sendVerificationEmailProps extends SendWelcomeEmailProps {
+  verificationUrl: string;
 }

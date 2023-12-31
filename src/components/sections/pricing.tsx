@@ -1,8 +1,8 @@
 import Link from "next/link";
 import Balancer from "react-wrap-balancer";
-import { validateRequest } from "~/lib/auth";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
 import { cn } from "~/lib/utils";
+import { validateRequest } from "~/server/auth";
 import { Badge } from "../ui/badge";
 import { buttonVariants } from "../ui/button";
 import {

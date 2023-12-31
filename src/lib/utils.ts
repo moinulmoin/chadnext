@@ -53,3 +53,5 @@ export class FreePlanLimitError extends Error {
     super(message);
   }
 }
+
+export const appUrl = process.env.NEXT_PUBLIC_APP_URL;

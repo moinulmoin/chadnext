@@ -11,20 +11,30 @@ datasource db {
 }
 
 model Session {
-  id        String   @id
+  id        String   @id @default(cuid())
   userId    String
   expiresAt DateTime
   user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  userId    String
+  email     String
+  expiresAt DateTime
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
 model User {
-  id        String    @id @unique @default(cuid())
-  name      String?
-  email     String?   @unique
-  picture   String?
-  github_id Int       @unique
-  sessions  Session[]
-  projects  Project[]
+  id                      String                   @id @unique @default(cuid())
+  name                    String?
+  email                   String?                  @unique
+  emailVerified           Boolean?                 @default(false)
+  picture                 String?
+  githubId                Int?                     @unique
+  sessions                Session[]
+  projects                Project[]
+  emailVerificationTokens EmailVerificationToken[]
 
   stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")

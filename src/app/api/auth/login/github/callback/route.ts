@@ -1,9 +1,9 @@
 import { OAuth2RequestError } from "arctic";
 import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
-import { github, lucia } from "~/lib/auth";
 import db from "~/lib/db";
-import { sendMail } from "~/lib/resend";
+import { github, lucia } from "~/lib/lucia";
+import { sendWelcomeEmail } from "~/lib/resend";
 
 export const GET = async (request: NextRequest) => {
   const url = new URL(request.url);
@@ -26,7 +26,7 @@ export const GET = async (request: NextRequest) => {
     const githubUser: GitHubUser = await githubUserResponse.json();
     const existingUser = await db.user.findUnique({
       where: {
-        github_id: githubUser.id,
+        githubId: githubUser.id,
       },
     });
 
@@ -48,13 +48,13 @@ export const GET = async (request: NextRequest) => {
 
     const newUser = await db.user.create({
       data: {
-        github_id: githubUser.id,
+        githubId: githubUser.id,
         name: githubUser.name,
         email: githubUser.email,
         picture: githubUser.avatar_url,
       },
     });
-    sendMail({ toMail: newUser.email!, data: { name: newUser.name! } });
+    sendWelcomeEmail({ toMail: newUser.email!, userName: newUser.name! });
     const session = await lucia.createSession(newUser.id, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
     cookies().set(

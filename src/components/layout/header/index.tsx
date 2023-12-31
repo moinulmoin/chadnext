@@ -1,5 +1,5 @@
 import { type User } from "lucia";
-import { validateRequest } from "~/lib/auth";
+import { validateRequest } from "~/server/auth";
 import Navbar from "./navbar";
 
 export default async function Header() {
