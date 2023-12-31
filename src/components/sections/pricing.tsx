@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Balancer from "react-wrap-balancer";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
 import { cn } from "~/lib/utils";
 import { validateRequest } from "~/server/auth";
@@ -23,10 +22,8 @@ export default async function Pricing() {
       <div className="container space-y-6 py-8 md:py-12 lg:py-24">
         <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
           <h2 className="font-heading text-4xl md:text-6xl">Pricing</h2>
-          <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
-            <Balancer>
-              Choose the plan that’s right for you and start enjoying it all.
-            </Balancer>
+          <p className="max-w-[85%] text-balance leading-normal text-muted-foreground sm:text-lg sm:leading-7">
+            Choose the plan that’s right for you and start enjoying it all.
           </p>
         </div>
         <div className="flex flex-col justify-center gap-8 md:flex-row">

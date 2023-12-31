@@ -1,6 +1,5 @@
 import { StarIcon } from "lucide-react";
 import Link from "next/link";
-import Balancer from "react-wrap-balancer";
 import { BrandIcons } from "~/components/shared/brand-icons";
 import Icons from "~/components/shared/icons";
 import { buttonVariants } from "~/components/ui/button";
@@ -31,13 +30,11 @@ export default async function Hero() {
               Introducing ChadNext
             </p>
           </a>
-          <h1 className=" bg-gradient-to-br from-gray-900 via-gray-800 to-gray-400 bg-clip-text text-center font-heading text-[40px] font-bold leading-tight tracking-[-0.02em] text-transparent drop-shadow-sm duration-300 ease-linear animate-in zoom-in-75 dark:bg-gradient-to-br dark:from-gray-100 dark:to-gray-900 md:text-7xl md:leading-[5rem]">
-            <Balancer>Quick Starter Template for your Next.js project</Balancer>
+          <h1 className=" text-balance bg-gradient-to-br from-gray-900 via-gray-800 to-gray-400 bg-clip-text text-center font-heading text-[40px] font-bold leading-tight tracking-[-0.02em] text-transparent drop-shadow-sm duration-300 ease-linear animate-in zoom-in-75 md:text-7xl md:leading-[5rem] dark:bg-gradient-to-br dark:from-gray-100 dark:to-gray-900">
+            Quick Starter Template for your Next.js project
           </h1>
-          <p className="mt-6 text-center text-muted-foreground md:text-xl">
-            <Balancer>
-              Packed with all necessary features to get started.
-            </Balancer>
+          <p className="mt-6 text-balance text-center text-muted-foreground md:text-xl">
+            Packed with all necessary features to get started.
           </p>
           <div className="mx-auto mt-6 flex items-center justify-center space-x-5">
             <Link className={buttonVariants() + " gap-x-2"} href="/login">

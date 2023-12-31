@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Balancer from "react-wrap-balancer";
 import { siteConfig } from "~/config/site";
 
 export default function OpenSource() {
@@ -10,11 +9,9 @@ export default function OpenSource() {
           <h2 className="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-6xl">
             Proudly Open Source
           </h2>
-          <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
-            <Balancer>
-              ChadNext is open source and powered by open source software. The
-              code is available on GitHub.
-            </Balancer>
+          <p className="max-w-[85%] text-balance leading-normal text-muted-foreground sm:text-lg sm:leading-7">
+            ChadNext is open source and powered by open source software. The
+            code is available on GitHub.
           </p>
           <Link
             className="underline underline-offset-4"

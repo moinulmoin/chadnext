@@ -1,5 +1,5 @@
-import SignInModal from "~/components/layout/signin-modal";
+import LoginModal from "~/components/layout/login-modal";
 
-export default async function Signin() {
-  return <SignInModal />;
+export default async function Login() {
+  return <LoginModal />;
 }

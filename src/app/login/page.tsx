@@ -3,7 +3,7 @@ import AuthForm from "~/components/layout/auth-form";
 import { Card } from "~/components/ui/card";
 import { validateRequest } from "~/server/auth";
 
-export default async function Signin() {
+export default async function Login() {
   const { session } = await validateRequest();
   if (session) redirect("/");
   return (

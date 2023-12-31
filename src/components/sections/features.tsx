@@ -1,4 +1,3 @@
-import Balancer from "react-wrap-balancer";
 import { BrandIcons } from "../shared/brand-icons";
 import { Card } from "../ui/card";
 
@@ -8,11 +7,9 @@ export default function Features() {
       <div className="container space-y-6 rounded-md bg-secondary py-8 md:py-12 lg:py-24 ">
         <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
           <h2 className="font-heading text-4xl md:text-6xl">Features</h2>
-          <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
-            <Balancer>
-              This template comes with features like Authentication, API routes,
-              File uploading and more in Next.js App dir.
-            </Balancer>
+          <p className="max-w-[85%] text-balance leading-normal text-muted-foreground sm:text-lg sm:leading-7">
+            This template comes with features like Authentication, API routes,
+            File uploading and more in Next.js App dir.
           </p>
         </div>
         <div className="mx-auto grid justify-center gap-4 text-center sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-3">

@@ -27,7 +27,7 @@ const VerificationTemp: React.FC<Readonly<VerificationTemplateProps>> = ({
 }) => (
   <Html>
     <Head />
-    <Preview>Click the link below to sign in to your account.</Preview>
+    <Preview>Verify your email</Preview>
     <Tailwind>
       <Body className="bg-white">
         <Container className="mx-auto py-20">
@@ -48,7 +48,7 @@ const VerificationTemp: React.FC<Readonly<VerificationTemplateProps>> = ({
           </Section>
           <Text className="my-4 text-lg">Hi, {userName.split(" ")[0]}</Text>
           <Text className="text-center text-base font-semibold ">
-            Click the link below to sign in to your account.
+            Click the link below to login to your account.
           </Text>
           <Section className="mt-8 text-center">
             <Button

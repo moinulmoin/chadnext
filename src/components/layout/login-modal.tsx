@@ -9,7 +9,7 @@ import {
 } from "~/components/ui/dialog";
 import AuthForm from "./auth-form";
 
-export default function SignInModal() {
+export default function LoginModal() {
   const router = useRouter();
 
   return (
