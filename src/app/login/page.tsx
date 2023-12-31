@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import AuthForm from "~/components/layout/auth-form";
 import { Card } from "~/components/ui/card";
-import { validateRequest } from "~/lib/auth";
+import { validateRequest } from "~/server/auth";
 
 export default async function Signin() {
   const { session } = await validateRequest();

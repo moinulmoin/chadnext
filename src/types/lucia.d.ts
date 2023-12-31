@@ -1,4 +1,4 @@
-import { lucia } from "~/lib/auth";
+import { lucia } from "~/lib/lucia";
 
 declare module "lucia" {
   interface Register {
@@ -8,6 +8,5 @@ declare module "lucia" {
     name: string;
     email: string;
     picture: string;
-    github_id: number;
   }
 }

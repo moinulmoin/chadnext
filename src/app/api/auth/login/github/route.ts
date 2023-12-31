@@ -1,6 +1,6 @@
 import { generateState } from "arctic";
-import { github } from "~/lib/auth";
 import { cookies } from "next/headers";
+import { github } from "~/lib/lucia";
 
 export const GET = async () => {
   const state = generateState();

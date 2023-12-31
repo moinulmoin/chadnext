@@ -1,8 +1,8 @@
 import { z } from "zod";
 import { proPlan } from "~/config/subscription";
-import { validateRequest } from "~/lib/auth";
 import { stripe } from "~/lib/stripe";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
+import { validateRequest } from "~/server/auth";
 
 const billingUrl = process.env.NEXT_PUBLIC_APP_URL + "/dashboard/billing";
 

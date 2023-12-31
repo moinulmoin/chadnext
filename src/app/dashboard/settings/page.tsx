@@ -1,6 +1,6 @@
 import { type User } from "lucia";
 import { type Metadata } from "next";
-import { validateRequest } from "~/lib/auth";
+import { validateRequest } from "~/server/auth";
 import SettingsForm from "./settings-form";
 
 export const metadata: Metadata = {

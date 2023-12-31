@@ -1,9 +1,9 @@
 import { AlertTriangleIcon } from "lucide-react";
 import { BillingForm } from "~/components/billing-form";
 import { Alert, AlertDescription } from "~/components/ui/alert";
-import { validateRequest } from "~/lib/auth";
 import { stripe } from "~/lib/stripe";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
+import { validateRequest } from "~/server/auth";
 
 export const revalidate = 0;
 export const dynamic = "force-dynamic";

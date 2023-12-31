@@ -1,15 +1,11 @@
-// * INFO: Right now, this template is not being used in the project
-
 import {
   Body,
   Button,
   Column,
   Container,
   Head,
-  Hr,
   Html,
   Img,
-  Link,
   Preview,
   Row,
   Section,
@@ -62,18 +58,13 @@ const VerificationTemp: React.FC<Readonly<VerificationTemplateProps>> = ({
               Sign In
             </Button>
             <Text className="mt-2.5 text-sm ">
-              This link expires in 24 hours and can only be used once.
+              This link expires in 3 minutes and can only be used once.
             </Text>
           </Section>
           <Text className="mt-8 ">
             Best,
             <br />
             ChadNext team
-          </Text>
-          <Hr className="my-8 border-gray-300" />
-          <Text className="text-sm text-gray-600">
-            Developed by{" "}
-            <Link href="https://twitter.com/immoinulmoin">Moinul Moin</Link>
           </Text>
         </Container>
       </Body>
