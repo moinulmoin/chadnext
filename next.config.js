@@ -15,6 +15,7 @@ const nextConfig = {
       },
     ];
   },
+  trailingSlash: true,
 };
 
 module.exports = withPWA(withContentlayer(nextConfig));
