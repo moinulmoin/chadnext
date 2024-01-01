@@ -9,8 +9,8 @@ dependencies:
     specifier: ^10.0.0
     version: 10.0.0(esbuild@0.19.11)(next@14.0.4)(webpack@5.89.0)
   '@hookform/resolvers':
-    specifier: ^3.3.2
-    version: 3.3.2(react-hook-form@7.49.2)
+    specifier: ^3.3.3
+    version: 3.3.3(react-hook-form@7.49.2)
   '@lucia-auth/adapter-prisma':
     specifier: 4.0.0-beta.8
     version: 4.0.0-beta.8(@prisma/client@5.7.0)(lucia@3.0.0-beta.13)
@@ -2063,8 +2063,8 @@ packages:
       yargs: 17.7.2
     dev: true
 
-  /@hookform/resolvers@3.3.2(react-hook-form@7.49.2):
-    resolution: {integrity: sha512-Tw+GGPnBp+5DOsSg4ek3LCPgkBOuOgS5DsDV7qsWNH9LZc433kgsWICjlsh2J9p04H2K66hsXPPb9qn9ILdUtA==}
+  /@hookform/resolvers@3.3.3(react-hook-form@7.49.2):
+    resolution: {integrity: sha512-bOMxKkSD3zWcS11TKoUQ8O0ZqKslFohvUsPKSrdCHiuEuMjRo/u3cq9YRJD/+xtNGYup++XD2LkjhegP5XENiw==}
     peerDependencies:
       react-hook-form: ^7.0.0
     dependencies:
