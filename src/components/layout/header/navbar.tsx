@@ -60,6 +60,7 @@ export default function Navbar({
       </div>
       <Sheet open={isModalOpen} onOpenChange={setIsModalOpen}>
         <SheetTrigger className="md:hidden">
+          <span className="sr-only">Open Menu</span>
           <MenuIcon />
         </SheetTrigger>
         <SheetContent>
