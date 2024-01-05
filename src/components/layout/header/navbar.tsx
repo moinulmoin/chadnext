@@ -8,7 +8,18 @@ import { useState } from "react";
 import { buttonVariants } from "~/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";
 import UserNav from "../user-nav";
-export default function Navbar({ loggedInUser }: { loggedInUser: User }) {
+export default function Navbar({
+  user,
+  headerText,
+}: {
+  user: User;
+  headerText: {
+    changelog: string;
+    about: string;
+    login: string;
+    [key: string]: string;
+  };
+}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <nav className="flex h-full items-center justify-between">
@@ -28,27 +39,28 @@ export default function Navbar({ loggedInUser }: { loggedInUser: User }) {
             href="/changelog"
             className="font-semibold hover:underline hover:underline-offset-4"
           >
-            Changelog
+            {headerText.changelog}
           </Link>
           <Link
             href="/about"
             className="font-semibold hover:underline hover:underline-offset-4"
           >
-            About
+            {headerText.about}
           </Link>
         </div>
         <div className="flex items-center gap-x-2">
-          {loggedInUser ? (
-            <UserNav user={loggedInUser} />
+          {user ? (
+            <UserNav user={user} />
           ) : (
             <Link href="/login" className={buttonVariants()}>
-              Login
+              {headerText.login}
             </Link>
           )}
         </div>
       </div>
       <Sheet open={isModalOpen} onOpenChange={setIsModalOpen}>
         <SheetTrigger className="md:hidden">
+          <span className="sr-only">Open Menu</span>
           <MenuIcon />
         </SheetTrigger>
         <SheetContent>
@@ -59,26 +71,26 @@ export default function Navbar({ loggedInUser }: { loggedInUser: User }) {
                 className="block font-semibold hover:underline hover:underline-offset-4"
                 onClick={() => setIsModalOpen(false)}
               >
-                Changelog
+                {headerText.changelog}
               </Link>
               <Link
                 href="/about"
                 className="block font-semibold hover:underline hover:underline-offset-4"
                 onClick={() => setIsModalOpen(false)}
               >
-                About
+                {headerText.about}
               </Link>
             </div>
             <div className="flex items-center gap-x-2">
-              {loggedInUser ? (
-                <UserNav user={loggedInUser} />
+              {user ? (
+                <UserNav user={user} />
               ) : (
                 <Link
                   href="/login"
                   className={buttonVariants()}
                   onClick={() => setIsModalOpen(false)}
                 >
-                  Login
+                  {headerText.login}
                 </Link>
               )}
             </div>

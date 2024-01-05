@@ -4,8 +4,10 @@ import { BrandIcons } from "~/components/shared/brand-icons";
 import Icons from "~/components/shared/icons";
 import { buttonVariants } from "~/components/ui/button";
 import { nFormatter } from "~/lib/utils";
+import { getScopedI18n } from "~/locales/server";
 
 export default async function Hero() {
+  const scopedT = await getScopedI18n("hero");
   const { stargazers_count: stars } = await fetch(
     "https://api.github.com/repos/moinulmoin/chadnext",
     {
@@ -16,7 +18,7 @@ export default async function Hero() {
     .catch((e) => console.error(e));
   return (
     <section>
-      <div className="container flex h-full min-h-[calc(100vh-140px)] w-full flex-col items-center justify-center space-y-20 py-14 md:min-h-[calc(100vh-160px)] xl:py-24">
+      <div className="container flex w-full flex-col items-center justify-center space-y-20 py-16 md:py-20 lg:py-24 xl:py-28">
         <div className="mx-auto w-full max-w-2xl ">
           <a
             href="https://twitter.com/immoinulmoin/status/1661645764697919489"
@@ -27,18 +29,18 @@ export default async function Hero() {
           >
             <Icons.twitter className="h-5 w-5 text-blue-700" />
             <p className="text-sm font-semibold text-blue-700">
-              Introducing ChadNext
+              {scopedT("top")} ChadNext
             </p>
           </a>
-          <h1 className=" text-balance bg-gradient-to-br from-gray-900 via-gray-800 to-gray-400 bg-clip-text text-center font-heading text-[40px] font-bold leading-tight tracking-[-0.02em] text-transparent drop-shadow-sm duration-300 ease-linear animate-in zoom-in-75 md:text-7xl md:leading-[5rem] dark:bg-gradient-to-br dark:from-gray-100 dark:to-gray-900">
-            Quick Starter Template for your Next.js project
+          <h1 className=" text-balance bg-gradient-to-br  from-gray-900 via-gray-800 to-gray-400 bg-clip-text text-center font-heading text-[40px] font-bold leading-tight tracking-[-0.02em] text-transparent  drop-shadow-sm duration-300 ease-linear [word-spacing:theme(spacing.1)] md:text-7xl md:leading-[5rem] dark:bg-gradient-to-br dark:from-gray-100 dark:to-gray-900">
+            {scopedT("main")}
           </h1>
           <p className="mt-6 text-balance text-center text-muted-foreground md:text-xl">
-            Packed with all necessary features to get started.
+            {scopedT("sub")}
           </p>
           <div className="mx-auto mt-6 flex items-center justify-center space-x-5">
             <Link className={buttonVariants() + " gap-x-2"} href="/login">
-              Get Started
+              {scopedT("firstButton")}
             </Link>
             <Link
               className={buttonVariants({ variant: "outline" }) + " gap-x-2"}
@@ -48,14 +50,14 @@ export default async function Hero() {
             >
               <span className="font-medium">{nFormatter(stars)}</span>
               <StarIcon width={16} />
-              <span>on</span>
+              <span>{scopedT("on")}</span>
               <Icons.gitHub width={16} />
             </Link>
           </div>
         </div>
         <div className="w-full ">
           <h2 className="mb-6 text-center text-2xl font-semibold tracking-tight transition-colors">
-            Built using Great Tools
+            {scopedT("tools")}
           </h2>
           <div className="flex w-full flex-wrap items-center justify-center gap-x-20 gap-y-10 ">
             {tools.map((t, i) => (

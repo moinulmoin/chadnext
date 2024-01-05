@@ -1,12 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 import { siteConfig } from "~/config/site";
+import LocaleToggler from "../shared/locale-toggler";
 import ThemeToggle from "../shared/theme-toggle";
 
 export default function Footer() {
   return (
-    <footer className="relative z-10 w-full py-4 md:py-0">
-      <div className="container flex items-center justify-between gap-4 md:h-20 md:flex-row">
+    <footer className="md:py- relative z-10 w-full border-t py-4">
+      <div className="container flex items-center justify-between gap-4 md:h-14 md:flex-row">
         <div className="flex flex-col items-center gap-4 md:flex-row md:gap-2">
           <Image
             src="/chad-next.png"
@@ -28,7 +30,12 @@ export default function Footer() {
           </p>
         </div>
 
-        <ThemeToggle />
+        <div>
+          <Suspense>
+            <LocaleToggler />
+          </Suspense>
+          <ThemeToggle />
+        </div>
       </div>
     </footer>
   );

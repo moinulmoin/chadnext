@@ -3,11 +3,11 @@ import { Card } from "../ui/card";
 
 export default function Features() {
   return (
-    <section id="features">
-      <div className="container space-y-6 rounded-md bg-secondary py-8 md:py-12 lg:py-24 ">
+    <section>
+      <div className="container space-y-6 rounded-md bg-secondary py-14 lg:py-24 ">
         <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
           <h2 className="font-heading text-4xl md:text-6xl">Features</h2>
-          <p className="max-w-[85%] text-balance leading-normal text-muted-foreground sm:text-lg sm:leading-7">
+          <p className="max-w-[85%] text-balance leading-normal text-primary/70 sm:text-lg sm:leading-7">
             This template comes with features like Authentication, API routes,
             File uploading and more in Next.js App dir.
           </p>
@@ -71,7 +71,7 @@ export default function Features() {
           </Card>
         </div>
         <div className="mx-auto text-center md:max-w-[58rem]">
-          <p className="leading-normal text-muted-foreground sm:text-lg sm:leading-7">
+          <p className="font-medium leading-normal text-primary/70 sm:text-lg sm:leading-7">
             ChadNext also includes changelog page built using Contentlayer and
             Markdown.
           </p>

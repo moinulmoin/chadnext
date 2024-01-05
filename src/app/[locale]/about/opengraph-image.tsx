@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from "next/og";
-import Logo from "../../../public/chad-next.png";
+import Logo from "../../../../public/chad-next.png";
 
 export const runtime = "edge";
 export const alt = "ChadNext - Quick Starter Template for your Next.js project";
