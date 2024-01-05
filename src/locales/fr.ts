@@ -10,5 +10,6 @@ export default {
     sub: "Doté de toutes les fonctionnalités nécessaires pour commencer.",
     firstButton: "Commencer",
     tools: "Construit à l'aide d'excellents outils",
+    on: "sur",
   },
 } as const;

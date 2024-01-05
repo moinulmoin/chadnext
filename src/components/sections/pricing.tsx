@@ -19,7 +19,7 @@ export default async function Pricing() {
   const subscription = user ? await getUserSubscriptionPlan(user.id) : null;
   return (
     <section>
-      <div className="container space-y-6 py-8 md:py-12 lg:py-24">
+      <div className="container space-y-6 py-14 lg:py-24">
         <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
           <h2 className="font-heading text-4xl md:text-6xl">Pricing</h2>
           <p className="max-w-[85%] text-balance leading-normal text-muted-foreground sm:text-lg sm:leading-7">
@@ -63,8 +63,7 @@ export default async function Pricing() {
           </Card>
           <Card
             className={cn(
-              "relative w-full transition duration-200 ease-in-out hover:shadow-lg xl:w-[300px]",
-              !subscription?.isPro && "bg-secondary"
+              "relative w-full transition duration-200 ease-in-out hover:shadow-lg xl:w-[300px]"
             )}
           >
             <CardHeader>

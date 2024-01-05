@@ -1,12 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from "next/og";
-import Logo from "../../public/chad-next.png";
+import { getScopedI18n } from "~/locales/server";
+import Logo from "../../../public/chad-next.png";
 
 export const runtime = "edge";
-export const alt = "ChadNext - Quick Starter Template for your Next.js project";
 export const contentType = "image/png";
 
 export default async function OG() {
+  const t = await getScopedI18n("hero");
+
   return new ImageResponse(
     (
       <div
@@ -45,7 +47,7 @@ export default async function OG() {
             letterSpacing: "-0.02em",
           }}
         >
-          Quick Starter Template for your Next.js project
+          {t("main")}
         </h2>
       </div>
     ),
