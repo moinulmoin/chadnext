@@ -15,7 +15,7 @@ export default function OpenSource() {
           </p>
           <Link
             className="underline underline-offset-4"
-            href={siteConfig.links.github}
+            href={siteConfig().links.github}
             target="_blank"
             rel="noreferrer"
           >
