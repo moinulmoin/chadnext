@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { ImageResponse } from "next/og";
 import { getScopedI18n } from "~/locales/server";
-import Logo from "../../../public/chad-next.png";
+import Logo from "../../public/chad-next.png";
 
 export const runtime = "edge";
 export const contentType = "image/png";

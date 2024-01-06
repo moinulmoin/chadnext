@@ -3,8 +3,9 @@ import Footer from "~/components/layout/footer";
 import Header from "~/components/layout/header";
 import ThemeProvider from "~/components/shared/theme-provider";
 import { Toaster } from "~/components/ui/toaster";
-import { siteConfig } from "~/config/site";
+import { siteConfig, siteUrl } from "~/config/site";
 import { I18nProviderClient } from "~/locales/client";
+import { getScopedI18n } from "~/locales/server";
 
 type Props = {
   params: { locale: string };
@@ -12,8 +13,12 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const locale = params.locale || "en";
+  const locale = params.locale;
   const site = siteConfig(locale);
+
+  const t = await getScopedI18n("hero");
+  const title = t("main");
+  const siteOgImage = `${siteUrl}/api/og?title=${title}`;
 
   return {
     title: {
@@ -42,14 +47,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     creator: "moinulmoin",
     openGraph: {
       type: "website",
-      locale: "en_US",
+      locale: locale,
       url: site.url,
       title: site.name,
       description: site.description,
       siteName: site.name,
       images: [
         {
-          url: site.ogImage,
+          url: siteOgImage,
           width: 1200,
           height: 630,
           alt: site.name,
@@ -60,7 +65,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title: site.name,
       description: site.description,
-      images: [site.ogImage],
+      images: [siteOgImage],
       creator: "@immoinulmoin",
     },
     icons: {
