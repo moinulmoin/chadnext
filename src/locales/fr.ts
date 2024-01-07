@@ -3,6 +3,7 @@ export default {
     changelog: "Journal des modifications",
     about: "Environ",
     login: "Se connecter",
+    dashboard: "Tableau de bord",
   },
   hero: {
     top: "Présentation de",

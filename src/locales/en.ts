@@ -3,6 +3,7 @@ export default {
     changelog: "Changelog",
     about: "About",
     login: "Login",
+    dashboard: "Dashboard",
   },
   hero: {
     top: "Introducing",

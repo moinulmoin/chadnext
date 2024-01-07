@@ -1,22 +1,24 @@
 "use client";
 
-import { type User } from "lucia";
+import { type Session } from "lucia";
 import { MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import LogoutButton from "~/components/shared/logout-button";
 import { buttonVariants } from "~/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";
-import UserNav from "../user-nav";
+import { cn } from "~/lib/utils";
 export default function Navbar({
-  user,
+  session,
   headerText,
 }: {
-  user: User;
+  session: Session;
   headerText: {
     changelog: string;
     about: string;
     login: string;
+    dashboard: string;
     [key: string]: string;
   };
 }) {
@@ -33,7 +35,7 @@ export default function Navbar({
         />
         <p>ChadNext</p>
       </Link>
-      <div className="hidden items-center gap-12 md:flex 2xl:gap-16">
+      <div className="hidden items-center gap-12 lg:flex 2xl:gap-16">
         <div className="space-x-4 text-center text-sm leading-loose text-muted-foreground md:text-left">
           <Link
             href="/changelog"
@@ -49,8 +51,17 @@ export default function Navbar({
           </Link>
         </div>
         <div className="flex items-center gap-x-2">
-          {user ? (
-            <UserNav user={user} />
+          {session ? (
+            <Link
+              href="/dashboard"
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "bg-secondary"
+              )}
+              onClick={() => setIsModalOpen(false)}
+            >
+              {headerText.dashboard}
+            </Link>
           ) : (
             <Link href="/login" className={buttonVariants()}>
               {headerText.login}
@@ -59,7 +70,7 @@ export default function Navbar({
         </div>
       </div>
       <Sheet open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <SheetTrigger className="md:hidden">
+        <SheetTrigger className="lg:hidden">
           <span className="sr-only">Open Menu</span>
           <MenuIcon />
         </SheetTrigger>
@@ -80,10 +91,17 @@ export default function Navbar({
               >
                 {headerText.about}
               </Link>
-            </div>
-            <div className="flex items-center gap-x-2">
-              {user ? (
-                <UserNav user={user} />
+              {session ? (
+                <>
+                  <Link
+                    href="/dashboard"
+                    className="block font-semibold hover:underline hover:underline-offset-4"
+                    onClick={() => setIsModalOpen(false)}
+                  >
+                    {headerText.dashboard}
+                  </Link>
+                  <LogoutButton className=" !mt-20" />
+                </>
               ) : (
                 <Link
                   href="/login"
