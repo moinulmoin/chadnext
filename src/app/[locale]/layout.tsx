@@ -5,7 +5,6 @@ import ThemeProvider from "~/components/shared/theme-provider";
 import { Toaster } from "~/components/ui/toaster";
 import { siteConfig, siteUrl } from "~/config/site";
 import { I18nProviderClient } from "~/locales/client";
-import { getScopedI18n } from "~/locales/server";
 
 type Props = {
   params: { locale: string };
@@ -16,9 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const locale = params.locale;
   const site = siteConfig(locale);
 
-  const t = await getScopedI18n("hero");
-  const title = t("main");
-  const siteOgImage = `${siteUrl}/api/og?title=${title}`;
+  const siteOgImage = `${siteUrl}/api/og?locale=${locale}`;
 
   return {
     title: {

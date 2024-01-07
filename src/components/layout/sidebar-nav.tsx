@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { buttonVariants } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 import Icons from "../shared/icons";
+import LogoutButton from "../shared/logout-button";
 
 const navItems = [
   {
@@ -33,7 +34,7 @@ export default function SidebarNav({ className, ...props }: SidebarNavProps) {
   const isActive = (href: string) => pathname === href;
   return (
     <nav
-      className={cn("flex gap-x-2 lg:flex-col lg:gap-y-1.5", className)}
+      className={cn("flex h-full gap-x-2 lg:flex-col lg:gap-y-1.5", className)}
       {...props}
     >
       {navItems.map((item) => (
@@ -51,6 +52,8 @@ export default function SidebarNav({ className, ...props }: SidebarNavProps) {
           {<item.icon className="mr-2 h-4 w-4 " />} {item.title}
         </Link>
       ))}
+
+      <LogoutButton className="mt-auto hidden lg:block" />
     </nav>
   );
 }
