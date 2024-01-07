@@ -102,8 +102,8 @@ dependencies:
     specifier: ^2.1.0-canary.1
     version: 2.1.0-canary.1
   stripe:
-    specifier: ^14.8.0
-    version: 14.8.0
+    specifier: ^14.11.0
+    version: 14.11.0
   uploadthing:
     specifier: ^6.1.0
     version: 6.1.0
@@ -9475,8 +9475,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /stripe@14.8.0:
-    resolution: {integrity: sha512-Qdecqk7lx095BE829NWxrG1+69NjPuHrpZqeR61i2KO00fpKkjMX9TYjwFU+WjQD6ZcNmCGOwNfnz5VnI5bjIg==}
+  /stripe@14.11.0:
+    resolution: {integrity: sha512-NmFEkDC0PldP7CQtdPgKs5dVZA/pF+IepldbmB+Kk9B4d7EBkWnbANp0y+/zJcbRGul48s8hmQzeqNWUlWW0wg==}
     engines: {node: '>=12.*'}
     dependencies:
       '@types/node': 20.10.5
