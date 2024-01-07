@@ -1,3 +1,4 @@
+import { LanguagesIcon } from "lucide-react";
 import { BrandIcons } from "../shared/brand-icons";
 import { Card } from "../ui/card";
 
@@ -15,7 +16,7 @@ export default function Features() {
         <div className="mx-auto grid justify-center gap-4 text-center sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-3">
           <Card className="flex h-[160px] flex-col justify-between rounded-md p-6">
             <BrandIcons.nextjs />
-            <p className="text-sm text-muted-foreground">
+            <p className="text-balance text-sm text-muted-foreground">
               App dir, Routing, Layouts, API routes, Server Components, Server
               actions.
             </p>
@@ -23,49 +24,56 @@ export default function Features() {
           <Card className="flex h-[160px] flex-col justify-between rounded-md p-6">
             <BrandIcons.shadcnUI />
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-balance text-sm text-muted-foreground">
               UI components built using Radix UI and styled with Tailwind CSS.
             </p>
           </Card>
           <Card className="flex h-[160px] flex-col justify-between rounded-md p-6">
             <BrandIcons.prisma />
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-balance text-sm text-muted-foreground">
               Using Postgres with Prisma ORM, hosted on Vercel Postgres.
             </p>
           </Card>
           <Card className="flex h-[160px] flex-col justify-between rounded-md p-6">
             <BrandIcons.luciaAuth />
 
-            <p className="text-sm text-muted-foreground">
-              Authentication and Authorization using LuciaAuth.
+            <p className="text-balance text-sm text-muted-foreground">
+              Authentication and Authorization using LuciaAuth v3.
             </p>
           </Card>
           <Card className="flex h-[160px] flex-col justify-between rounded-md p-6">
             <BrandIcons.uploadthing />
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-balance text-sm text-muted-foreground">
               Upload and preview files effortlessly with UploadThing.
             </p>
           </Card>
           <Card className="flex h-[160px] flex-col justify-between p-6">
             <BrandIcons.resend />
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-balance text-sm text-muted-foreground">
               Create emails using React Email and Send with Resend.
+            </p>
+          </Card>
+          <Card className="flex h-[160px] flex-col justify-between p-6">
+            <LanguagesIcon className="mx-auto h-12 w-12 fill-current" />
+
+            <p className="text-balance text-sm text-muted-foreground">
+              Internationalization support with type-safe Next-International.
             </p>
           </Card>
           <Card className="flex h-[160px] flex-col justify-between p-6">
             <BrandIcons.stripe />
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-balance text-sm text-muted-foreground">
               Receive and process payments with Stripe.
             </p>
           </Card>
           <Card className="flex h-[160px] flex-col justify-between p-6">
             <BrandIcons.vercel />
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-balance text-sm text-muted-foreground">
               Production and Preview deployments with Vercel.
             </p>
           </Card>
