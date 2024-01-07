@@ -5,7 +5,7 @@ import Script from "next/script";
 import { cn } from "~/lib/utils";
 import "./globals.css";
 
-const fontSans = Inter({
+export const fontSans = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
 });
