@@ -9,8 +9,7 @@
     "start": "next start",
     "lint": "next lint --dir src",
     "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,css,json}'",
-    "postinstall": "lefthook install",
-    "preinstall": "bun upgrade"
+    "postinstall": "bun upgrade && lefthook install"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.0.0",
