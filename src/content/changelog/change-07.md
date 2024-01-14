@@ -9,5 +9,5 @@ version: 1.6.0
 - Upgraded to **[UploadThing](https://uploadthing.com/)**
 - Added **[React Email](https://react.email/)** Preview in development.
 - Added **[Stripe](https://stripe.com/)** Integration.
-- Added **[Next International](https://next-international.vercel.app/)** support.
+- Added **[Internationalization](https://next-international.vercel.app/)** support.
 - Improved the UI and refactored the Codebase.
