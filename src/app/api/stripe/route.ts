@@ -7,8 +7,7 @@ import { getUserSubscriptionPlan } from "~/lib/subscription";
 import { validateRequest } from "~/server/auth";
 
 export async function GET(req: NextRequest) {
-  const locale = req.nextUrl.searchParams.get("locale") || "en";
-  console.log({ locale });
+  const locale = req.cookies.get("Next-Locale")?.value || "en";
 
   const billingUrl = siteConfig(locale).url + "/dashboard/billing";
   try {
