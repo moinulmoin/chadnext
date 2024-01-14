@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -11,9 +11,12 @@ import AuthForm from "./auth-form";
 
 export default function LoginModal() {
   const router = useRouter();
+  const pathname = usePathname();
+
+  const IsOpen = pathname.includes("/login");
 
   return (
-    <Dialog open onOpenChange={() => router.back()}>
+    <Dialog open={IsOpen} onOpenChange={() => router.push("/")}>
       <DialogContent className="w-full max-w-[400px] rounded-md">
         <DialogHeader>
           <DialogTitle>

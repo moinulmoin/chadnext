@@ -53,7 +53,7 @@ export default async function Pricing() {
             </CardContent>
             <CardFooter className=" justify-center">
               {!subscription ? (
-                <Link href="/dashboard/billing" className={buttonVariants()}>
+                <Link href="/login" className={buttonVariants()}>
                   Get Started
                 </Link>
               ) : (
@@ -86,7 +86,7 @@ export default async function Pricing() {
               </p>
             </CardContent>
             <CardFooter className=" justify-center">
-              <Link href="/dashboard/billing" className={buttonVariants()}>
+              <Link href="/login" className={buttonVariants()}>
                 {!subscription
                   ? "Get Started"
                   : subscription?.isPro

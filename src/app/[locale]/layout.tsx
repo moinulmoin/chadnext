@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         url: "https://moinulmoin.com",
       },
     ],
-    creator: "moinulmoin",
+    creator: "Moinul Moin",
     openGraph: {
       type: "website",
       locale: locale,
@@ -70,8 +70,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       shortcut: "/favicon-16x16.png",
       apple: "/apple-touch-icon.png",
     },
-    manifest: `${site.url}/manifest.json`,
+    manifest: `${siteUrl}/manifest.json`,
     metadataBase: new URL(site.url),
+    alternates: {
+      canonical: "/",
+      languages: {
+        en: "/en",
+        fr: "/fr",
+      },
+    },
   };
 }
 

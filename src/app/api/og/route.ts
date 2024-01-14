@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { RenderIMGEl } from "~/components/OGImgEl";
+import { siteUrl } from "~/config/site";
 import Logo from "../../../../public/chad-next.png";
 import homepageImage from "../../../../public/chadnext-homepage.png";
 
@@ -13,9 +14,9 @@ export async function GET(request: Request) {
   try {
     return new ImageResponse(
       RenderIMGEl({
-        logo: process.env.NEXT_PUBLIC_APP_URL + Logo.src,
+        logo: siteUrl + Logo.src,
         locale: locale as string,
-        image: process.env.NEXT_PUBLIC_APP_URL + homepageImage.src,
+        image: siteUrl + homepageImage.src,
       }),
       {
         width: 1200,

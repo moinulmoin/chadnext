@@ -1,12 +1,16 @@
+import { type NextRequest } from "next/server";
 import { z } from "zod";
+import { siteConfig } from "~/config/site";
 import { proPlan } from "~/config/subscription";
 import { stripe } from "~/lib/stripe";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
 import { validateRequest } from "~/server/auth";
 
-const billingUrl = process.env.NEXT_PUBLIC_APP_URL + "/dashboard/billing";
+export async function GET(req: NextRequest) {
+  const locale = req.nextUrl.searchParams.get("locale") || "en";
+  console.log({ locale });
 
-export async function GET() {
+  const billingUrl = siteConfig(locale).url + "/dashboard/billing";
   try {
     const { user, session } = await validateRequest();
 

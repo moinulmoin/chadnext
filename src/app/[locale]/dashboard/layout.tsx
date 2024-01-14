@@ -9,6 +9,7 @@ interface DashboardLayoutProps {
 export default async function DashboardLayout({
   children,
 }: DashboardLayoutProps) {
+  // move to middleware and check stripe payment
   const { session } = await validateRequest();
   if (!session) redirect("/login");
   return (

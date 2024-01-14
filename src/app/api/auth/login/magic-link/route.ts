@@ -1,6 +1,6 @@
+import { siteUrl } from "~/config/site";
 import db from "~/lib/db";
 import { sendVerificationEmail } from "~/lib/resend";
-import { appUrl } from "~/lib/utils";
 import { createEmailVerificationToken } from "~/server/auth";
 
 export const POST = async (req: Request) => {
@@ -23,7 +23,7 @@ export const POST = async (req: Request) => {
       body.email
     );
     const verificationUrl =
-      appUrl + "/api/auth/email-verify?token=" + verificationToken;
+      siteUrl + "/api/auth/email-verify?token=" + verificationToken;
     await sendVerificationEmail({
       toMail: body.email,
       verificationUrl,
