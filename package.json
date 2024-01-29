@@ -31,7 +31,7 @@
     "arctic": "^0.10.2",
     "dayjs": "^1.11.10",
     "lucia": "3.0.0-beta.13",
-    "lucide-react": "^0.302.0",
+    "lucide-react": "^0.316.0",
     "nanoid": "^5.0.4",
     "next": "14.0.4",
     "next-international": "^1.1.4",
