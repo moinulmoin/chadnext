@@ -9,7 +9,7 @@ import { validateRequest } from "~/server/auth";
 export async function GET(req: NextRequest) {
   const locale = req.cookies.get("Next-Locale")?.value || "en";
 
-  const billingUrl = siteConfig(locale).url + "/dashboard/billing";
+  const billingUrl = siteConfig(locale).url + "/dashboard/billing/";
   try {
     const { user, session } = await validateRequest();
 
