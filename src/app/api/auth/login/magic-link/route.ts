@@ -1,7 +1,7 @@
 import { siteUrl } from "~/config/site";
 import db from "~/lib/db";
-import { sendVerificationEmail } from "~/lib/resend";
 import { createEmailVerificationToken } from "~/server/auth";
+import { sendVerificationEmail } from "~/server/mail";
 
 export const POST = async (req: Request) => {
   const body = await req.json();
