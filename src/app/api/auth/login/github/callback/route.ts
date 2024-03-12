@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
 import db from "~/lib/db";
 import { github, lucia } from "~/lib/lucia";
-import { sendWelcomeEmail } from "~/lib/resend";
+import { sendWelcomeEmail } from "~/server/mail";
 
 export const GET = async (request: NextRequest) => {
   const url = new URL(request.url);
