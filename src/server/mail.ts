@@ -1,6 +1,7 @@
 import ThanksTemp from "emails/thanks";
 import VerificationTemp from "emails/verification";
 import { nanoid } from "nanoid";
+import { resend } from "~/lib/resend";
 import {
   type SendWelcomeEmailProps,
   type sendVerificationEmailProps,

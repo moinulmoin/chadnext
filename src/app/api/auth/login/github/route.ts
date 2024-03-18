@@ -4,8 +4,10 @@ import { github } from "~/lib/lucia";
 
 export const GET = async () => {
   const state = generateState();
-  const url = await github.createAuthorizationURL(state);
-
+  const url = await github.createAuthorizationURL(state,{
+    scopes: ["user:email", "read:user"]
+  });
+  
   cookies().set("github_oauth_state", state, {
     path: "/",
     secure: process.env.NODE_ENV === "production",
