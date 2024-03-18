@@ -24,6 +24,22 @@ export const GET = async (request: NextRequest) => {
       },
     });
     const githubUser: GitHubUser = await githubUserResponse.json();
+    if(!githubUser.email) {
+      const githubEmailsResponse = await fetch("https://api.github.com/user/emails", {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      });
+      const githubEmails: { email: string; primary: boolean; verified: boolean; }[] = await githubEmailsResponse.json();
+      const verifiedEmail = githubEmails.find((email) => email.primary && email.verified);
+      if (!verifiedEmail) {
+        return new Response(null, {
+          status: 400,
+        });
+      }
+      githubUser.email = verifiedEmail.email;
+    }
+    
     const existingUser = await db.user.findUnique({
       where: {
         githubId: githubUser.id,
@@ -52,6 +68,7 @@ export const GET = async (request: NextRequest) => {
         name: githubUser.name,
         email: githubUser.email,
         picture: githubUser.avatar_url,
+        emailVerified: true,
       },
     });
     sendWelcomeEmail({ toMail: newUser.email!, userName: newUser.name! });
