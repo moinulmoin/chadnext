@@ -1,7 +1,6 @@
 ---
 title: Introducing ChadNext
 date: 2023-05-25
-version: 1.0.0
 ---
 
 I have created ChadNext to help developers build and deploy their ideas quickly. I didn't find any template combining all of these together. That's why I connected the dots and made ChadNext.

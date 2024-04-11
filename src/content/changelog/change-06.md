@@ -1,7 +1,6 @@
 ---
 title: Homepage got updated!
 date: 2023-08-02
-version: 1.5.0
 ---
 
 - Added Features Section on Homepage.

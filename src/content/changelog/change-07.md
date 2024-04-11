@@ -1,7 +1,6 @@
 ---
 title: LuciaAuth v3, Stripe, Internationalization and more!
 date: 2024-01-05
-version: 1.6.0
 ---
 
 - Upgraded to **[Next.js](https://nextjs.org/)** v14

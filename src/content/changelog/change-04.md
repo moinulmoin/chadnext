@@ -1,7 +1,6 @@
 ---
 title: Added Passwordless Auth and more
 date: 2023-06-28
-version: 1.3.0
 ---
 
 - Updated [Shadcn/ui](https://ui.shadcn.com/) lib to the latest version.

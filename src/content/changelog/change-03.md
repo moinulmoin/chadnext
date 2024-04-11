@@ -1,7 +1,6 @@
 ---
 title: Added New Settings page and more
 date: 2023-06-15
-version: 1.2.0
 ---
 
 - Integrated **[React Hook Form](https://react-hook-form.com/)** & **[Zod](https://zod.dev/)** to manage form state and validation.

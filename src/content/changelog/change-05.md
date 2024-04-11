@@ -1,7 +1,6 @@
 ---
 title: Added Intercepting Signin route and more
 date: 2023-07-15
-version: 1.4.0
 ---
 
 - Added [Intercepting route](https://nextjs.org/docs/app/building-your-application/routing/intercepting-routes) for Signin Page.

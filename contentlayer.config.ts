@@ -6,7 +6,6 @@ export const Change = defineDocumentType(() => ({
   fields: {
     title: { type: "string", required: true },
     date: { type: "date", required: true },
-    version: { type: "string", required: true },
   },
 }));
 

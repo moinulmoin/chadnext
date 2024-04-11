@@ -11,7 +11,7 @@ export default async function Hero() {
   const { stargazers_count: stars } = await fetch(
     "https://api.github.com/repos/moinulmoin/chadnext",
     {
-      next: { revalidate: 60 },
+      cache: "no-store",
     }
   )
     .then((res) => res.json())
@@ -32,7 +32,7 @@ export default async function Hero() {
               {scopedT("top")} ChadNext
             </p>
           </a>
-          <h1 className=" text-balance bg-gradient-to-br  from-gray-900 via-gray-800 to-gray-400 bg-clip-text text-center font-heading text-[40px] font-bold leading-tight tracking-[-0.02em] text-transparent  drop-shadow-sm duration-300 ease-linear [word-spacing:theme(spacing.1)] md:text-7xl md:leading-[5rem] dark:bg-gradient-to-br dark:from-gray-100 dark:to-gray-900">
+          <h1 className=" text-balance bg-gradient-to-br  from-gray-900 via-gray-800 to-gray-400 bg-clip-text text-center font-heading text-[40px] font-bold leading-tight tracking-[-0.02em] text-transparent  drop-shadow-sm duration-300 ease-linear [word-spacing:theme(spacing.1)] dark:bg-gradient-to-br dark:from-gray-100 dark:to-gray-900 md:text-7xl md:leading-[5rem]">
             {scopedT("main")}
           </h1>
           <p className="mt-6 text-balance text-center text-muted-foreground md:text-xl">
