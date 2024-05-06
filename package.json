@@ -45,7 +45,7 @@
     "react-hook-form": "^7.49.2",
     "resend": "^2.1.0-canary.1",
     "stripe": "^14.8.0",
-    "uploadthing": "^6.1.0",
+    "uploadthing": "^6.10.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
