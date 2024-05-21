@@ -25,12 +25,10 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "contentlayer/generated": [
-        "./.contentlayer/generated"
-      ],
       "~/*": [
-        "./src/*"
+        "./src/*",
       ],
+      "content": ["./.velite"]
     }
   },
   "include": [
