@@ -1,4 +1,4 @@
-import { allAbouts, type About } from "contentlayer/generated";
+import { abouts, type About } from "content";
 import { type Metadata } from "next";
 
 function AboutCard(about: About) {
@@ -7,7 +7,7 @@ function AboutCard(about: About) {
       <h2 className="mb-0 text-3xl font-semibold tracking-tight transition-colors ">
         {about.title}
       </h2>
-      <div dangerouslySetInnerHTML={{ __html: about.body.html }} />
+      <div dangerouslySetInnerHTML={{ __html: about.content }} />
     </article>
   );
 }
@@ -25,7 +25,7 @@ export default function About() {
         Learn about the tech stack and inspiration behind ChadNext.
       </p>
       <div className="space-y-10">
-        {allAbouts.map((p, i) => (
+        {abouts.map((p, i) => (
           <AboutCard key={i} {...p} />
         ))}
       </div>

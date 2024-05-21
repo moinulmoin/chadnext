@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "prisma generate && next dev",
     "dev:email": "email dev -p 9000",
-    "build": "prisma generate && prisma db push && next build",
+    "dev:content": "velite build --watch",
+    "build:content": "velite build --clean",
+    "build": "pnpm build:content && prisma generate && prisma db push && next build",
     "start": "next start",
     "lint": "next lint --dir src",
     "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,css,json}'",
@@ -59,13 +61,11 @@
     "autoprefixer": "10.4.16",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
-    "contentlayer": "^0.3.4",
     "encoding": "^0.1.13",
     "eslint": "8.56.0",
     "eslint-config-next": "14.2.2",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-prettier": "^8.10.0",
     "lefthook": "^1.5.5",
-    "next-contentlayer": "^0.3.4",
     "prettier": "3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.9",
     "prisma": "^5.7.0",
@@ -73,6 +73,7 @@
     "tailwind-merge": "^2.3.0",
     "tailwindcss": "3.4.1",
     "tailwindcss-animate": "^1.0.7",
-    "typescript": "5.3.3"
+    "typescript": "5.3.3",
+    "velite": "0.1.0-rc.3"
   }
 }

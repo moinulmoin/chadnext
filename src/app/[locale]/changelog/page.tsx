@@ -1,4 +1,4 @@
-import { allChanges, type Change } from "contentlayer/generated";
+import { type Change, changes } from "content";
 import dayjs from "dayjs";
 import { type Metadata } from "next";
 
@@ -11,7 +11,7 @@ function ChangeCard(change: Change) {
       <time className=" text-sm text-muted-foreground" dateTime={change.date}>
         {dayjs(change.date).format("MMM DD YYYY")}
       </time>
-      <div dangerouslySetInnerHTML={{ __html: change.body.html }} />
+      <div dangerouslySetInnerHTML={{ __html: change.content }} />
     </article>
   );
 }
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 export default function Changelog() {
-  const posts = allChanges.sort((a, b) =>
+  const posts = changes.sort((a, b) =>
     dayjs(a.date).isAfter(dayjs(b.date)) ? -1 : 1
   );
 

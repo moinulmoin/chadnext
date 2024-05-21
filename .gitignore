@@ -38,8 +38,6 @@ next-env.d.ts
 # custom workspace settings
 .vscode
 .idea
-# contentlayer
-.contentlayer
 
 # worker
 sw.*
@@ -50,5 +48,4 @@ workbox-*.*
 !.env.project
 !.env.vault
 
-docker-compose.yml
-migrations
+.velite
