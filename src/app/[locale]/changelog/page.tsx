@@ -1,4 +1,3 @@
-// import { allChanges, type Change } from "contentlayer/generated";
 import { type Change, changes } from "content";
 import dayjs from "dayjs";
 import { type Metadata } from "next";

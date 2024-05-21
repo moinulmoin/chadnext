@@ -6,6 +6,9 @@
 
 pre-commit:
   commands:
+    typecheck:
+      glob: "src/**/*.{ts,tsx}"
+      run: npx tsc --noEmit
     lint:
       glob: "src/**/*.{ts,tsx,js,jsx}"
       run: npx eslint {staged_files} --fix && git add {staged_files}

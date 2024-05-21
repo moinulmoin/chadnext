@@ -79,9 +79,17 @@ export default function Features() {
           </Card>
         </div>
         <div className="mx-auto text-center md:max-w-[58rem]">
-          <p className="font-medium leading-normal text-primary/70 sm:text-lg sm:leading-7">
-            ChadNext also includes changelog page built using Contentlayer and
-            Markdown.
+          <p className="leading-normal text-primary/70 sm:text-lg sm:leading-7">
+            ChadNext also includes Changelog & About page built using{" "}
+            <a
+              href="https://velite.js.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className=" underline underline-offset-4"
+            >
+              Velite
+            </a>{" "}
+            and Markdown.
           </p>
         </div>
       </div>
