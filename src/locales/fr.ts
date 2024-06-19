@@ -13,4 +13,7 @@ export default {
     tools: "Construit à l'aide d'excellents outils",
     on: "sur",
   },
+  notFound: {
+    title: "Page non trouvée!",
+  },
 } as const;

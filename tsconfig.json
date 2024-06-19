@@ -26,15 +26,18 @@
     "baseUrl": ".",
     "paths": {
       "~/*": [
-        "./src/*",
+        "./src/*"
       ],
-      "content": ["./.velite"]
+      "content": [
+        "./.velite"
+      ]
     }
   },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
