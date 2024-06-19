@@ -4,6 +4,7 @@ import Script from "next/script";
 import { cn } from "~/lib/utils";
 import { getCurrentLocale } from "~/locales/server";
 import "./globals.css";
+import { cookies } from "next/headers";
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -20,7 +21,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const locale = getCurrentLocale();
+  const locale = cookies().get("Next-Locale")?.value || "en";
   return (
     <html lang={locale}>
       <body
