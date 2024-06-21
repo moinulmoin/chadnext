@@ -75,8 +75,9 @@ export const GET = async (request: NextRequest) => {
         emailVerified: Boolean(githubUser.email),
       },
     });
-    if (githubUser.email)
+    if (githubUser.email) {
       sendWelcomeEmail({ toMail: newUser.email!, userName: newUser.name! });
+    }
     const session = await lucia.createSession(newUser.id, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
     cookies().set(

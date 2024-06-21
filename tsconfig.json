@@ -1,10 +1,14 @@
 {
   "compilerOptions": {
     "target": "es2017",
+    "types": [
+      "@serwist/next/typings"
+    ],
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "esnext",
+      "webworker"
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -42,6 +46,7 @@
   "exclude": [
     "node_modules",
     ".next",
-    ".velite"
+    ".velite",
+    "public/sw.js"
   ]
 }

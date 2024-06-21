@@ -79,6 +79,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         fr: "/fr",
       },
     },
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "default",
+      title: site.name,
+    },
   };
 }
 

@@ -1,2 +1,3 @@
 ui/
 *.d.ts
+*.config.*

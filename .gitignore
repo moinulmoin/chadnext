@@ -40,7 +40,7 @@ next-env.d.ts
 .idea
 
 # worker
-sw.*
+sw.js
 workbox-*.*
 .react-email
 .env*

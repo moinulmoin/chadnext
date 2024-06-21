@@ -11,7 +11,7 @@ pre-commit:
       run: npx tsc --noEmit
     lint:
       glob: "src/**/*.{ts,tsx,js,jsx}"
-      run: pnpm eslint {staged_files} --fix && && git update-index --again
+      run: pnpm eslint {staged_files} --fix && git update-index --again
     format:
       glob: "src/**/*.{ts,tsx,js,jsx,css}"
-      run: pnpm prettier --write {staged_files} && && git update-index --again
+      run: pnpm prettier --write {staged_files} && git update-index --again
