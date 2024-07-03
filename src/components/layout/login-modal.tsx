@@ -16,7 +16,7 @@ export default function LoginModal() {
   const IsOpen = pathname.includes("/login");
 
   return (
-    <Dialog open={IsOpen} onOpenChange={() => router.push("/")}>
+    <Dialog open={IsOpen} onOpenChange={() => router.back()}>
       <DialogContent className="w-full max-w-[400px] rounded-md">
         <DialogHeader>
           <DialogTitle>
