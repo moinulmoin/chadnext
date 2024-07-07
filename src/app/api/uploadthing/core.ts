@@ -1,4 +1,5 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
+import { UploadThingError } from "uploadthing/server";
 import { validateRequest } from "~/actions/auth";
 
 const f = createUploadthing();
@@ -13,12 +14,14 @@ export const ourFileRouter = {
       const { user, session } = await validateRequest();
 
       // If you throw, the user will not be able to upload
-      if (!session) throw new Error("Unauthorized!");
+      if (!session) throw new UploadThingError("Unauthorized!");
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId: user.id };
     })
-    .onUploadComplete(() => {}),
+    .onUploadComplete(({ file }) => {
+      return { url: file.url };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { validateRequest } from "~/actions/auth";
-import { getUserSubscriptionPlan } from "~/lib/subscription";
+import { getUserSubscriptionPlan } from "~/actions/subscription";
 import { cn } from "~/lib/utils";
 import { Badge } from "../ui/badge";
 import { buttonVariants } from "../ui/button";

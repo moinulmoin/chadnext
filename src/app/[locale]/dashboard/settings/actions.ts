@@ -1,13 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { utapi } from "~/actions/upload";
-import db from "~/lib/db";
+import { utapi } from "~/lib/uploadthing-server";
 import { getImageKeyFromUrl, isOurCdnUrl } from "~/lib/utils";
 import { type payload } from "~/types";
+import prisma from "~/lib/prisma";
 
 export const updateUser = async (id: string, payload: payload) => {
-  await db.user.update({
+  await prisma.user.update({
     where: { id },
     data: { ...payload },
   });
@@ -16,18 +16,9 @@ export const updateUser = async (id: string, payload: payload) => {
 };
 
 export async function removeUserOldImageFromCDN(
-  id: string,
-  newImageUrl: string
+  newImageUrl: string,
+  currentImageUrl: string
 ) {
-  const user = await db.user.findFirst({
-    where: { id },
-    select: { picture: true },
-  });
-
-  const currentImageUrl = user?.picture;
-
-  if (!currentImageUrl) throw new Error("User Picture Missing");
-
   try {
     if (isOurCdnUrl(currentImageUrl)) {
       const currentImageFileKey = getImageKeyFromUrl(currentImageUrl);
@@ -36,11 +27,9 @@ export async function removeUserOldImageFromCDN(
       revalidatePath("/dashboard/settings");
     }
   } catch (e) {
-    if (e instanceof Error) {
-      const newImageFileKey = getImageKeyFromUrl(newImageUrl);
-      await utapi.deleteFiles(newImageFileKey as string);
-      console.error(e.message);
-    }
+    console.error(e);
+    const newImageFileKey = getImageKeyFromUrl(newImageUrl);
+    await utapi.deleteFiles(newImageFileKey as string);
   }
 }
 

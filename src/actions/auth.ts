@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { TimeSpan, createDate, isWithinExpirationDate } from "oslo";
 import { alphabet, generateRandomString } from "oslo/crypto";
 import { cache } from "react";
-import db from "~/lib/db";
 import { lucia } from "~/lib/lucia";
+import prisma from "~/lib/prisma";
 
 export const validateRequest = cache(
   async (): Promise<
@@ -69,13 +69,13 @@ export async function generateEmailVerificationCode(
   userId: string,
   email: string
 ): Promise<string> {
-  await db.emailVerificationCode.deleteMany({
+  await prisma.emailVerificationCode.deleteMany({
     where: {
       userId,
     },
   });
   const code = generateRandomString(6, alphabet("0-9"));
-  await db.emailVerificationCode.create({
+  await prisma.emailVerificationCode.create({
     data: {
       userId,
       email,
@@ -90,7 +90,7 @@ export async function verifyVerificationCode(
   user: { id: string; email: string },
   code: string
 ): Promise<boolean> {
-  return await db.$transaction(async (tx) => {
+  return await prisma.$transaction(async (tx) => {
     const databaseCode = await tx.emailVerificationCode.findFirst({
       where: {
         userId: user.id,

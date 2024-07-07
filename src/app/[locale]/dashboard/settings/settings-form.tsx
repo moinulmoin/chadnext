@@ -42,9 +42,9 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
     resolver: zodResolver(settingsSchema),
     mode: "onChange",
     values: {
-      name: currentUser.name,
-      email: currentUser.email,
-      picture: currentUser.picture,
+      name: currentUser.name ?? "",
+      email: currentUser.email ?? "",
+      picture: currentUser.picture ?? "",
     },
   });
 
@@ -62,20 +62,21 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
   function onSubmit(data: SettingsValues) {
     if (!formState.isDirty) return;
 
-    startTransition(() => {
-      const updatePromise = isImageChanged
-        ? removeUserOldImageFromCDN(currentUser.id, data.picture).then(() =>
-            updateUser(currentUser.id, data)
-          )
-        : updateUser(currentUser.id, data);
-
-      return updatePromise
+    startTransition(async () => {
+      const updatePromise =
+        currentUser.picture && isImageChanged
+          ? removeUserOldImageFromCDN(data.picture, currentUser.picture).then(
+              () => updateUser(currentUser.id, data)
+            )
+          : updateUser(currentUser.id, data);
+      updatePromise
         .then(() => {
           toast({
             title: "Updated successfully!",
           });
         })
-        .catch(() => {
+        .catch((error) => {
+          console.log(error);
           toast({
             title: "Something went wrong.",
             variant: "destructive",
@@ -98,7 +99,7 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="max-w-2xl space-y-8 rounded-md border p-6 "
+        className="max-w-2xl space-y-8 rounded-md border p-6"
       >
         <FormField
           control={form.control}
@@ -106,18 +107,21 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Picture</FormLabel>
+              <FormDescription>
+                Click on the avatar to upload new one.
+              </FormDescription>
               <FormControl>
                 <Avatar className="group relative h-28 w-28 rounded-full">
-                  <AvatarImage src={field.value} alt={form.getValues().name} />
-                  <AvatarFallback className=" text-xs">
-                    {form.getValues().name}
+                  <AvatarImage
+                    src={field.value}
+                    alt={form.getValues().name ?? ""}
+                  />
+                  <AvatarFallback className="text-xs">
+                    {form.getValues().name ?? "A"}
                   </AvatarFallback>
                   <ImageUploadModal onChange={field.onChange} />
                 </Avatar>
               </FormControl>
-              <FormDescription>
-                Click on the avatar to upload new one.
-              </FormDescription>
             </FormItem>
           )}
         ></FormField>
@@ -142,7 +146,7 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
               <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input
-                  className=" bg-muted"
+                  className="bg-muted"
                   readOnly
                   placeholder="Your email address"
                   {...field}

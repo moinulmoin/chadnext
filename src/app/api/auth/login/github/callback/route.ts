@@ -2,7 +2,7 @@ import { OAuth2RequestError } from "arctic";
 import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
 import { sendWelcomeEmail } from "~/actions/mail";
-import db from "~/lib/db";
+import prisma from "~/lib/prisma";
 import { github } from "~/lib/github";
 import { lucia } from "~/lib/lucia";
 
@@ -45,7 +45,7 @@ export const GET = async (request: NextRequest) => {
       if (verifiedEmail) githubUser.email = verifiedEmail.email;
     }
 
-    const existingUser = await db.user.findUnique({
+    const existingUser = await prisma.user.findUnique({
       where: {
         githubId: githubUser.id,
       },
@@ -67,7 +67,7 @@ export const GET = async (request: NextRequest) => {
       });
     }
 
-    const newUser = await db.user.create({
+    const newUser = await prisma.user.create({
       data: {
         githubId: githubUser.id,
         name: githubUser.name,

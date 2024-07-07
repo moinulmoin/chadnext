@@ -1,13 +1,13 @@
 import { cookies } from "next/headers";
 import { verifyVerificationCode } from "~/actions/auth";
-import db from "~/lib/db";
 import { lucia } from "~/lib/lucia";
+import prisma from "~/lib/prisma";
 
 export const POST = async (req: Request) => {
   const body = await req.json();
 
   try {
-    const user = await db.user.findFirst({
+    const user = await prisma.user.findFirst({
       where: {
         email: body.email,
       },
@@ -38,7 +38,7 @@ export const POST = async (req: Request) => {
     await lucia.invalidateUserSessions(user.id);
 
     if (!user.emailVerified) {
-      await db.user.update({
+      await prisma.user.update({
         where: {
           id: user.id,
         },

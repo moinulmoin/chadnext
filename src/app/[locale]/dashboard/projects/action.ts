@@ -4,8 +4,8 @@ import { type Project } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { validateRequest } from "~/actions/auth";
-import db from "~/lib/db";
-import { getUserSubscriptionPlan } from "~/lib/subscription";
+import { getUserSubscriptionPlan } from "~/actions/subscription";
+import prisma from "~/lib/prisma";
 
 interface Payload {
   name: string;
@@ -15,7 +15,7 @@ interface Payload {
 export async function createProject(payload: Payload) {
   const { user } = await validateRequest();
 
-  await db.project.create({
+  await prisma.project.create({
     data: {
       ...payload,
       user: {
@@ -37,7 +37,7 @@ export async function checkIfFreePlanLimitReached() {
   // Check if user has reached limit of 3 projects.
   if (subscriptionPlan?.isPro) return false;
 
-  const count = await db.project.count({
+  const count = await prisma.project.count({
     where: {
       userId: user?.id,
     },
@@ -48,7 +48,7 @@ export async function checkIfFreePlanLimitReached() {
 
 export async function getProjects() {
   const { user } = await validateRequest();
-  const projects = await db.project.findMany({
+  const projects = await prisma.project.findMany({
     where: {
       userId: user?.id,
     },
@@ -61,7 +61,7 @@ export async function getProjects() {
 
 export async function getProjectById(id: string) {
   const { user } = await validateRequest();
-  const project = await db.project.findFirst({
+  const project = await prisma.project.findFirst({
     where: {
       id,
       userId: user?.id,
@@ -72,7 +72,7 @@ export async function getProjectById(id: string) {
 
 export async function updateProjectById(id: string, payload: Payload) {
   const { user } = await validateRequest();
-  await db.project.update({
+  await prisma.project.update({
     where: {
       id,
       userId: user?.id,
@@ -84,7 +84,7 @@ export async function updateProjectById(id: string, payload: Payload) {
 
 export async function deleteProjectById(id: string) {
   const { user } = await validateRequest();
-  await db.project.delete({
+  await prisma.project.delete({
     where: {
       id,
       userId: user?.id,

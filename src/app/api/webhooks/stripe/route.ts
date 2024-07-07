@@ -2,8 +2,8 @@ import { headers } from "next/headers";
 import { type NextRequest } from "next/server";
 import { buffer } from "node:stream/consumers";
 import type Stripe from "stripe";
-import db from "~/lib/db";
 import { stripe } from "~/lib/stripe";
+import prisma from "~/lib/prisma";
 
 export async function POST(req: NextRequest) {
   //@ts-expect-error Argument of type 'ReadableStream<any>' is not assignable to parameter of type 'ReadableStream | Readable | AsyncIterable<any>'
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     // Update the user stripe into in our database.
     // Since this is the initial subscription, we need to update
     // the subscription id and customer id.
-    await db.user.update({
+    await prisma.user.update({
       where: {
         id: session?.metadata?.userId,
       },
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
     );
 
     // Update the price id and set the new period end.
-    await db.user.update({
+    await prisma.user.update({
       where: {
         stripeSubscriptionId: subscription.id,
       },

@@ -1,13 +1,12 @@
 import { generateEmailVerificationCode } from "~/actions/auth";
 import { sendOTP } from "~/actions/mail";
-import { siteUrl } from "~/config/site";
-import db from "~/lib/db";
+import prisma from "~/lib/prisma";
 
 export const POST = async (req: Request) => {
   const body = await req.json();
 
   try {
-    const user = await db.user.upsert({
+    const user = await prisma.user.upsert({
       where: {
         email: body.email,
       },
