@@ -1,9 +1,9 @@
 import { AlertTriangleIcon } from "lucide-react";
+import { validateRequest } from "~/actions/auth";
 import { BillingForm } from "~/components/billing-form";
 import { Alert, AlertDescription } from "~/components/ui/alert";
 import { stripe } from "~/lib/stripe";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
-import { validateRequest } from "~/server/auth";
 
 export const revalidate = 0;
 export const dynamic = "force-dynamic";
@@ -22,9 +22,9 @@ export default async function Billing() {
     isCanceled = stripePlan.cancel_at_period_end;
   }
   return (
-    <div className="space-y-8 ">
+    <div className="space-y-8">
       <Alert>
-        <div className=" flex items-center gap-2">
+        <div className="flex items-center gap-2">
           <AlertTriangleIcon className="h-5 w-5 shrink-0" />
           <div>
             <AlertDescription>

@@ -1,11 +1,10 @@
+"use server";
+
 import ThanksTemp from "emails/thanks";
 import VerificationTemp from "emails/verification";
 import { nanoid } from "nanoid";
 import { resend } from "~/lib/resend";
-import {
-  type SendWelcomeEmailProps,
-  type sendVerificationEmailProps,
-} from "~/types";
+import { type SendOTPProps, type SendWelcomeEmailProps } from "~/types";
 
 export const sendWelcomeEmail = async ({
   toMail,
@@ -14,7 +13,6 @@ export const sendWelcomeEmail = async ({
   const subject = "Thanks for using ChadNext!";
   const temp = ThanksTemp({ userName });
 
-  //@ts-expect-error text field is required
   await resend.emails.send({
     from: `ChadNext App <chadnext@moinulmoin.com>`,
     to: toMail,
@@ -23,18 +21,14 @@ export const sendWelcomeEmail = async ({
       "X-Entity-Ref-ID": nanoid(),
     },
     react: temp,
+    text: "",
   });
 };
 
-export const sendVerificationEmail = async ({
-  toMail,
-  verificationUrl,
-  userName,
-}: sendVerificationEmailProps) => {
-  const subject = "Email Verification for ChadNext";
-  const temp = VerificationTemp({ userName, verificationUrl });
+export const sendOTP = async ({ toMail, code, userName }: SendOTPProps) => {
+  const subject = "OTP for ChadNext";
+  const temp = VerificationTemp({ userName, code });
 
-  //@ts-expect-error text field is required
   await resend.emails.send({
     from: `ChadNext App <chadnext@moinulmoin.com>`,
     to: toMail,
@@ -43,5 +37,6 @@ export const sendVerificationEmail = async ({
       "X-Entity-Ref-ID": nanoid(),
     },
     react: temp,
+    text: "",
   });
 };

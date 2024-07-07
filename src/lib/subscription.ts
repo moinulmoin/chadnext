@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import { freePlan, proPlan } from "~/config/subscription";
 import { type UserSubscriptionPlan } from "~/types";
 import db from "./db";

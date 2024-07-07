@@ -3,7 +3,8 @@
 import { type Session, type User } from "lucia";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { TimeSpan, createDate } from "oslo";
+import { TimeSpan, createDate, isWithinExpirationDate } from "oslo";
+import { alphabet, generateRandomString } from "oslo/crypto";
 import { cache } from "react";
 import db from "~/lib/db";
 import { lucia } from "~/lib/lucia";
@@ -21,7 +22,6 @@ export const validateRequest = cache(
     }
 
     const result = await lucia.validateSession(sessionId);
-    // next.js throws when you attempt to set cookie when rendering page
     try {
       if (result.session && result.session.fresh) {
         const sessionCookie = lucia.createSessionCookie(result.session.id);
@@ -39,7 +39,9 @@ export const validateRequest = cache(
           sessionCookie.attributes
         );
       }
-    } catch {}
+    } catch {
+      // next.js throws when you attempt to set cookie when rendering page
+    }
     return result;
   }
 );
@@ -60,24 +62,59 @@ export async function logout() {
     sessionCookie.value,
     sessionCookie.attributes
   );
-  return redirect("/login");
+  redirect("/");
 }
 
-export async function createEmailVerificationToken(
+export async function generateEmailVerificationCode(
   userId: string,
   email: string
 ): Promise<string> {
-  await db.emailVerificationToken.deleteMany({
+  await db.emailVerificationCode.deleteMany({
     where: {
       userId,
     },
   });
-  const newToken = await db.emailVerificationToken.create({
+  const code = generateRandomString(6, alphabet("0-9"));
+  await db.emailVerificationCode.create({
     data: {
       userId,
       email,
-      expiresAt: createDate(new TimeSpan(3, "m")),
+      code,
+      expiresAt: createDate(new TimeSpan(10, "m")), // 10 minutes
     },
   });
-  return newToken.id;
+  return code;
+}
+
+export async function verifyVerificationCode(
+  user: { id: string; email: string },
+  code: string
+): Promise<boolean> {
+  return await db.$transaction(async (tx) => {
+    const databaseCode = await tx.emailVerificationCode.findFirst({
+      where: {
+        userId: user.id,
+      },
+    });
+
+    if (!databaseCode || databaseCode.code !== code) {
+      return false;
+    }
+
+    await tx.emailVerificationCode.delete({
+      where: {
+        id: databaseCode.id,
+      },
+    });
+
+    if (!isWithinExpirationDate(databaseCode.expiresAt)) {
+      return false;
+    }
+
+    if (databaseCode.email !== user.email) {
+      return false;
+    }
+
+    return true;
+  });
 }

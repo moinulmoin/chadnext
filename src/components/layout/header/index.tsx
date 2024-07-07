@@ -1,5 +1,5 @@
+import { validateRequest } from "~/actions/auth";
 import { getScopedI18n } from "~/locales/server";
-import { validateRequest } from "~/server/auth";
 import Navbar from "./navbar";
 
 export default async function Header() {

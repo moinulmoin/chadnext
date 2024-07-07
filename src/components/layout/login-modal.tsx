@@ -20,8 +20,8 @@ export default function LoginModal() {
       <DialogContent className="w-full max-w-[400px] rounded-md">
         <DialogHeader>
           <DialogTitle>
-            <h2 className=" font-semibold tracking-tight transition-colors">
-              Welcome Back 👋
+            <h2 className="font-semibold tracking-tight transition-colors">
+              Login
             </h2>
           </DialogTitle>
         </DialogHeader>
