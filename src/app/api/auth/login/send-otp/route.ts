@@ -1,7 +1,7 @@
+import { generateEmailVerificationCode } from "~/actions/auth";
+import { sendOTP } from "~/actions/mail";
 import { siteUrl } from "~/config/site";
 import db from "~/lib/db";
-import { createEmailVerificationToken } from "~/server/auth";
-import { sendVerificationEmail } from "~/server/mail";
 
 export const POST = async (req: Request) => {
   const body = await req.json();
@@ -18,15 +18,10 @@ export const POST = async (req: Request) => {
       },
     });
 
-    const verificationToken = await createEmailVerificationToken(
-      user.id,
-      body.email
-    );
-    const verificationUrl =
-      siteUrl + "/api/auth/email-verify?token=" + verificationToken;
-    await sendVerificationEmail({
+    const otp = await generateEmailVerificationCode(user.id, body.email);
+    await sendOTP({
       toMail: body.email,
-      verificationUrl,
+      code: otp,
       userName: user.name?.split(" ")[0] || "",
     });
 

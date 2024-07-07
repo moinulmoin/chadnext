@@ -1,5 +1,5 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { validateRequest } from "~/server/auth";
+import { validateRequest } from "~/actions/auth";
 
 const f = createUploadthing();
 

@@ -18,12 +18,12 @@ const siteUrl =
 
 interface VerificationTemplateProps {
   userName: string;
-  verificationUrl: string;
+  code: string;
 }
 
 const VerificationTemp: React.FC<Readonly<VerificationTemplateProps>> = ({
   userName,
-  verificationUrl,
+  code,
 }) => (
   <Html>
     <Head />
@@ -51,14 +51,13 @@ const VerificationTemp: React.FC<Readonly<VerificationTemplateProps>> = ({
             Click the link below to login to your account.
           </Text>
           <Section className="mt-8 text-center">
-            <Button
-              className="bg-bg-white inline-block rounded-md bg-slate-900 px-6 py-3 text-base text-gray-100"
-              href={verificationUrl}
+            <div
+              className="bg-bg-white inline-block rounded-md bg-slate-900 tracking-wider px-6 py-3 text-base text-gray-100"
             >
-              Sign In
-            </Button>
+              {code}
+            </div>
             <Text className="mt-2.5 text-sm ">
-              This link expires in 3 minutes and can only be used once.
+              This link expires in 10 minutes and can only be used once.
             </Text>
           </Section>
           <Text className="mt-8 ">

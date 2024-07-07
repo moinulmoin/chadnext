@@ -1,9 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { utapi } from "~/actions/upload";
 import db from "~/lib/db";
 import { getImageKeyFromUrl, isOurCdnUrl } from "~/lib/utils";
-import { utapi } from "~/server/utapi";
 import { type payload } from "~/types";
 
 export const updateUser = async (id: string, payload: payload) => {

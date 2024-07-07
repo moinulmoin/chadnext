@@ -49,6 +49,6 @@ export interface SendWelcomeEmailProps {
   userName: string;
 }
 
-export interface sendVerificationEmailProps extends SendWelcomeEmailProps {
-  verificationUrl: string;
+export interface SendOTPProps extends SendWelcomeEmailProps {
+  code: string;
 }

@@ -1,9 +1,10 @@
 import { OAuth2RequestError } from "arctic";
 import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
+import { sendWelcomeEmail } from "~/actions/mail";
 import db from "~/lib/db";
-import { github, lucia } from "~/lib/lucia";
-import { sendWelcomeEmail } from "~/server/mail";
+import { github } from "~/lib/github";
+import { lucia } from "~/lib/lucia";
 
 export const GET = async (request: NextRequest) => {
   const url = new URL(request.url);

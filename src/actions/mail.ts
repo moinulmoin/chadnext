@@ -1,11 +1,10 @@
+"use server";
+
 import ThanksTemp from "emails/thanks";
 import VerificationTemp from "emails/verification";
 import { nanoid } from "nanoid";
 import { resend } from "~/lib/resend";
-import {
-  type SendWelcomeEmailProps,
-  type sendVerificationEmailProps,
-} from "~/types";
+import { type SendOTPProps, type SendWelcomeEmailProps } from "~/types";
 
 export const sendWelcomeEmail = async ({
   toMail,
@@ -26,13 +25,9 @@ export const sendWelcomeEmail = async ({
   });
 };
 
-export const sendVerificationEmail = async ({
-  toMail,
-  verificationUrl,
-  userName,
-}: sendVerificationEmailProps) => {
-  const subject = "Email Verification for ChadNext";
-  const temp = VerificationTemp({ userName, verificationUrl });
+export const sendOTP = async ({ toMail, code, userName }: SendOTPProps) => {
+  const subject = "OTP for ChadNext";
+  const temp = VerificationTemp({ userName, code });
 
   //@ts-expect-error text field is required
   await resend.emails.send({

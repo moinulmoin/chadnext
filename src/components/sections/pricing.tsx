@@ -1,7 +1,7 @@
 import Link from "next/link";
+import { validateRequest } from "~/actions/auth";
 import { getUserSubscriptionPlan } from "~/lib/subscription";
 import { cn } from "~/lib/utils";
-import { validateRequest } from "~/server/auth";
 import { Badge } from "../ui/badge";
 import { buttonVariants } from "../ui/button";
 import {
@@ -36,7 +36,7 @@ export default async function Pricing() {
               <CardTitle>
                 Free Plan{" "}
                 {subscription && !subscription?.isPro && (
-                  <Badge className=" absolute right-0 top-0 m-4">Current</Badge>
+                  <Badge className="absolute right-0 top-0 m-4">Current</Badge>
                 )}
               </CardTitle>
               <CardDescription>Up to 3 projects</CardDescription>
@@ -51,7 +51,7 @@ export default async function Pricing() {
                 </span>
               </p>
             </CardContent>
-            <CardFooter className=" justify-center">
+            <CardFooter className="justify-center">
               {!subscription ? (
                 <Link href="/login" className={buttonVariants()}>
                   Get Started
@@ -70,7 +70,7 @@ export default async function Pricing() {
               <CardTitle>
                 Pro Plan{" "}
                 {subscription && subscription?.isPro && (
-                  <Badge className=" absolute right-0 top-0 m-4">Current</Badge>
+                  <Badge className="absolute right-0 top-0 m-4">Current</Badge>
                 )}
               </CardTitle>
               <CardDescription>Unlimited projects</CardDescription>
@@ -85,7 +85,7 @@ export default async function Pricing() {
                 </span>
               </p>
             </CardContent>
-            <CardFooter className=" justify-center">
+            <CardFooter className="justify-center">
               <Link href="/login" className={buttonVariants()}>
                 {!subscription
                   ? "Get Started"

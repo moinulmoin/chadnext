@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
+import { validateRequest } from "~/actions/auth";
 import SidebarNav from "~/components/layout/sidebar-nav";
-import { validateRequest } from "~/server/auth";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

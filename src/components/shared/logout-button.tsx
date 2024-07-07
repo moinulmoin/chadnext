@@ -1,5 +1,5 @@
 import { LogOutIcon } from "lucide-react";
-import { logout } from "~/server/auth";
+import { logout } from "~/actions/auth";
 import { Button } from "../ui/button";
 
 export default function LogoutButton({ className }: { className?: string }) {
