@@ -13,7 +13,6 @@ export const sendWelcomeEmail = async ({
   const subject = "Thanks for using ChadNext!";
   const temp = ThanksTemp({ userName });
 
-  //@ts-expect-error text field is required
   await resend.emails.send({
     from: `ChadNext App <chadnext@moinulmoin.com>`,
     to: toMail,
@@ -22,6 +21,7 @@ export const sendWelcomeEmail = async ({
       "X-Entity-Ref-ID": nanoid(),
     },
     react: temp,
+    text: "",
   });
 };
 
@@ -29,7 +29,6 @@ export const sendOTP = async ({ toMail, code, userName }: SendOTPProps) => {
   const subject = "OTP for ChadNext";
   const temp = VerificationTemp({ userName, code });
 
-  //@ts-expect-error text field is required
   await resend.emails.send({
     from: `ChadNext App <chadnext@moinulmoin.com>`,
     to: toMail,
@@ -38,5 +37,6 @@ export const sendOTP = async ({ toMail, code, userName }: SendOTPProps) => {
       "X-Entity-Ref-ID": nanoid(),
     },
     react: temp,
+    text: "",
   });
 };
