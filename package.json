@@ -29,7 +29,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@react-email/components": "^0.0.12",
     "@serwist/next": "^9.0.3",
-    "@uploadthing/react": "^6.0.2",
+    "@uploadthing/react": "^6.7.2",
     "arctic": "^1.9.1",
     "dayjs": "^1.11.10",
     "input-otp": "^1.2.4",
