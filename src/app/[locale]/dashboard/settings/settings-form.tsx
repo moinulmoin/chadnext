@@ -117,7 +117,7 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
                     alt={form.getValues().name ?? ""}
                   />
                   <AvatarFallback className="text-xs">
-                    {form.getValues().name ?? "A"}
+                    {form.getValues().name[0] ?? "A"}
                   </AvatarFallback>
                   <ImageUploadModal onChange={field.onChange} />
                 </Avatar>

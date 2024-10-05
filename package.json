@@ -29,7 +29,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@react-email/components": "^0.0.12",
     "@serwist/next": "^9.0.3",
-    "@uploadthing/react": "^6.0.2",
+    "@uploadthing/react": "^7.0.2",
     "arctic": "^1.9.1",
     "dayjs": "^1.11.10",
     "input-otp": "^1.2.4",
@@ -43,12 +43,11 @@
     "postcss": "8.4.35",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-dropzone": "^14.2.3",
     "react-email": "1.10.0",
     "react-hook-form": "^7.49.2",
     "resend": "^3.4.0",
     "stripe": "^14.8.0",
-    "uploadthing": "^6.13.2",
+    "uploadthing": "^7.0.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {

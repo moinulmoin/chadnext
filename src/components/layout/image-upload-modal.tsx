@@ -1,12 +1,14 @@
 "use client";
 
+import { useDropzone } from "@uploadthing/react";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import type { FileWithPath } from "react-dropzone";
-import { useDropzone } from "react-dropzone";
 import { type ControllerRenderProps } from "react-hook-form";
-import { generateClientDropzoneAccept } from "uploadthing/client";
+import {
+  generateClientDropzoneAccept,
+  generatePermittedFileTypes,
+} from "uploadthing/client";
 import {
   Dialog,
   DialogContent,
@@ -16,13 +18,10 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import { useUploadThing } from "~/lib/uploadthing";
-import { hasFileNameSpaces } from "~/lib/utils";
 import { type SettingsValues } from "~/types";
 import Icons from "../shared/icons";
 import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
-
-const fileTypes = ["image"];
 
 export default function ImageUploadModal({
   onChange,
@@ -33,29 +32,13 @@ export default function ImageUploadModal({
   const [preview, setPreview] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
 
-  const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
+  const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0) return;
     setFiles(acceptedFiles);
     setPreview(URL.createObjectURL(acceptedFiles[0]));
   }, []);
 
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-    accept: fileTypes ? generateClientDropzoneAccept(fileTypes) : undefined,
-    maxFiles: 1,
-    multiple: false,
-    validator(file) {
-      if (hasFileNameSpaces(file.name)) {
-        return {
-          code: "Spaces in file name",
-          message: "Spaces in file names are not acceptable!",
-        };
-      }
-      return null;
-    },
-  });
-
-  const { startUpload, isUploading, permittedFileInfo } = useUploadThing(
+  const { startUpload, isUploading, routeConfig } = useUploadThing(
     "imageUploader",
     {
       onClientUploadComplete: (res) => {
@@ -76,6 +59,13 @@ export default function ImageUploadModal({
       },
     }
   );
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: generateClientDropzoneAccept(
+      generatePermittedFileTypes(routeConfig).fileTypes
+    ),
+  });
 
   const handleCancel = useCallback(() => {
     if (preview) {
@@ -115,8 +105,8 @@ export default function ImageUploadModal({
         </DialogHeader>
         <div>
           {preview ? (
-            <div className=" flex flex-col items-center justify-center">
-              <div className=" relative h-40 w-40 ">
+            <div className="flex flex-col items-center justify-center">
+              <div className="relative h-40 w-40">
                 <Image
                   src={preview}
                   alt="File preview"
@@ -148,30 +138,26 @@ export default function ImageUploadModal({
             </div>
           ) : (
             <div
-              className=" flex h-60 items-center justify-center border border-dashed focus-visible:outline-none "
+              className="flex h-60 items-center justify-center border border-dashed focus-visible:outline-none"
               {...getRootProps()}
             >
               <input className="" {...getInputProps()} />
-              <div className=" space-y-2 text-center">
+              <div className="space-y-2 text-center">
                 <div className="flex cursor-pointer flex-col items-center gap-y-2">
-                  <span className=" text-md">Drop Here</span>
                   <Icons.download size={40} />
                 </div>
-                <p className=" text-muted-foreground">OR</p>
-                <p className=" cursor-pointer text-sm">Click here</p>
+                <p className="text-sm">
+                  Drop <em>or</em> Click Here
+                </p>
               </div>
             </div>
           )}
         </div>
         <DialogFooter>
-          <div className=" text-right text-xs leading-normal">
+          <div className="text-right text-xs leading-normal">
             <p>
-              <span className=" text-sm text-destructive">*</span>
-              {`Only Images are supported. Max file size is ${permittedFileInfo?.config.image?.maxFileSize}.`}
-            </p>
-            <p>
-              <span className=" text-sm text-destructive">*</span>
-              <strong>File name with spaces is not acceptable</strong>!
+              <span className="text-sm text-destructive">*</span>
+              {`Only Image files are supported and size limit up to ${routeConfig?.image?.maxFileSize}.`}
             </p>
           </div>
         </DialogFooter>

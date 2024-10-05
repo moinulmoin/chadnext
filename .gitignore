@@ -49,3 +49,5 @@ workbox-*.*
 !.env.vault
 
 .velite
+
+.cursorrules
