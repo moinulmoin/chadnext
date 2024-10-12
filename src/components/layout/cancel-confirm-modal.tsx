@@ -1,5 +1,3 @@
-"use client";
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,23 +11,19 @@ import {
 import { Button } from "~/components/ui/button";
 
 interface CancelConfirmModalProps {
-  show: boolean;
-  setShow: (show: boolean) => void;
   reset: () => void;
   isDisabled: boolean;
 }
 
 export default function CancelConfirmModal({
-  show,
-  setShow,
   reset,
   isDisabled,
 }: CancelConfirmModalProps) {
   return (
-    <AlertDialog open={show} onOpenChange={setShow}>
+    <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" type="reset" disabled={isDisabled}>
-          Cancel
+        <Button variant="secondary" type="reset" disabled={isDisabled}>
+          Reset
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

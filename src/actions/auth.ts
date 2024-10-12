@@ -80,7 +80,7 @@ export async function generateEmailVerificationCode(
       userId,
       email,
       code,
-      expiresAt: createDate(new TimeSpan(10, "m")), // 10 minutes
+      expiresAt: createDate(new TimeSpan(3, "m")), // 3 minutes
     },
   });
   return code;

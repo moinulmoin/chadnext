@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { type User } from "lucia";
 import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { toast } from "~/components/ui/use-toast";
+import { useToast } from "~/components/ui/use-toast";
 import { settingsSchema, type SettingsValues } from "~/types";
 import {
   removeNewImageFromCDN,
@@ -29,76 +29,69 @@ import {
 const ImageUploadModal = dynamic(
   () => import("~/components/layout/image-upload-modal")
 );
-
 const CancelConfirmModal = dynamic(
   () => import("~/components/layout/cancel-confirm-modal")
 );
 
 export default function SettingsForm({ currentUser }: { currentUser: User }) {
-  const oldImage = useRef("");
-  const [pending, startTransition] = useTransition();
+  const oldImage = useRef(currentUser.picture ?? "");
+  const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
 
   const form = useForm<SettingsValues>({
     resolver: zodResolver(settingsSchema),
     mode: "onChange",
-    values: {
+    defaultValues: {
       name: currentUser.name ?? "",
       email: currentUser.email ?? "",
       picture: currentUser.picture ?? "",
     },
   });
 
-  const { formState, getFieldState } = form;
+  const { formState, getFieldState, handleSubmit, reset, getValues } = form;
   const { isDirty: isImageChanged } = getFieldState("picture");
-
-  const [showConfirmAlert, setShowConfirmAlert] = useState(false);
 
   useEffect(() => {
     if (isImageChanged && currentUser.picture !== oldImage.current) {
-      oldImage.current = currentUser.picture;
+      oldImage.current = currentUser.picture ?? "";
     }
   }, [currentUser.picture, isImageChanged]);
 
-  function onSubmit(data: SettingsValues) {
+  const onSubmit = handleSubmit((data: SettingsValues) => {
     if (!formState.isDirty) return;
 
     startTransition(async () => {
-      const updatePromise =
-        currentUser.picture && isImageChanged
-          ? removeUserOldImageFromCDN(data.picture, currentUser.picture).then(
-              () => updateUser(currentUser.id, data)
-            )
-          : updateUser(currentUser.id, data);
-      updatePromise
-        .then(() => {
-          toast({
-            title: "Updated successfully!",
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-          toast({
-            title: "Something went wrong.",
-            variant: "destructive",
-          });
-        });
+      try {
+        if (currentUser.picture && isImageChanged) {
+          await removeUserOldImageFromCDN(data.picture, currentUser.picture);
+        }
+        await updateUser(currentUser.id, data);
+        toast({ title: "Updated successfully!" });
+      } catch (error) {
+        console.error(error);
+        toast({ title: "Something went wrong.", variant: "destructive" });
+      }
     });
-  }
+  });
 
-  function handleReset() {
+  const handleReset = async () => {
     if (isImageChanged) {
-      removeNewImageFromCDN(form.getValues().picture)
-        .then(() => form.reset())
-        .catch((error) => console.error(error));
-    } else {
-      form.reset();
+      try {
+        await removeNewImageFromCDN(getValues().picture);
+      } catch (error) {
+        console.error(error);
+      }
     }
-  }
+    reset();
+  };
+
+  const isFormDisabled =
+    formState.isSubmitting || isPending || !formState.isDirty;
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={onSubmit}
         className="max-w-2xl space-y-8 rounded-md border p-6"
       >
         <FormField
@@ -112,19 +105,16 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
               </FormDescription>
               <FormControl>
                 <Avatar className="group relative h-28 w-28 rounded-full">
-                  <AvatarImage
-                    src={field.value}
-                    alt={form.getValues().name ?? ""}
-                  />
+                  <AvatarImage src={field.value} alt={getValues().name ?? ""} />
                   <AvatarFallback className="text-xs">
-                    {form.getValues().name[0] ?? "A"}
+                    {getValues().name?.[0] ?? "A"}
                   </AvatarFallback>
-                  <ImageUploadModal onChange={field.onChange} />
+                  <ImageUploadModal onImageChange={field.onChange} />
                 </Avatar>
               </FormControl>
             </FormItem>
           )}
-        ></FormField>
+        />
         <FormField
           control={form.control}
           name="name"
@@ -158,18 +148,10 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
         />
 
         <div className="inline-flex gap-x-4">
-          <CancelConfirmModal
-            setShow={setShowConfirmAlert}
-            show={showConfirmAlert}
-            reset={handleReset}
-            isDisabled={formState.isSubmitting || pending || !formState.isDirty}
-          />
+          <CancelConfirmModal reset={handleReset} isDisabled={isFormDisabled} />
 
-          <Button
-            type="submit"
-            disabled={formState.isSubmitting || pending || !formState.isDirty}
-          >
-            {formState.isSubmitting || pending ? (
+          <Button type="submit" disabled={isFormDisabled}>
+            {isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Updating...

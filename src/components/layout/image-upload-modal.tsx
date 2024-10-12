@@ -1,5 +1,3 @@
-"use client";
-
 import { useDropzone } from "@uploadthing/react";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
@@ -22,11 +20,12 @@ import { type SettingsValues } from "~/types";
 import Icons from "../shared/icons";
 import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
+import React from "react";
 
 export default function ImageUploadModal({
-  onChange,
+  onImageChange,
 }: {
-  onChange: ControllerRenderProps<SettingsValues, "picture">["onChange"];
+  onImageChange: (imageUrl: string) => void;
 }) {
   const [files, setFiles] = useState<File[]>([]);
   const [preview, setPreview] = useState<string | null>(null);
@@ -43,7 +42,7 @@ export default function ImageUploadModal({
     {
       onClientUploadComplete: (res) => {
         if (res) {
-          onChange(res[0].url);
+          onImageChange(res[0].url);
           toast({
             title: "Uploaded successfully!",
           });

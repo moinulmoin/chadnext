@@ -2,9 +2,10 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { set, z } from "zod";
+import { z } from "zod";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 import Icons from "../shared/icons";
@@ -12,7 +13,6 @@ import { Input } from "../ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
 import { Label } from "../ui/label";
 import { toast } from "../ui/use-toast";
-import { useRouter } from "next/navigation";
 
 const userAuthSchema = z.object({
   email: z.string().email("Please enter a valid email address."),
@@ -25,16 +25,25 @@ export default function AuthForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [isGithubLoading, setIsGithubLoading] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
   const [otp, setOTP] = useState("");
-
+  const [countdown, setCountdown] = useState(30);
   const {
     register,
     handleSubmit,
     reset,
+    getValues,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(userAuthSchema),
   });
+
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [countdown]);
 
   async function onEmailSubmit(data: FormData) {
     setIsLoading(true);
@@ -54,6 +63,7 @@ export default function AuthForm() {
         title: "OTP sent!",
         description: "Please check your mail inbox",
       });
+      setCountdown(30);
     } catch (error) {
       toast({
         title: "Failed to send OTP",
@@ -66,7 +76,7 @@ export default function AuthForm() {
   }
 
   async function onOTPSubmit(data: FormData) {
-    setIsLoading(true);
+    setIsVerifying(true);
 
     try {
       const res = await fetch("/api/auth/login/verify-otp", {
@@ -89,9 +99,15 @@ export default function AuthForm() {
         variant: "destructive",
       });
     } finally {
-      setIsLoading(false);
+      setIsVerifying(false);
     }
   }
+
+  async function handleResend() {
+    if (!getValues("email")) return;
+    await onEmailSubmit(getValues());
+  }
+
   return (
     <div className={cn("mt-4 flex flex-col gap-4")}>
       {currentStep === 1 && (
@@ -118,7 +134,7 @@ export default function AuthForm() {
               <button
                 type="submit"
                 className={cn(buttonVariants())}
-                disabled={isLoading || isGithubLoading}
+                disabled={isLoading || isGithubLoading || isVerifying}
               >
                 {isLoading && (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
@@ -146,11 +162,18 @@ export default function AuthForm() {
         </>
       )}
       {currentStep === 2 && (
-        <form onSubmit={handleSubmit(onOTPSubmit)}>
-          <div className="flex flex-col gap-2.5">
+        <>
+          <p className="mb-4 text-balance">
+            We&apos;ve sent a 6-digit code to your email. Please enter it below
+            to verify your account.
+          </p>
+          <form
+            onSubmit={handleSubmit(onOTPSubmit)}
+            className="flex flex-col gap-2.5"
+          >
             <div>
               <Label className="sr-only" htmlFor="otp">
-                OTP
+                Enter OTP
               </Label>
               <div className="flex justify-center">
                 <InputOTP
@@ -172,14 +195,33 @@ export default function AuthForm() {
                 </InputOTP>
               </div>
             </div>
-            <Button type="submit" disabled={isLoading || otp.length !== 6}>
+            <Button
+              type="submit"
+              disabled={isVerifying || otp.length !== 6}
+              className="mt-4"
+            >
               {isLoading && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               )}
               Verify OTP
             </Button>
+          </form>
+          <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
+            <span>Didn&apos;t receive the code / expired?</span>
+            {countdown > 0 ? (
+              <span>Resend in {countdown}s</span>
+            ) : (
+              <Button
+                variant="link"
+                onClick={handleResend}
+                className="h-auto p-0"
+                disabled={isLoading}
+              >
+                Resend OTP
+              </Button>
+            )}
           </div>
-        </form>
+        </>
       )}
     </div>
   );
