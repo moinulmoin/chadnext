@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { verifyVerificationCode } from "~/actions/auth";
 import { setSessionTokenCookie } from "~/lib/cookies";
 import prisma from "~/lib/prisma";
@@ -7,7 +8,7 @@ import {
   invalidateAllSessions,
 } from "~/lib/session";
 
-export const POST = async (req: Request) => {
+export const POST = async (req: Request, response: Response) => {
   const body = await req.json();
 
   try {
@@ -19,12 +20,11 @@ export const POST = async (req: Request) => {
         id: true,
         email: true,
         emailVerified: true,
-        sessions: true,
       },
     });
 
     if (!user) {
-      return new Response(null, {
+      return new Response("User not found", {
         status: 400,
       });
     }
@@ -35,7 +35,7 @@ export const POST = async (req: Request) => {
     );
 
     if (!isValid) {
-      return new Response(null, {
+      return new Response("Invalid OTP", {
         status: 400,
       });
     }
@@ -54,15 +54,16 @@ export const POST = async (req: Request) => {
     }
     const sessionToken = generateSessionToken();
     const session = await createSession(sessionToken, user.id);
-    setSessionTokenCookie(sessionToken, session.expiresAt);
-
+    await setSessionTokenCookie(sessionToken, session.expiresAt);
+    revalidatePath("/");
     return new Response(null, {
       status: 200,
+      headers: {
+        Location: "/dashboard",
+      },
     });
   } catch (error) {
-    console.log(error);
-
-    return new Response(null, {
+    return new Response("Internal Server Error", {
       status: 500,
     });
   }

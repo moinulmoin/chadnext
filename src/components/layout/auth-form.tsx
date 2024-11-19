@@ -39,9 +39,18 @@ export default function AuthForm() {
   });
 
   useEffect(() => {
+    let intervalId: NodeJS.Timeout | undefined;
+
     if (countdown > 0) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-      return () => clearTimeout(timer);
+      intervalId = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+
+      return () => {
+        if (intervalId) {
+          clearInterval(intervalId);
+        }
+      };
     }
   }, [countdown]);
 
@@ -56,7 +65,7 @@ export default function AuthForm() {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to send OTP");
+        throw new Error(await res.text());
       }
       setCurrentStep(2);
       toast({
@@ -86,16 +95,21 @@ export default function AuthForm() {
       });
 
       if (!res.ok) {
-        throw new Error("Invalid OTP");
+        throw new Error(await res.text());
       }
+      setCountdown(0);
+
       toast({
         title: "Successfully verified!",
       });
+
       router.push("/dashboard");
     } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Something went wrong";
       toast({
-        title: "Invalid OTP",
-        description: "Please try again",
+        title: "Failed to verify OTP",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -105,6 +119,8 @@ export default function AuthForm() {
 
   async function handleResend() {
     if (!getValues("email")) return;
+    setCountdown(0);
+    setOTP("");
     await onEmailSubmit(getValues());
   }
 

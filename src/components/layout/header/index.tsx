@@ -11,6 +11,7 @@ export default async function Header() {
     login: scopedT("login"),
     dashboard: scopedT("dashboard"),
   };
+
   return (
     <header className="h-20 w-full">
       <div className="container h-full">

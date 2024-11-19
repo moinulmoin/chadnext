@@ -73,8 +73,13 @@ export const GET = async (request: Request) => {
     }
     const sessionTokenCookie = generateSessionToken();
     const session = await createSession(sessionTokenCookie, newUser.id);
-    setSessionTokenCookie(sessionTokenCookie, session.expiresAt);
-    return Response.redirect("/dashboard");
+    await setSessionTokenCookie(sessionTokenCookie, session.expiresAt);
+    return new Response(null, {
+      status: 302,
+      headers: {
+        Location: "/dashboard",
+      },
+    });
   } catch (e) {
     console.log(e);
     // the specific error message depends on the provider
@@ -84,7 +89,7 @@ export const GET = async (request: Request) => {
         status: 400,
       });
     }
-    return new Response(null, {
+    return new Response("Internal Server Error", {
       status: 500,
     });
   }

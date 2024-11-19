@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { alphabet, generateRandomString } from "oslo/crypto";
 import { deleteSessionTokenCookie } from "~/lib/cookies";
@@ -16,6 +17,7 @@ export async function logout() {
 
   await invalidateSession(session.id);
   deleteSessionTokenCookie();
+  revalidatePath("/");
   return redirect("/login");
 }
 
