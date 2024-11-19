@@ -1,6 +1,6 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
-import { validateRequest } from "~/actions/auth";
+import { getCurrentSession } from "~/lib/session";
 
 const f = createUploadthing();
 
@@ -11,7 +11,7 @@ export const ourFileRouter = {
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req }) => {
       // This code runs on your server before upload
-      const { user, session } = await validateRequest();
+      const { user, session } = await getCurrentSession();
 
       // If you throw, the user will not be able to upload
       if (!session) throw new UploadThingError("Unauthorized");

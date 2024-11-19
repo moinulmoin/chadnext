@@ -1,16 +1,17 @@
 import { OAuth2RequestError } from "arctic";
 import { cookies } from "next/headers";
-import type { NextRequest } from "next/server";
 import { sendWelcomeEmail } from "~/actions/mail";
-import prisma from "~/lib/prisma";
+import { setSessionTokenCookie } from "~/lib/cookies";
 import { github } from "~/lib/github";
-import { lucia } from "~/lib/lucia";
+import prisma from "~/lib/prisma";
+import { createSession, generateSessionToken } from "~/lib/session";
 
-export const GET = async (request: NextRequest) => {
+export const GET = async (request: Request) => {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
-  const storedState = cookies().get("github_oauth_state")?.value ?? null;
+  const cookieStore = await cookies();
+  const storedState = cookieStore.get("github_oauth_state")?.value ?? null;
   if (!code || !state || !storedState || state !== storedState) {
     return new Response(null, {
       status: 400,
@@ -21,7 +22,7 @@ export const GET = async (request: NextRequest) => {
     const tokens = await github.validateAuthorizationCode(code);
     const githubUserResponse = await fetch("https://api.github.com/user", {
       headers: {
-        Authorization: `Bearer ${tokens.accessToken}`,
+        Authorization: `Bearer ${tokens.accessToken()}`,
       },
     });
     const githubUser: GitHubUser = await githubUserResponse.json();
@@ -30,7 +31,7 @@ export const GET = async (request: NextRequest) => {
         "https://api.github.com/user/emails",
         {
           headers: {
-            Authorization: `Bearer ${tokens.accessToken}`,
+            Authorization: `Bearer ${tokens.accessToken()}`,
           },
         }
       );
@@ -52,19 +53,10 @@ export const GET = async (request: NextRequest) => {
     });
 
     if (existingUser) {
-      const session = await lucia.createSession(existingUser.id, {});
-      const sessionCookie = lucia.createSessionCookie(session.id);
-      cookies().set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes
-      );
-      return new Response(null, {
-        status: 302,
-        headers: {
-          Location: "/dashboard",
-        },
-      });
+      const sessionTokenCookie = generateSessionToken();
+      const session = await createSession(sessionTokenCookie, existingUser.id);
+      setSessionTokenCookie(sessionTokenCookie, session.expiresAt);
+      return Response.redirect("/dashboard");
     }
 
     const newUser = await prisma.user.create({
@@ -79,19 +71,10 @@ export const GET = async (request: NextRequest) => {
     if (githubUser.email) {
       sendWelcomeEmail({ toMail: newUser.email!, userName: newUser.name! });
     }
-    const session = await lucia.createSession(newUser.id, {});
-    const sessionCookie = lucia.createSessionCookie(session.id);
-    cookies().set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes
-    );
-    return new Response(null, {
-      status: 302,
-      headers: {
-        Location: "/dashboard",
-      },
-    });
+    const sessionTokenCookie = generateSessionToken();
+    const session = await createSession(sessionTokenCookie, newUser.id);
+    setSessionTokenCookie(sessionTokenCookie, session.expiresAt);
+    return Response.redirect("/dashboard");
   } catch (e) {
     console.log(e);
     // the specific error message depends on the provider

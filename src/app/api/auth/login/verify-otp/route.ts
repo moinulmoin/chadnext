@@ -1,7 +1,11 @@
-import { cookies } from "next/headers";
 import { verifyVerificationCode } from "~/actions/auth";
-import { lucia } from "~/lib/lucia";
+import { setSessionTokenCookie } from "~/lib/cookies";
 import prisma from "~/lib/prisma";
+import {
+  createSession,
+  generateSessionToken,
+  invalidateAllSessions,
+} from "~/lib/session";
 
 export const POST = async (req: Request) => {
   const body = await req.json();
@@ -15,6 +19,7 @@ export const POST = async (req: Request) => {
         id: true,
         email: true,
         emailVerified: true,
+        sessions: true,
       },
     });
 
@@ -35,7 +40,7 @@ export const POST = async (req: Request) => {
       });
     }
 
-    await lucia.invalidateUserSessions(user.id);
+    await invalidateAllSessions(user.id);
 
     if (!user.emailVerified) {
       await prisma.user.update({
@@ -47,14 +52,10 @@ export const POST = async (req: Request) => {
         },
       });
     }
+    const sessionToken = generateSessionToken();
+    const session = await createSession(sessionToken, user.id);
+    setSessionTokenCookie(sessionToken, session.expiresAt);
 
-    const session = await lucia.createSession(user.id, {});
-    const sessionCookie = lucia.createSessionCookie(session.id);
-    cookies().set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes
-    );
     return new Response(null, {
       status: 200,
     });

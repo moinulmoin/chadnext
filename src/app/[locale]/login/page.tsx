@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
-import { validateRequest } from "~/actions/auth";
 import AuthForm from "~/components/layout/auth-form";
 import { Card } from "~/components/ui/card";
+import { getCurrentSession } from "~/lib/session";
 
 export default async function Login() {
-  const { session } = await validateRequest();
+  const { session } = await getCurrentSession();
   if (session) redirect("/");
   return (
     <section>

@@ -1,9 +1,9 @@
-import { validateRequest } from "~/actions/auth";
+import { getCurrentSession } from "~/lib/session";
 import { getScopedI18n } from "~/locales/server";
 import Navbar from "./navbar";
 
 export default async function Header() {
-  const { session } = await validateRequest();
+  const { session } = await getCurrentSession();
   const scopedT = await getScopedI18n("header");
   const headerText = {
     changelog: scopedT("changelog"),

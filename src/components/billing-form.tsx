@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { toast } from "~/components/ui/use-toast";
+import { toast } from "~/hooks/use-toast";
 import { cn, formatDate } from "~/lib/utils";
 import { type UserSubscriptionPlan } from "~/types";
 interface BillingFormProps extends React.HTMLAttributes<HTMLFormElement> {
@@ -62,7 +62,7 @@ export function BillingForm({
             </em>
           </CardDescription>
         </CardHeader>
-        <CardContent className="font-medium ">
+        <CardContent className="font-medium">
           {subscriptionPlan.description}
         </CardContent>
         <CardFooter className="flex flex-col items-start space-y-2 md:flex-row md:justify-between md:space-x-0">
@@ -73,7 +73,7 @@ export function BillingForm({
             {subscriptionPlan.isPro ? "Manage Subscription" : "Upgrade to PRO"}
           </Button>
           {subscriptionPlan.isPro ? (
-            <p className="rounded-full text-xs font-medium md:self-end ">
+            <p className="rounded-full text-xs font-medium md:self-end">
               {subscriptionPlan.isCanceled
                 ? "Your plan will be canceled on "
                 : "Your plan renews on "}

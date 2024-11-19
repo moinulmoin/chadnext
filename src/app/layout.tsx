@@ -15,14 +15,16 @@ const fontHeading = localFont({
   variable: "--font-heading",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const locale = cookies().get("Next-Locale")?.value || "en";
+  const cookie = await cookies();
+  const locale = cookie.get("Next-Locale")?.value || "en";
+
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
       <body
         className={cn(
           "font-sans antialiased",

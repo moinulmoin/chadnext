@@ -8,6 +8,9 @@ const withSerwist = withSerwistInit({
   disable: process.env.NODE_ENV !== "production",
 });
 
+/**
+ * @type {import('next').NextConfig}
+ */
 const nextConfig = {
   redirects: async () => {
     return [
@@ -22,6 +25,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-};
+}
 
 export default withSerwist(nextConfig);

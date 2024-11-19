@@ -2,7 +2,6 @@ import { useDropzone } from "@uploadthing/react";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import { type ControllerRenderProps } from "react-hook-form";
 import {
   generateClientDropzoneAccept,
   generatePermittedFileTypes,
@@ -15,12 +14,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
+import { toast } from "~/hooks/use-toast";
 import { useUploadThing } from "~/lib/uploadthing";
-import { type SettingsValues } from "~/types";
 import Icons from "../shared/icons";
 import { Button } from "../ui/button";
-import { toast } from "../ui/use-toast";
-import React from "react";
 
 export default function ImageUploadModal({
   onImageChange,

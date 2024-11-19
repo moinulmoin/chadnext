@@ -3,9 +3,9 @@
 import { type Project } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { validateRequest } from "~/actions/auth";
 import { getUserSubscriptionPlan } from "~/actions/subscription";
 import prisma from "~/lib/prisma";
+import { getCurrentSession } from "~/lib/session";
 
 interface Payload {
   name: string;
@@ -13,7 +13,7 @@ interface Payload {
 }
 
 export async function createProject(payload: Payload) {
-  const { user } = await validateRequest();
+  const { user } = await getCurrentSession();
 
   await prisma.project.create({
     data: {
@@ -30,7 +30,7 @@ export async function createProject(payload: Payload) {
 }
 
 export async function checkIfFreePlanLimitReached() {
-  const { user } = await validateRequest();
+  const { user } = await getCurrentSession();
   const subscriptionPlan = await getUserSubscriptionPlan(user?.id as string);
 
   // If user is on a free plan.
@@ -47,7 +47,7 @@ export async function checkIfFreePlanLimitReached() {
 }
 
 export async function getProjects() {
-  const { user } = await validateRequest();
+  const { user } = await getCurrentSession();
   const projects = await prisma.project.findMany({
     where: {
       userId: user?.id,
@@ -60,7 +60,7 @@ export async function getProjects() {
 }
 
 export async function getProjectById(id: string) {
-  const { user } = await validateRequest();
+  const { user } = await getCurrentSession();
   const project = await prisma.project.findFirst({
     where: {
       id,
@@ -71,7 +71,7 @@ export async function getProjectById(id: string) {
 }
 
 export async function updateProjectById(id: string, payload: Payload) {
-  const { user } = await validateRequest();
+  const { user } = await getCurrentSession();
   await prisma.project.update({
     where: {
       id,
@@ -83,7 +83,7 @@ export async function updateProjectById(id: string, payload: Payload) {
 }
 
 export async function deleteProjectById(id: string) {
-  const { user } = await validateRequest();
+  const { user } = await getCurrentSession();
   await prisma.project.delete({
     where: {
       id,

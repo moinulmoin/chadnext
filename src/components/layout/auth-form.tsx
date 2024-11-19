@@ -7,12 +7,12 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, buttonVariants } from "~/components/ui/button";
+import { toast } from "~/hooks/use-toast";
 import { cn } from "~/lib/utils";
 import Icons from "../shared/icons";
 import { Input } from "../ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
 import { Label } from "../ui/label";
-import { toast } from "../ui/use-toast";
 
 const userAuthSchema = z.object({
   email: z.string().email("Please enter a valid email address."),

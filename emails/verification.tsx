@@ -1,15 +1,12 @@
 import {
   Body,
-  Column,
   Container,
   Head,
   Html,
-  Img,
   Preview,
-  Row,
   Section,
   Tailwind,
-  Text,
+  Text
 } from "@react-email/components";
 
 const siteUrl =
@@ -29,24 +26,9 @@ const VerificationTemp: React.FC<Readonly<VerificationTemplateProps>> = ({
     <Preview>Verify your email</Preview>
     <Tailwind>
       <Body className="bg-gray-100">
-        <Container className="m-10 mx-auto bg-white p-10">
-          <Section className="mx-auto text-center">
-            <Row>
-              <Column align="right">
-                <Img
-                  src={`${siteUrl}/chad-next.png`}
-                  height="50"
-                  alt="ChadNext logo"
-                  className="inline-block"
-                />
-              </Column>
-              <Column align="left">
-                <Text className="ml-2 text-lg font-bold">ChadNext</Text>
-              </Column>
-            </Row>
-          </Section>
-          <Text className="my-4 text-lg">Hi, {userName.split(" ")[0]}</Text>
-          <Text className="text-center text-base font-semibold">
+        <Container className="p-6 m-10 mx-auto bg-white">
+          <Text className="mb-4 text-lg">Hi, {userName.split(" ")[0]}</Text>
+          <Text className="text-base font-semibold text-center">
             Here is your verification code.
           </Text>
           <Section className="mt-4 text-center">

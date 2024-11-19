@@ -1,10 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type User } from "lucia";
+import { User } from "@prisma/client";
 import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useTransition } from "react";
+import { useEffect, useMemo, useRef, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { useToast } from "~/components/ui/use-toast";
+import { useToast } from "~/hooks/use-toast";
 import { settingsSchema, type SettingsValues } from "~/types";
 import {
   removeNewImageFromCDN,
@@ -85,8 +85,12 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
     reset();
   };
 
-  const isFormDisabled =
-    formState.isSubmitting || isPending || !formState.isDirty;
+  const isFormDisabled = useMemo(
+    () => formState.isSubmitting || isPending || !formState.isDirty,
+    [formState.isSubmitting, isPending, formState.isDirty]
+  );
+
+  console.log(formState.isSubmitting, isPending, !formState.isDirty);
 
   return (
     <Form {...form}>

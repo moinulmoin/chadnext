@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { validateRequest } from "~/actions/auth";
 import { getUserSubscriptionPlan } from "~/actions/subscription";
+import { getCurrentSession } from "~/lib/session";
 import { cn } from "~/lib/utils";
 import { Badge } from "../ui/badge";
 import { buttonVariants } from "../ui/button";
@@ -14,7 +14,7 @@ import {
 } from "../ui/card";
 
 export default async function Pricing() {
-  const { user } = await validateRequest();
+  const { user } = await getCurrentSession();
 
   const subscription = user ? await getUserSubscriptionPlan(user.id) : null;
   return (

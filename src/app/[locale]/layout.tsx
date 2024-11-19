@@ -7,12 +7,13 @@ import { siteConfig, siteUrl } from "~/config/site";
 import { I18nProviderClient } from "~/locales/client";
 
 type Props = {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const locale = params.locale;
+  const p = await params;
+  const locale = p.locale;
   const site = siteConfig(locale);
 
   const siteOgImage = `${siteUrl}/api/og?locale=${locale}`;
@@ -95,15 +96,17 @@ export const viewport = {
   ],
 };
 
-export default function SubLayout({
+export default async function SubLayout({
   children,
   loginDialog,
-  params: { locale },
+  params: params,
 }: {
   children: React.ReactNode;
   loginDialog: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
+  const p = await params;
+  const locale = p.locale;
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <Header />
