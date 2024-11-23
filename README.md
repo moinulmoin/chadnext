@@ -37,7 +37,7 @@ Save time and effort, and build performant apps with an excellent developer expe
 
 ## License 📄
 
-MIT License. [LICENSE](https://github.com/moinulmoin/chadnext/blob/main/LICENSE)
+[MIT License](https://github.com/moinulmoin/chadnext/blob/main/LICENSE)
 
 ## Author ✍️
 
