@@ -9,6 +9,7 @@ import { getCurrentSession, invalidateSession } from "~/lib/session";
 
 export async function logout() {
   const { session } = await getCurrentSession();
+
   if (!session) {
     return {
       message: "Unauthorized",

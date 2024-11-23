@@ -5,7 +5,8 @@ import {
 } from "@oslojs/encoding";
 import type { Session, User } from "@prisma/client";
 import { cookies } from "next/headers";
-import { cache } from "react";
+// import { cache } from "react";
+import { unstable_cache as cache } from "next/cache";
 import prisma from "./prisma";
 
 export function generateSessionToken(): string {
@@ -65,17 +66,24 @@ export async function validateSessionToken(
   return { session, user };
 }
 
-export const getCurrentSession = cache(
-  async (): Promise<SessionValidationResult> => {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("session")?.value ?? null;
+export const getSession = cache(
+  async (token: string | null): Promise<SessionValidationResult> => {
     if (token === null) {
       return { session: null, user: null };
     }
-    const result = await validateSessionToken(token);
-    return result;
+    return validateSessionToken(token);
+  },
+  ["session"],
+  {
+    tags: ["session"],
   }
 );
+
+export const getCurrentSession = async (): Promise<SessionValidationResult> => {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("session")?.value ?? null;
+  return getSession(token);
+};
 
 export async function invalidateSession(sessionId: string): Promise<void> {
   await prisma.session.delete({ where: { id: sessionId } });

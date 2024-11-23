@@ -1,4 +1,6 @@
-import { OAuth2RequestError } from "arctic";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { ArcticFetchError, OAuth2RequestError } from "arctic";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { sendWelcomeEmail } from "~/actions/mail";
 import { setSessionTokenCookie } from "~/lib/cookies";
@@ -26,6 +28,7 @@ export const GET = async (request: Request) => {
       },
     });
     const githubUser: GitHubUser = await githubUserResponse.json();
+
     if (!githubUser.email) {
       const githubEmailsResponse = await fetch(
         "https://api.github.com/user/emails",
@@ -46,17 +49,30 @@ export const GET = async (request: Request) => {
       if (verifiedEmail) githubUser.email = verifiedEmail.email;
     }
 
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await prisma.user.findFirst({
       where: {
-        githubId: githubUser.id,
+        OR: [
+          {
+            githubId: githubUser.id,
+          },
+          {
+            email: githubUser.email,
+          },
+        ],
       },
     });
 
     if (existingUser) {
       const sessionTokenCookie = generateSessionToken();
       const session = await createSession(sessionTokenCookie, existingUser.id);
-      setSessionTokenCookie(sessionTokenCookie, session.expiresAt);
-      return Response.redirect("/dashboard");
+      await setSessionTokenCookie(sessionTokenCookie, session.expiresAt);
+      revalidatePath("/dashboard", "layout");
+      return new Response(null, {
+        status: 302,
+        headers: {
+          Location: "/dashboard",
+        },
+      });
     }
 
     const newUser = await prisma.user.create({
@@ -68,12 +84,14 @@ export const GET = async (request: Request) => {
         emailVerified: Boolean(githubUser.email),
       },
     });
+
     if (githubUser.email) {
       sendWelcomeEmail({ toMail: newUser.email!, userName: newUser.name! });
     }
     const sessionTokenCookie = generateSessionToken();
     const session = await createSession(sessionTokenCookie, newUser.id);
     await setSessionTokenCookie(sessionTokenCookie, session.expiresAt);
+    revalidatePath("/dashboard", "layout");
     return new Response(null, {
       status: 302,
       headers: {
@@ -81,14 +99,29 @@ export const GET = async (request: Request) => {
       },
     });
   } catch (e) {
-    console.log(e);
+    console.log(JSON.stringify(e));
+
     // the specific error message depends on the provider
     if (e instanceof OAuth2RequestError) {
       // invalid code
-      return new Response(null, {
+      return new Response(e.description, {
         status: 400,
       });
     }
+
+    if (e instanceof ArcticFetchError) {
+      // invalid code
+      return new Response(e.message, {
+        status: 400,
+      });
+    }
+
+    if (e instanceof PrismaClientKnownRequestError) {
+      return new Response(e.message, {
+        status: 400,
+      });
+    }
+
     return new Response("Internal Server Error", {
       status: 500,
     });

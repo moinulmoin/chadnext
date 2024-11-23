@@ -1,4 +1,4 @@
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { verifyVerificationCode } from "~/actions/auth";
 import { setSessionTokenCookie } from "~/lib/cookies";
 import prisma from "~/lib/prisma";
@@ -55,12 +55,9 @@ export const POST = async (req: Request, response: Response) => {
     const sessionToken = generateSessionToken();
     const session = await createSession(sessionToken, user.id);
     await setSessionTokenCookie(sessionToken, session.expiresAt);
-    revalidatePath("/");
+    revalidateTag("session");
     return new Response(null, {
       status: 200,
-      headers: {
-        Location: "/dashboard",
-      },
     });
   } catch (error) {
     return new Response("Internal Server Error", {

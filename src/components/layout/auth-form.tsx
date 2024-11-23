@@ -74,9 +74,11 @@ export default function AuthForm() {
       });
       setCountdown(30);
     } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Something went wrong";
       toast({
         title: "Failed to send OTP",
-        description: "Please try again later",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -98,12 +100,11 @@ export default function AuthForm() {
         throw new Error(await res.text());
       }
       setCountdown(0);
-
+      reset();
       toast({
         title: "Successfully verified!",
       });
-
-      router.push("/dashboard");
+      window.location.href = "/dashboard";
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Something went wrong";
@@ -216,14 +217,14 @@ export default function AuthForm() {
               disabled={isVerifying || otp.length !== 6}
               className="mt-4"
             >
-              {isLoading && (
+              {isVerifying && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               )}
               Verify OTP
             </Button>
           </form>
           <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
-            <span>Didn&apos;t receive the code / expired?</span>
+            <span>Didn&apos;t receive the code/expired?</span>
             {countdown > 0 ? (
               <span>Resend in {countdown}s</span>
             ) : (
@@ -233,7 +234,7 @@ export default function AuthForm() {
                 className="h-auto p-0"
                 disabled={isLoading}
               >
-                Resend OTP
+                {isLoading ? "Resending..." : "Resend"}
               </Button>
             )}
           </div>

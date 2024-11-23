@@ -40,7 +40,6 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
 
   const form = useForm<SettingsValues>({
     resolver: zodResolver(settingsSchema),
-    mode: "onChange",
     defaultValues: {
       name: currentUser.name ?? "",
       email: currentUser.email ?? "",
@@ -52,14 +51,21 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
   const { isDirty: isImageChanged } = getFieldState("picture");
 
   useEffect(() => {
+    reset({
+      name: currentUser.name ?? "",
+      email: currentUser.email ?? "",
+      picture: currentUser.picture ?? "",
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser]);
+
+  useEffect(() => {
     if (isImageChanged && currentUser.picture !== oldImage.current) {
       oldImage.current = currentUser.picture ?? "";
     }
   }, [currentUser.picture, isImageChanged]);
 
   const onSubmit = handleSubmit((data: SettingsValues) => {
-    if (!formState.isDirty) return;
-
     startTransition(async () => {
       try {
         if (currentUser.picture && isImageChanged) {
@@ -68,7 +74,7 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
         await updateUser(currentUser.id, data);
         toast({ title: "Updated successfully!" });
       } catch (error) {
-        console.error(error);
+        console.log(JSON.stringify(error));
         toast({ title: "Something went wrong.", variant: "destructive" });
       }
     });
@@ -89,8 +95,6 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
     () => formState.isSubmitting || isPending || !formState.isDirty,
     [formState.isSubmitting, isPending, formState.isDirty]
   );
-
-  console.log(formState.isSubmitting, isPending, !formState.isDirty);
 
   return (
     <Form {...form}>

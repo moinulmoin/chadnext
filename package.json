@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "prisma generate && next dev --turbo",
+    "dev": "prisma generate && next dev",
     "dev:email": "email dev -p 9000",
     "dev:content": "velite build --watch",
     "build:content": "velite build --clean",
@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
-    "@lucia-auth/adapter-prisma": "4.0.1",
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
     "@prisma/client": "^5.22.0",
