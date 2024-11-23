@@ -124,7 +124,7 @@ export default function AuthForm() {
   }
 
   return (
-    <div className={cn("mt-4 flex flex-col gap-4")}>
+    <div className={cn("mt-4 flex max-w-full flex-col gap-4")}>
       {currentStep === 1 && (
         <>
           <form onSubmit={handleSubmit(onEmailSubmit)}>
@@ -178,11 +178,11 @@ export default function AuthForm() {
       )}
       {currentStep === 2 && (
         <>
-          <p className="mb-4">
-            <span className="whitespace-nowrap">
-              We&apos;ve sent a 6-digit code to {getValues("email")}
+          <p className="mb-4 text-center">
+            <span className="break-all">
+              We&apos;ve sent a 6-digit code to {getValues("email")}.
             </span>{" "}
-            Please enter it below to verify your account.
+            Please enter it below for verification.
           </p>
           <form
             onSubmit={handleSubmit(onOTPSubmit)}
@@ -192,7 +192,7 @@ export default function AuthForm() {
               <Label className="sr-only" htmlFor="otp">
                 Enter OTP
               </Label>
-              <div className="flex justify-center">
+              <div className="">
                 <InputOTP
                   id="otp"
                   autoFocus
@@ -200,8 +200,9 @@ export default function AuthForm() {
                   value={otp}
                   onChange={setOTP}
                   maxLength={6}
+                  className="flex justify-between"
                 >
-                  <InputOTPGroup>
+                  <InputOTPGroup className="flex w-full items-center justify-between [&>div]:rounded-md [&>div]:border">
                     <InputOTPSlot index={0} />
                     <InputOTPSlot index={1} />
                     <InputOTPSlot index={2} />

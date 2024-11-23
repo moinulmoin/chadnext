@@ -1,10 +1,15 @@
 import { type Metadata } from "next";
+import { Inter } from "next/font/google";
+import localFont from "next/font/local";
+import Script from "next/script";
 import Footer from "~/components/layout/footer";
 import Header from "~/components/layout/header";
 import ThemeProvider from "~/components/shared/theme-provider";
 import { Toaster } from "~/components/ui/toaster";
 import { siteConfig, siteUrl } from "~/config/site";
+import { cn } from "~/lib/utils";
 import { I18nProviderClient } from "~/locales/client";
+import "../globals.css";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -96,28 +101,53 @@ export const viewport = {
   ],
 };
 
+const fontSans = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
+const fontHeading = localFont({
+  src: "../../assets/fonts/CalSans-SemiBold.woff2",
+  variable: "--font-heading",
+});
+
 export default async function SubLayout({
   children,
   loginDialog,
-  params: params,
+  params,
 }: {
   children: React.ReactNode;
   loginDialog: React.ReactNode;
   params: Promise<{ locale: string }>;
 }) {
-  const p = await params;
-  const locale = p.locale;
+  const { locale } = await params;
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <Header />
-      <main>
-        {children}
-        {loginDialog}
-      </main>
-      <I18nProviderClient locale={locale}>
-        <Footer />
-      </I18nProviderClient>
-      <Toaster />
-    </ThemeProvider>
+    <html lang={locale} suppressHydrationWarning>
+      <body
+        className={cn(
+          "font-sans antialiased",
+          fontSans.variable,
+          fontHeading.variable
+        )}
+      >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Header />
+          <main>
+            {children}
+            {loginDialog}
+          </main>
+          <I18nProviderClient locale={locale}>
+            <Footer />
+          </I18nProviderClient>
+          <Toaster />
+        </ThemeProvider>
+      </body>
+      {process.env.NODE_ENV === "production" && (
+        <Script
+          src="https://umami.moinulmoin.com/script.js"
+          data-website-id="bc66d96a-fc75-4ecd-b0ef-fdd25de8113c"
+        />
+      )}
+    </html>
   );
 }
