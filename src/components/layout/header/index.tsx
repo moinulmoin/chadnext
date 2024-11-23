@@ -1,8 +1,10 @@
 import { getCurrentSession } from "~/lib/session";
 import { getScopedI18n } from "~/locales/server";
 import Navbar from "./navbar";
+import { connection } from "next/server";
 
 export default async function Header() {
+  await connection();
   const { session } = await getCurrentSession();
   const scopedT = await getScopedI18n("header");
   const headerText = {

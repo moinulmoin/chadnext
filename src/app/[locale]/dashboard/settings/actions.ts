@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import prisma from "~/lib/prisma";
 import { utapi } from "~/lib/uploadthing-server";
 import { getImageKeyFromUrl, isOurCdnUrl } from "~/lib/utils";
@@ -12,7 +12,7 @@ export const updateUser = async (id: string, payload: payload) => {
     data: { ...payload },
   });
 
-  revalidateTag("session");
+  revalidatePath("/dashboard/settings");
 };
 
 export async function removeUserOldImageFromCDN(

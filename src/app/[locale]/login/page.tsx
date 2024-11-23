@@ -5,7 +5,7 @@ import { getCurrentSession } from "~/lib/session";
 
 export default async function Login() {
   const { session } = await getCurrentSession();
-  if (session) redirect("/");
+  if (session) return redirect("/dashboard");
   return (
     <section>
       <div className="container">

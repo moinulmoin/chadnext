@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -21,7 +20,6 @@ const userAuthSchema = z.object({
 type FormData = z.infer<typeof userAuthSchema>;
 
 export default function AuthForm() {
-  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [isGithubLoading, setIsGithubLoading] = useState(false);
@@ -180,9 +178,11 @@ export default function AuthForm() {
       )}
       {currentStep === 2 && (
         <>
-          <p className="mb-4 text-balance">
-            We&apos;ve sent a 6-digit code to your email. Please enter it below
-            to verify your account.
+          <p className="mb-4">
+            <span className="whitespace-nowrap">
+              We&apos;ve sent a 6-digit code to {getValues("email")}
+            </span>{" "}
+            Please enter it below to verify your account.
           </p>
           <form
             onSubmit={handleSubmit(onOTPSubmit)}
