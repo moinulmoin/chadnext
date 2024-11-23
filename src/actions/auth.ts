@@ -2,10 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { alphabet, generateRandomString } from "oslo/crypto";
+import { generateRandomString, RandomReader } from "@oslojs/crypto/random";
 import { deleteSessionTokenCookie } from "~/lib/server/cookies";
 import prisma from "~/lib/server/prisma";
 import { getCurrentSession, invalidateSession } from "~/lib/server/session";
+
+const digits = "0123456789";
 
 export async function logout() {
   const { session } = await getCurrentSession();
@@ -30,7 +32,12 @@ export async function generateEmailVerificationCode(
       userId,
     },
   });
-  const code = generateRandomString(6, alphabet("0-9"));
+  const random: RandomReader = {
+    read(bytes) {
+      crypto.getRandomValues(bytes);
+    },
+  };
+  const code = generateRandomString(random, digits, 6);
   await prisma.emailVerificationCode.create({
     data: {
       userId,
