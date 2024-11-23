@@ -53,3 +53,13 @@ export class FreePlanLimitError extends Error {
     super(message);
   }
 }
+
+export function isRedirectError(error: unknown): boolean {
+  return (
+    error !== null &&
+    typeof error === "object" &&
+    "digest" in error &&
+    typeof error.digest === "string" &&
+    error.digest.includes("NEXT_REDIRECT")
+  );
+}

@@ -18,12 +18,6 @@ import { toast } from "~/hooks/use-toast";
 import { updateProjectById } from "../action";
 import { projectSchema, type ProjectFormValues } from "../create-project-modal";
 
-// const projectEditSchema = projectSchema.extend({
-//   id: z.string().readonly(),
-// });
-
-// type ProjectEditValues = z.infer<typeof projectEditSchema>;
-
 export default function EditableDetails({
   initialValues,
 }: {
@@ -42,7 +36,7 @@ export default function EditableDetails({
       });
       form.reset();
     } catch (error) {
-      console.error(error);
+      console.log(error);
       toast({
         title: "Error creating project.",
         description: "Please try again.",

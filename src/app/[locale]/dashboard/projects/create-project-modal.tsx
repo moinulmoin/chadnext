@@ -58,7 +58,7 @@ export default function CreateProjectModal() {
       form.reset();
       setIsOpen(false);
     } catch (error) {
-      console.error({ error });
+      console.log(error);
       if (error instanceof FreePlanLimitError) {
         return toast({
           title: "Free plan limit reached. Please upgrade your plan.",

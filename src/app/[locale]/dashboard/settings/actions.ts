@@ -26,7 +26,7 @@ export async function removeUserOldImageFromCDN(
       await utapi.deleteFiles(currentImageFileKey as string);
     }
   } catch (e) {
-    console.error(e);
+    console.log(e);
     const newImageFileKey = getImageKeyFromUrl(newImageUrl);
     await utapi.deleteFiles(newImageFileKey as string);
   }

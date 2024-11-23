@@ -47,7 +47,7 @@ export default function ImageUploadModal({
         }
       },
       onUploadError: (e) => {
-        console.error(e);
+        console.log(e);
         toast({
           title: "Error occurred while uploading!",
           variant: "destructive",
