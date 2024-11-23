@@ -1,15 +1,15 @@
 import { AlertTriangleIcon } from "lucide-react";
-import { validateRequest } from "~/actions/auth";
 import { getUserSubscriptionPlan } from "~/actions/subscription";
 import { BillingForm } from "~/components/billing-form";
 import { Alert, AlertDescription } from "~/components/ui/alert";
+import { getCurrentSession } from "~/lib/session";
 import { stripe } from "~/lib/stripe";
 
 export const revalidate = 0;
 export const dynamic = "force-dynamic";
 
 export default async function Billing() {
-  const { user } = await validateRequest();
+  const { user } = await getCurrentSession();
 
   const subscriptionPlan = await getUserSubscriptionPlan(user?.id as string);
 

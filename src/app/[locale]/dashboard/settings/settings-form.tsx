@@ -1,10 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type User } from "lucia";
+import { User } from "@prisma/client";
 import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
-import { useEffect, useRef, useTransition } from "react";
+import { useEffect, useMemo, useRef, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { useToast } from "~/components/ui/use-toast";
+import { useToast } from "~/hooks/use-toast";
 import { settingsSchema, type SettingsValues } from "~/types";
 import {
   removeNewImageFromCDN,
@@ -40,7 +40,6 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
 
   const form = useForm<SettingsValues>({
     resolver: zodResolver(settingsSchema),
-    mode: "onChange",
     defaultValues: {
       name: currentUser.name ?? "",
       email: currentUser.email ?? "",
@@ -52,14 +51,21 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
   const { isDirty: isImageChanged } = getFieldState("picture");
 
   useEffect(() => {
+    reset({
+      name: currentUser.name ?? "",
+      email: currentUser.email ?? "",
+      picture: currentUser.picture ?? "",
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser]);
+
+  useEffect(() => {
     if (isImageChanged && currentUser.picture !== oldImage.current) {
       oldImage.current = currentUser.picture ?? "";
     }
   }, [currentUser.picture, isImageChanged]);
 
   const onSubmit = handleSubmit((data: SettingsValues) => {
-    if (!formState.isDirty) return;
-
     startTransition(async () => {
       try {
         if (currentUser.picture && isImageChanged) {
@@ -68,7 +74,7 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
         await updateUser(currentUser.id, data);
         toast({ title: "Updated successfully!" });
       } catch (error) {
-        console.error(error);
+        console.log(JSON.stringify(error));
         toast({ title: "Something went wrong.", variant: "destructive" });
       }
     });
@@ -85,8 +91,10 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
     reset();
   };
 
-  const isFormDisabled =
-    formState.isSubmitting || isPending || !formState.isDirty;
+  const isFormDisabled = useMemo(
+    () => formState.isSubmitting || isPending || !formState.isDirty,
+    [formState.isSubmitting, isPending, formState.isDirty]
+  );
 
   return (
     <Form {...form}>

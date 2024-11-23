@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
 import Icons from "./shared/icons";
 import { Button } from "./ui/button";
-import { toast } from "./ui/use-toast";
+import { toast } from "~/hooks/use-toast";
 
 export default function CopyButton({ content }: { content: string }) {
   const copyToClipboard = (content: string) => {
@@ -23,7 +22,7 @@ export default function CopyButton({ content }: { content: string }) {
   return (
     <Button
       type="button"
-      className="absolute right-0 top-0 h-full "
+      className="absolute right-0 top-0 h-full"
       size="icon"
       variant="ghost"
       onClick={() => copyToClipboard(content)}

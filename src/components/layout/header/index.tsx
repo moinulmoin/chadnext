@@ -1,9 +1,11 @@
-import { validateRequest } from "~/actions/auth";
+import { getCurrentSession } from "~/lib/session";
 import { getScopedI18n } from "~/locales/server";
 import Navbar from "./navbar";
+import { connection } from "next/server";
 
 export default async function Header() {
-  const { session } = await validateRequest();
+  await connection();
+  const { session } = await getCurrentSession();
   const scopedT = await getScopedI18n("header");
   const headerText = {
     changelog: scopedT("changelog"),
@@ -11,6 +13,7 @@ export default async function Header() {
     login: scopedT("login"),
     dashboard: scopedT("dashboard"),
   };
+
   return (
     <header className="h-20 w-full">
       <div className="container h-full">

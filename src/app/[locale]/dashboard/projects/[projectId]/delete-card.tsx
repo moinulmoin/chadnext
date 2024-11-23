@@ -13,7 +13,7 @@ import {
 } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
 import { Card, CardDescription, CardTitle } from "~/components/ui/card";
-import { toast } from "~/components/ui/use-toast";
+import { toast } from "~/hooks/use-toast";
 import { deleteProjectById } from "../action";
 
 export default function DeleteCard({ id }: { id: string }) {
@@ -39,7 +39,7 @@ export default function DeleteCard({ id }: { id: string }) {
   return (
     <Card className="mt-5 flex items-center justify-between p-6">
       <div>
-        <CardTitle className=" mb-2.5">Delete Project</CardTitle>
+        <CardTitle className="mb-2.5">Delete Project</CardTitle>
         <CardDescription>
           The project will be permanently deleted. This action is irreversible
           and can not be undone.

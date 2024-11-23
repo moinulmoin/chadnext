@@ -2,17 +2,16 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, buttonVariants } from "~/components/ui/button";
+import { toast } from "~/hooks/use-toast";
 import { cn } from "~/lib/utils";
 import Icons from "../shared/icons";
 import { Input } from "../ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
 import { Label } from "../ui/label";
-import { toast } from "../ui/use-toast";
 
 const userAuthSchema = z.object({
   email: z.string().email("Please enter a valid email address."),
@@ -21,7 +20,6 @@ const userAuthSchema = z.object({
 type FormData = z.infer<typeof userAuthSchema>;
 
 export default function AuthForm() {
-  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [isGithubLoading, setIsGithubLoading] = useState(false);
@@ -39,9 +37,18 @@ export default function AuthForm() {
   });
 
   useEffect(() => {
+    let intervalId: NodeJS.Timeout | undefined;
+
     if (countdown > 0) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-      return () => clearTimeout(timer);
+      intervalId = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+
+      return () => {
+        if (intervalId) {
+          clearInterval(intervalId);
+        }
+      };
     }
   }, [countdown]);
 
@@ -56,7 +63,7 @@ export default function AuthForm() {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to send OTP");
+        throw new Error(await res.text());
       }
       setCurrentStep(2);
       toast({
@@ -65,9 +72,11 @@ export default function AuthForm() {
       });
       setCountdown(30);
     } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Something went wrong";
       toast({
         title: "Failed to send OTP",
-        description: "Please try again later",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -86,16 +95,20 @@ export default function AuthForm() {
       });
 
       if (!res.ok) {
-        throw new Error("Invalid OTP");
+        throw new Error(await res.text());
       }
+      setCountdown(0);
+      reset();
       toast({
         title: "Successfully verified!",
       });
-      router.push("/dashboard");
+      window.location.href = "/dashboard";
     } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Something went wrong";
       toast({
-        title: "Invalid OTP",
-        description: "Please try again",
+        title: "Failed to verify OTP",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -105,11 +118,13 @@ export default function AuthForm() {
 
   async function handleResend() {
     if (!getValues("email")) return;
+    setCountdown(0);
+    setOTP("");
     await onEmailSubmit(getValues());
   }
 
   return (
-    <div className={cn("mt-4 flex flex-col gap-4")}>
+    <div className={cn("mt-4 flex max-w-full flex-col gap-4")}>
       {currentStep === 1 && (
         <>
           <form onSubmit={handleSubmit(onEmailSubmit)}>
@@ -163,9 +178,11 @@ export default function AuthForm() {
       )}
       {currentStep === 2 && (
         <>
-          <p className="mb-4 text-balance">
-            We&apos;ve sent a 6-digit code to your email. Please enter it below
-            to verify your account.
+          <p className="mb-4 text-center">
+            <span className="break-all">
+              We&apos;ve sent a 6-digit code to {getValues("email")}.
+            </span>{" "}
+            Please enter it below for verification.
           </p>
           <form
             onSubmit={handleSubmit(onOTPSubmit)}
@@ -175,7 +192,7 @@ export default function AuthForm() {
               <Label className="sr-only" htmlFor="otp">
                 Enter OTP
               </Label>
-              <div className="flex justify-center">
+              <div className="">
                 <InputOTP
                   id="otp"
                   autoFocus
@@ -183,8 +200,9 @@ export default function AuthForm() {
                   value={otp}
                   onChange={setOTP}
                   maxLength={6}
+                  className="flex justify-between"
                 >
-                  <InputOTPGroup>
+                  <InputOTPGroup className="flex w-full items-center justify-between [&>div]:rounded-md [&>div]:border">
                     <InputOTPSlot index={0} />
                     <InputOTPSlot index={1} />
                     <InputOTPSlot index={2} />
@@ -200,14 +218,14 @@ export default function AuthForm() {
               disabled={isVerifying || otp.length !== 6}
               className="mt-4"
             >
-              {isLoading && (
+              {isVerifying && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               )}
               Verify OTP
             </Button>
           </form>
           <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
-            <span>Didn&apos;t receive the code / expired?</span>
+            <span>Didn&apos;t receive the code/expired?</span>
             {countdown > 0 ? (
               <span>Resend in {countdown}s</span>
             ) : (
@@ -217,7 +235,7 @@ export default function AuthForm() {
                 className="h-auto p-0"
                 disabled={isLoading}
               >
-                Resend OTP
+                {isLoading ? "Resending..." : "Resend"}
               </Button>
             )}
           </div>

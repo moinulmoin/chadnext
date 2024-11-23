@@ -1,16 +1,19 @@
-import { OAuth2RequestError } from "arctic";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { ArcticFetchError, OAuth2RequestError } from "arctic";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import type { NextRequest } from "next/server";
 import { sendWelcomeEmail } from "~/actions/mail";
-import prisma from "~/lib/prisma";
+import { setSessionTokenCookie } from "~/lib/cookies";
 import { github } from "~/lib/github";
-import { lucia } from "~/lib/lucia";
+import prisma from "~/lib/prisma";
+import { createSession, generateSessionToken } from "~/lib/session";
 
-export const GET = async (request: NextRequest) => {
+export const GET = async (request: Request) => {
   const url = new URL(request.url);
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
-  const storedState = cookies().get("github_oauth_state")?.value ?? null;
+  const cookieStore = await cookies();
+  const storedState = cookieStore.get("github_oauth_state")?.value ?? null;
   if (!code || !state || !storedState || state !== storedState) {
     return new Response(null, {
       status: 400,
@@ -21,16 +24,17 @@ export const GET = async (request: NextRequest) => {
     const tokens = await github.validateAuthorizationCode(code);
     const githubUserResponse = await fetch("https://api.github.com/user", {
       headers: {
-        Authorization: `Bearer ${tokens.accessToken}`,
+        Authorization: `Bearer ${tokens.accessToken()}`,
       },
     });
     const githubUser: GitHubUser = await githubUserResponse.json();
+
     if (!githubUser.email) {
       const githubEmailsResponse = await fetch(
         "https://api.github.com/user/emails",
         {
           headers: {
-            Authorization: `Bearer ${tokens.accessToken}`,
+            Authorization: `Bearer ${tokens.accessToken()}`,
           },
         }
       );
@@ -45,20 +49,24 @@ export const GET = async (request: NextRequest) => {
       if (verifiedEmail) githubUser.email = verifiedEmail.email;
     }
 
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await prisma.user.findFirst({
       where: {
-        githubId: githubUser.id,
+        OR: [
+          {
+            githubId: githubUser.id,
+          },
+          {
+            email: githubUser.email,
+          },
+        ],
       },
     });
 
     if (existingUser) {
-      const session = await lucia.createSession(existingUser.id, {});
-      const sessionCookie = lucia.createSessionCookie(session.id);
-      cookies().set(
-        sessionCookie.name,
-        sessionCookie.value,
-        sessionCookie.attributes
-      );
+      const sessionTokenCookie = generateSessionToken();
+      const session = await createSession(sessionTokenCookie, existingUser.id);
+      await setSessionTokenCookie(sessionTokenCookie, session.expiresAt);
+      revalidatePath("/dashboard", "layout");
       return new Response(null, {
         status: 302,
         headers: {
@@ -76,16 +84,14 @@ export const GET = async (request: NextRequest) => {
         emailVerified: Boolean(githubUser.email),
       },
     });
+
     if (githubUser.email) {
       sendWelcomeEmail({ toMail: newUser.email!, userName: newUser.name! });
     }
-    const session = await lucia.createSession(newUser.id, {});
-    const sessionCookie = lucia.createSessionCookie(session.id);
-    cookies().set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes
-    );
+    const sessionTokenCookie = generateSessionToken();
+    const session = await createSession(sessionTokenCookie, newUser.id);
+    await setSessionTokenCookie(sessionTokenCookie, session.expiresAt);
+    revalidatePath("/dashboard", "layout");
     return new Response(null, {
       status: 302,
       headers: {
@@ -93,15 +99,30 @@ export const GET = async (request: NextRequest) => {
       },
     });
   } catch (e) {
-    console.log(e);
+    console.log(JSON.stringify(e));
+
     // the specific error message depends on the provider
     if (e instanceof OAuth2RequestError) {
       // invalid code
-      return new Response(null, {
+      return new Response(e.description, {
         status: 400,
       });
     }
-    return new Response(null, {
+
+    if (e instanceof ArcticFetchError) {
+      // invalid code
+      return new Response(e.message, {
+        status: 400,
+      });
+    }
+
+    if (e instanceof PrismaClientKnownRequestError) {
+      return new Response(e.message, {
+        status: 400,
+      });
+    }
+
+    return new Response("Internal Server Error", {
       status: 500,
     });
   }

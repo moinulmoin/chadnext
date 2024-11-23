@@ -4,11 +4,10 @@ import { github } from "~/lib/github";
 
 export const GET = async () => {
   const state = generateState();
-  const url = await github.createAuthorizationURL(state, {
-    scopes: ["user:email", "read:user"],
-  });
+  const url = github.createAuthorizationURL(state, ["read:user", "user:email"]);
 
-  cookies().set("github_oauth_state", state, {
+  const cookieStore = await cookies();
+  cookieStore.set("github_oauth_state", state, {
     path: "/",
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,
@@ -16,5 +15,5 @@ export const GET = async () => {
     sameSite: "lax",
   });
 
-  return Response.redirect(url);
+  return Response.redirect(url.toString());
 };

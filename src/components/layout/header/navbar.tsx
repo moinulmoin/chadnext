@@ -1,6 +1,6 @@
 "use client";
 
-import { type Session } from "lucia";
+import { Session } from "@prisma/client";
 import { MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -100,7 +100,7 @@ export default function Navbar({
                   >
                     {headerText.dashboard}
                   </Link>
-                  <LogoutButton className=" !mt-20" />
+                  <LogoutButton className="!mt-20" />
                 </>
               ) : (
                 <Link

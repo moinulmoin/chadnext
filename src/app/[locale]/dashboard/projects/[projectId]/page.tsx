@@ -4,9 +4,9 @@ import TabSections from "./tab-sections";
 export default async function SingleProject({
   params,
 }: {
-  params: { projectId: string };
+  params: Promise<{ projectId: string }>;
 }) {
-  const { projectId } = params;
+  const { projectId } = await params;
   const project = await getProjectById(projectId);
   return <TabSections project={project} />;
 }

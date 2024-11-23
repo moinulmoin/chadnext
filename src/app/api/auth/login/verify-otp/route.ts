@@ -1,9 +1,14 @@
-import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { verifyVerificationCode } from "~/actions/auth";
-import { lucia } from "~/lib/lucia";
+import { setSessionTokenCookie } from "~/lib/cookies";
 import prisma from "~/lib/prisma";
+import {
+  createSession,
+  generateSessionToken,
+  invalidateAllSessions,
+} from "~/lib/session";
 
-export const POST = async (req: Request) => {
+export const POST = async (req: Request, response: Response) => {
   const body = await req.json();
 
   try {
@@ -19,7 +24,7 @@ export const POST = async (req: Request) => {
     });
 
     if (!user) {
-      return new Response(null, {
+      return new Response("User not found", {
         status: 400,
       });
     }
@@ -30,12 +35,12 @@ export const POST = async (req: Request) => {
     );
 
     if (!isValid) {
-      return new Response(null, {
+      return new Response("Invalid OTP", {
         status: 400,
       });
     }
 
-    await lucia.invalidateUserSessions(user.id);
+    await invalidateAllSessions(user.id);
 
     if (!user.emailVerified) {
       await prisma.user.update({
@@ -47,21 +52,15 @@ export const POST = async (req: Request) => {
         },
       });
     }
-
-    const session = await lucia.createSession(user.id, {});
-    const sessionCookie = lucia.createSessionCookie(session.id);
-    cookies().set(
-      sessionCookie.name,
-      sessionCookie.value,
-      sessionCookie.attributes
-    );
+    const sessionToken = generateSessionToken();
+    const session = await createSession(sessionToken, user.id);
+    await setSessionTokenCookie(sessionToken, session.expiresAt);
+    revalidatePath("/", "layout");
     return new Response(null, {
       status: 200,
     });
   } catch (error) {
-    console.log(error);
-
-    return new Response(null, {
+    return new Response("Internal Server Error", {
       status: 500,
     });
   }

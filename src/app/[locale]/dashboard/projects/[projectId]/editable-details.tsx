@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { toast } from "~/components/ui/use-toast";
+import { toast } from "~/hooks/use-toast";
 import { updateProjectById } from "../action";
 import { projectSchema, type ProjectFormValues } from "../create-project-modal";
 
@@ -56,7 +56,7 @@ export default function EditableDetails({
         <FormItem>
           <FormLabel>ID</FormLabel>
           <FormControl>
-            <div className="relative ">
+            <div className="relative">
               <Input value={initialValues.id} readOnly disabled />
               <CopyButton content={initialValues.id} />
             </div>
@@ -95,7 +95,7 @@ export default function EditableDetails({
           type="submit"
         >
           {form.formState.isSubmitting && (
-            <Icons.spinner className={"mr-2 h-5 w-5 animate-spin "} />
+            <Icons.spinner className={"mr-2 h-5 w-5 animate-spin"} />
           )}
           Save
         </Button>

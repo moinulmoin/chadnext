@@ -14,12 +14,11 @@ export default function LoginModal() {
   const pathname = usePathname();
 
   const IsOpen = pathname.includes("/login");
-
   return (
     <Dialog open={IsOpen} onOpenChange={() => router.back()}>
       <DialogContent className="w-full max-w-[400px] rounded-md">
         <DialogHeader>
-          <DialogTitle>
+          <DialogTitle asChild>
             <h2 className="font-semibold tracking-tight transition-colors">
               Login
             </h2>

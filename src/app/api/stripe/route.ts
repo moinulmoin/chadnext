@@ -1,9 +1,9 @@
 import { type NextRequest } from "next/server";
 import { z } from "zod";
-import { validateRequest } from "~/actions/auth";
 import { getUserSubscriptionPlan } from "~/actions/subscription";
 import { siteConfig } from "~/config/site";
 import { proPlan } from "~/config/subscription";
+import { getCurrentSession } from "~/lib/session";
 import { stripe } from "~/lib/stripe";
 
 export async function GET(req: NextRequest) {
@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
 
   const billingUrl = siteConfig(locale).url + "/dashboard/billing/";
   try {
-    const { user, session } = await validateRequest();
+    const { user, session } = await getCurrentSession();
 
     if (!session) {
       return new Response("Unauthorized", { status: 401 });
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
       payment_method_types: ["card"],
       mode: "subscription",
       billing_address_collection: "auto",
-      customer_email: user.email,
+      customer_email: user.email!,
       line_items: [
         {
           price: proPlan.stripePriceId,

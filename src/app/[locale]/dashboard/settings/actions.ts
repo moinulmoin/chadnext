@@ -1,10 +1,10 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
+import prisma from "~/lib/prisma";
 import { utapi } from "~/lib/uploadthing-server";
 import { getImageKeyFromUrl, isOurCdnUrl } from "~/lib/utils";
 import { type payload } from "~/types";
-import prisma from "~/lib/prisma";
 
 export const updateUser = async (id: string, payload: payload) => {
   await prisma.user.update({
@@ -24,7 +24,6 @@ export async function removeUserOldImageFromCDN(
       const currentImageFileKey = getImageKeyFromUrl(currentImageUrl);
 
       await utapi.deleteFiles(currentImageFileKey as string);
-      revalidatePath("/dashboard/settings");
     }
   } catch (e) {
     console.error(e);

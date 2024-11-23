@@ -24,7 +24,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { toast } from "~/components/ui/use-toast";
+import { toast } from "~/hooks/use-toast";
 import { FreePlanLimitError } from "~/lib/utils";
 import { checkIfFreePlanLimitReached, createProject } from "./action";
 
@@ -79,9 +79,9 @@ export default function CreateProjectModal() {
           className="flex flex-col items-center justify-center gap-y-2.5 p-8 text-center hover:bg-accent"
         >
           <Button size="icon" variant="ghost">
-            <Icons.projectPlus className="h-8 w-8 " />
+            <Icons.projectPlus className="h-8 w-8" />
           </Button>
-          <p className="text-xl font-medium ">Create a project</p>
+          <p className="text-xl font-medium">Create a project</p>
         </Card>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

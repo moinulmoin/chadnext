@@ -1,68 +1,25 @@
 "use server";
 
-import { type Session, type User } from "lucia";
-import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { TimeSpan, createDate, isWithinExpirationDate } from "oslo";
 import { alphabet, generateRandomString } from "oslo/crypto";
-import { cache } from "react";
-import { lucia } from "~/lib/lucia";
+import { deleteSessionTokenCookie } from "~/lib/cookies";
 import prisma from "~/lib/prisma";
-
-export const validateRequest = cache(
-  async (): Promise<
-    { user: User; session: Session } | { user: null; session: null }
-  > => {
-    const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
-    if (!sessionId) {
-      return {
-        user: null,
-        session: null,
-      };
-    }
-
-    const result = await lucia.validateSession(sessionId);
-    try {
-      if (result.session && result.session.fresh) {
-        const sessionCookie = lucia.createSessionCookie(result.session.id);
-        cookies().set(
-          sessionCookie.name,
-          sessionCookie.value,
-          sessionCookie.attributes
-        );
-      }
-      if (!result.session) {
-        const sessionCookie = lucia.createBlankSessionCookie();
-        cookies().set(
-          sessionCookie.name,
-          sessionCookie.value,
-          sessionCookie.attributes
-        );
-      }
-    } catch {
-      // next.js throws when you attempt to set cookie when rendering page
-    }
-    return result;
-  }
-);
+import { getCurrentSession, invalidateSession } from "~/lib/session";
 
 export async function logout() {
-  const { session } = await validateRequest();
+  const { session } = await getCurrentSession();
+
   if (!session) {
     return {
-      error: "Unauthorized",
+      message: "Unauthorized",
     };
   }
 
-  await lucia.invalidateSession(session.id);
-
-  const sessionCookie = lucia.createBlankSessionCookie();
-  cookies().set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes
-  );
-  redirect("/");
+  await invalidateSession(session.id);
+  deleteSessionTokenCookie();
+  revalidatePath("/");
+  return redirect("/login");
 }
 
 export async function generateEmailVerificationCode(
@@ -80,7 +37,7 @@ export async function generateEmailVerificationCode(
       userId,
       email,
       code,
-      expiresAt: createDate(new TimeSpan(3, "m")), // 3 minutes
+      expiresAt: new Date(Date.now() + 1000 * 60 * 3), // 3 minutes
     },
   });
   return code;
@@ -107,7 +64,7 @@ export async function verifyVerificationCode(
       },
     });
 
-    if (!isWithinExpirationDate(databaseCode.expiresAt)) {
+    if (Date.now() > databaseCode.expiresAt.getTime()) {
       return false;
     }
 
