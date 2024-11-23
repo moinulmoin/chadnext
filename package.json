@@ -11,7 +11,8 @@
     "start": "next start",
     "lint": "next lint --dir src",
     "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,css}'",
-    "preinstall": "lefthook install"
+    "preinstall": "lefthook install",
+    "release": "release-it"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -67,6 +68,8 @@
     "prettier": "3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.8",
     "prisma": "^5.22.0",
+    "release-it": "^17.10.0",
+    "release-it-pnpm": "^4.6.3",
     "serwist": "^9.0.10",
     "tailwind-merge": "^2.5.4",
     "tailwindcss": "3.4.15",

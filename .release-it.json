@@ -1,0 +1,19 @@
+{
+  "plugins": {
+    "release-it-pnpm": {}
+  },
+  "git": {
+    "commitMessage": "chore: release v${version}",
+    "tagName": "v${version}",
+    "push": true,
+    "requireCleanWorkingDir": true
+  },
+  "github": {
+    "release": true,
+    "tokenRef": "GITHUB_TOKEN",
+    "releaseNotes": "git log --pretty=format:'* %s (%h)' ${latestTag}...${tagName}"
+  },
+  "npm": {
+    "publish": false
+  }
+}
