@@ -14,6 +14,7 @@ import {
 import { Button } from "~/components/ui/button";
 import { Card, CardDescription, CardTitle } from "~/components/ui/card";
 import { toast } from "~/hooks/use-toast";
+import { isRedirectError } from "~/lib/utils";
 import { deleteProjectById } from "../action";
 
 export default function DeleteCard({ id }: { id: string }) {
@@ -27,12 +28,14 @@ export default function DeleteCard({ id }: { id: string }) {
           });
         })
         .catch((error) => {
-          console.error(error);
-          toast({
-            title: "Error deleting project.",
-            description: "Please try again.",
-            variant: "destructive",
-          });
+          console.log(error);
+          if (!isRedirectError(error)) {
+            toast({
+              title: "Error deleting project.",
+              description: "Please try again.",
+              variant: "destructive",
+            });
+          }
         })
     );
   };

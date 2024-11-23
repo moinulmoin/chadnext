@@ -15,7 +15,7 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import { toast } from "~/hooks/use-toast";
-import { useUploadThing } from "~/lib/uploadthing";
+import { useUploadThing } from "~/lib/client/uploadthing";
 import Icons from "../shared/icons";
 import { Button } from "../ui/button";
 
@@ -47,7 +47,7 @@ export default function ImageUploadModal({
         }
       },
       onUploadError: (e) => {
-        console.error(e);
+        console.log(e);
         toast({
           title: "Error occurred while uploading!",
           variant: "destructive",

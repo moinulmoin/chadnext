@@ -3,13 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { alphabet, generateRandomString } from "oslo/crypto";
-import { deleteSessionTokenCookie } from "~/lib/cookies";
-import prisma from "~/lib/prisma";
-import { getCurrentSession, invalidateSession } from "~/lib/session";
+import { deleteSessionTokenCookie } from "~/lib/server/cookies";
+import prisma from "~/lib/server/prisma";
+import { getCurrentSession, invalidateSession } from "~/lib/server/session";
 
 export async function logout() {
   const { session } = await getCurrentSession();
-
   if (!session) {
     return {
       message: "Unauthorized",

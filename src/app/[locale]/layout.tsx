@@ -111,7 +111,7 @@ const fontHeading = localFont({
   variable: "--font-heading",
 });
 
-export default async function SubLayout({
+export default async function RootLayout({
   children,
   loginDialog,
   params,
@@ -122,7 +122,7 @@ export default async function SubLayout({
 }) {
   const { locale } = await params;
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale}>
       <body
         className={cn(
           "font-sans antialiased",

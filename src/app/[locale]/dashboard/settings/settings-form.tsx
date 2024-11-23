@@ -85,7 +85,7 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
       try {
         await removeNewImageFromCDN(getValues().picture);
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     }
     reset();

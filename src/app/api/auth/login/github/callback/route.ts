@@ -3,10 +3,10 @@ import { ArcticFetchError, OAuth2RequestError } from "arctic";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { sendWelcomeEmail } from "~/actions/mail";
-import { setSessionTokenCookie } from "~/lib/cookies";
-import { github } from "~/lib/github";
-import prisma from "~/lib/prisma";
-import { createSession, generateSessionToken } from "~/lib/session";
+import { setSessionTokenCookie } from "~/lib/server/cookies";
+import { github } from "~/lib/server/github";
+import prisma from "~/lib/server/prisma";
+import { createSession, generateSessionToken } from "~/lib/server/session";
 
 export const GET = async (request: Request) => {
   const url = new URL(request.url);

@@ -1,7 +1,7 @@
-import { getCurrentSession } from "~/lib/session";
+import { connection } from "next/server";
+import { getCurrentSession } from "~/lib/server/session";
 import { getScopedI18n } from "~/locales/server";
 import Navbar from "./navbar";
-import { connection } from "next/server";
 
 export default async function Header() {
   await connection();

@@ -5,10 +5,10 @@ import { type Metadata } from "next";
 function ChangeCard(change: Change) {
   return (
     <article className="prose prose-slate mb-8 dark:prose-invert">
-      <h2 className=" mb-0 text-3xl font-semibold tracking-tight transition-colors">
+      <h2 className="mb-0 text-3xl font-semibold tracking-tight transition-colors">
         {change.title}
       </h2>
-      <time className=" text-sm text-muted-foreground" dateTime={change.date}>
+      <time className="text-sm text-muted-foreground" dateTime={change.date}>
         {dayjs(change.date).format("MMM DD YYYY")}
       </time>
       <div dangerouslySetInnerHTML={{ __html: change.content }} />
