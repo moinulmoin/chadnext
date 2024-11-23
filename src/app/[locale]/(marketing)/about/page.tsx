@@ -4,7 +4,7 @@ import { type Metadata } from "next";
 function AboutCard(about: About) {
   return (
     <article className="prose prose-slate mb-8 dark:prose-invert">
-      <h2 className="mb-0 text-3xl font-semibold tracking-tight transition-colors ">
+      <h2 className="mb-0 text-3xl font-semibold tracking-tight transition-colors">
         {about.title}
       </h2>
       <div dangerouslySetInnerHTML={{ __html: about.content }} />

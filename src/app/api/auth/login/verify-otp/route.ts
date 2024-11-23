@@ -1,12 +1,12 @@
 import { revalidatePath } from "next/cache";
 import { verifyVerificationCode } from "~/actions/auth";
-import { setSessionTokenCookie } from "~/lib/cookies";
-import prisma from "~/lib/prisma";
+import { setSessionTokenCookie } from "~/lib/server/cookies";
+import prisma from "~/lib/server/prisma";
 import {
   createSession,
   generateSessionToken,
   invalidateAllSessions,
-} from "~/lib/session";
+} from "~/lib/server/session";
 
 export const POST = async (req: Request, response: Response) => {
   const body = await req.json();

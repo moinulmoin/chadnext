@@ -1,8 +1,8 @@
 "use server";
 
-import { revalidatePath, revalidateTag } from "next/cache";
-import prisma from "~/lib/prisma";
-import { utapi } from "~/lib/uploadthing-server";
+import { revalidatePath } from "next/cache";
+import prisma from "~/lib/server/prisma";
+import { utapi } from "~/lib/server/uploadthing";
 import { getImageKeyFromUrl, isOurCdnUrl } from "~/lib/utils";
 import { type payload } from "~/types";
 
