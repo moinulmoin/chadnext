@@ -1,10 +1,9 @@
 import { type NextRequest } from "next/server";
 import { z } from "zod";
-import { getUserSubscriptionPlan } from "~/actions/subscription";
 import { siteConfig } from "~/config/site";
 import { proPlan } from "~/config/subscription";
-import { getCurrentSession } from "~/lib/server/session";
-import { stripe } from "~/lib/server/stripe";
+import { getCurrentSession } from "~/lib/server/auth/session";
+import { getUserSubscriptionPlan, stripe } from "~/lib/server/payment";
 
 export async function GET(req: NextRequest) {
   const locale = req.cookies.get("Next-Locale")?.value || "en";

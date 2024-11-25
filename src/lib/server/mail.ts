@@ -1,10 +1,10 @@
-"use server";
-
 import ThanksTemp from "emails/thanks";
 import VerificationTemp from "emails/verification";
-import { nanoid } from "nanoid";
-import { resend } from "~/lib/server/resend";
+import { Resend } from "resend";
 import { type SendOTPProps, type SendWelcomeEmailProps } from "~/types";
+import { generateId } from "../utils";
+
+export const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendWelcomeEmail = async ({
   toMail,
@@ -18,7 +18,7 @@ export const sendWelcomeEmail = async ({
     to: toMail,
     subject: subject,
     headers: {
-      "X-Entity-Ref-ID": nanoid(),
+      "X-Entity-Ref-ID": generateId(),
     },
     react: temp,
     text: "",
@@ -34,7 +34,7 @@ export const sendOTP = async ({ toMail, code, userName }: SendOTPProps) => {
     to: toMail,
     subject: subject,
     headers: {
-      "X-Entity-Ref-ID": nanoid(),
+      "X-Entity-Ref-ID": generateId(),
     },
     react: temp,
     text: "",

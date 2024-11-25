@@ -1,8 +1,8 @@
 import { type NextRequest } from "next/server";
 import { buffer } from "node:stream/consumers";
 import type Stripe from "stripe";
-import prisma from "~/lib/server/prisma";
-import { stripe } from "~/lib/server/stripe";
+import { prisma } from "~/lib/server/db";
+import { stripe } from "~/lib/server/payment";
 
 export async function POST(req: NextRequest) {
   //@ts-expect-error Argument of type 'ReadableStream<any>' is not assignable to parameter of type 'ReadableStream | Readable | AsyncIterable<any>'

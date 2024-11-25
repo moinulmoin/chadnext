@@ -3,9 +3,9 @@
 import { type Project } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { getUserSubscriptionPlan } from "~/actions/subscription";
-import prisma from "~/lib/server/prisma";
-import { getCurrentSession } from "~/lib/server/session";
+import { getCurrentSession } from "~/lib/server/auth/session";
+import { prisma } from "~/lib/server/db";
+import { getUserSubscriptionPlan } from "~/lib/server/payment";
 
 interface Payload {
   name: string;

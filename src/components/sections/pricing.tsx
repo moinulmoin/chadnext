@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { getUserSubscriptionPlan } from "~/actions/subscription";
-import { getCurrentSession } from "~/lib/server/session";
+import { getCurrentSession } from "~/lib/server/auth/session";
+import { getUserSubscriptionPlan } from "~/lib/server/payment";
 import { cn } from "~/lib/utils";
 import { Badge } from "../ui/badge";
 import { buttonVariants } from "../ui/button";
