@@ -3,6 +3,7 @@ import VerificationTemp from "emails/verification";
 import { Resend } from "resend";
 import { type SendOTPProps, type SendWelcomeEmailProps } from "~/types";
 import { generateId } from "../utils";
+import { ReactNode } from "react";
 
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -11,7 +12,7 @@ export const sendWelcomeEmail = async ({
   userName,
 }: SendWelcomeEmailProps) => {
   const subject = "Thanks for using ChadNext!";
-  const temp = ThanksTemp({ userName });
+  const temp = ThanksTemp({ userName }) as ReactNode;
 
   await resend.emails.send({
     from: `ChadNext App <chadnext@moinulmoin.com>`,
@@ -27,7 +28,7 @@ export const sendWelcomeEmail = async ({
 
 export const sendOTP = async ({ toMail, code, userName }: SendOTPProps) => {
   const subject = "OTP for ChadNext";
-  const temp = VerificationTemp({ userName, code });
+  const temp = VerificationTemp({ userName, code }) as ReactNode;
 
   await resend.emails.send({
     from: `ChadNext App <chadnext@moinulmoin.com>`,

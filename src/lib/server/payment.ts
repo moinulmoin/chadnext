@@ -4,7 +4,7 @@ import { prisma } from "~/lib/server/db";
 import { type UserSubscriptionPlan } from "~/types";
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: "2023-10-16",
+  apiVersion: "2024-12-18.acacia",
   typescript: true,
 });
 

@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { type NextRequest } from "next/server";
 import { z } from "zod";
 import { siteConfig } from "~/config/site";
@@ -48,7 +49,7 @@ export async function GET(req: NextRequest) {
         userId: user.id,
       },
     });
-
+    revalidatePath(`/dashboard/billing`);
     return new Response(JSON.stringify({ url: stripeSession.url }));
   } catch (error) {
     if (error instanceof z.ZodError) {
