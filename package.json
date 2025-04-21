@@ -48,7 +48,7 @@
     "resend": "^4.0.0",
     "stripe": "^14.25.0",
     "uploadthing": "^7.3.0",
-    "zod": "^3.23.8"
+    "zod": "^3.24.3"
   },
   "devDependencies": {
     "@tailwindcss/line-clamp": "^0.4.4",
