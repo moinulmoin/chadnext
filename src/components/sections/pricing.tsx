@@ -75,7 +75,7 @@ export default async function Pricing() {
           {plans.map((plan) => {
             const isCurrentPlan = subscription
               ? plan.isPro === subscription.isPro
-              : plan.price === 0;
+              : false;
 
             return (
               <Card

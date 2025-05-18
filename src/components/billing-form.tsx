@@ -26,6 +26,7 @@ export function BillingForm({
   ...props
 }: BillingFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  console.log(subscriptionPlan);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

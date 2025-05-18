@@ -24,9 +24,14 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const session = event?.data.object as Stripe.Checkout.Session;
+  const eventData = event?.data.object as
+    | Stripe.Checkout.Session
+    | Stripe.Invoice;
+
+  console.log({ event, eventData });
 
   if (event?.type === "checkout.session.completed") {
+    const session = eventData as Stripe.Checkout.Session;
     // Retrieve the subscription details from Stripe.
     const subscription = await stripe.subscriptions.retrieve(
       session.subscription as string
@@ -43,17 +48,16 @@ export async function POST(req: NextRequest) {
         stripeSubscriptionId: subscription.id,
         stripeCustomerId: subscription.customer as string,
         stripePriceId: subscription.items.data[0].price.id,
-        stripeCurrentPeriodEnd: new Date(
-          subscription.current_period_end * 1000
-        ),
+        stripeCurrentPeriodEnd: new Date(subscription.ended_at! * 1000),
       },
     });
   }
 
   if (event?.type === "invoice.payment_succeeded") {
+    const invoice = eventData as Stripe.Invoice;
     // Retrieve the subscription details from Stripe.
     const subscription = await stripe.subscriptions.retrieve(
-      session.subscription as string
+      invoice.parent?.subscription_details?.subscription as string
     );
 
     // Update the price id and set the new period end.
@@ -63,9 +67,7 @@ export async function POST(req: NextRequest) {
       },
       data: {
         stripePriceId: subscription.items.data[0].price.id,
-        stripeCurrentPeriodEnd: new Date(
-          subscription.current_period_end * 1000
-        ),
+        stripeCurrentPeriodEnd: new Date(subscription.ended_at! * 1000),
       },
     });
   }
