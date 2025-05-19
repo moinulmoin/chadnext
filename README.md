@@ -20,8 +20,8 @@ Save time and effort, and build performant apps with an excellent developer expe
 
 1. Clone the repo.
 2. Install dependencies: `pnpm install`
-3. Copy `.env.example` file to `.env` file. then follow the instructions inside.
-4. Run `pnpm prisma db push`
+3. Copy `.env.example` file to `.env` file, then follow the instructions inside.
+4. Run `pnpm prisma db push` to set up the database.
 5. Start the dev server: `pnpm dev`
 
 ### Or
