@@ -1,0 +1,6 @@
+{
+  "snapshot": "snapshot-20250519-348489b0-1643-41ed-a75d-af930cb71c75",
+  "install": "pnpm i",
+  "start": "pnpm dev",
+  "terminals": []
+}
