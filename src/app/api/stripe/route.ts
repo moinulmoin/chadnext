@@ -37,7 +37,6 @@ export async function GET(req: NextRequest) {
       cancel_url: billingUrl,
       payment_method_types: ["card"],
       mode: "subscription",
-      billing_address_collection: "auto",
       customer_email: user.email!,
       line_items: [
         {

@@ -25,12 +25,12 @@ export function BillingForm({
   className,
   ...props
 }: BillingFormProps) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  console.log(subscriptionPlan);
+  const [isLoading, setIsLoading] = useState(false);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setIsLoading(!isLoading);
+
+    setIsLoading(true);
 
     // Get a Stripe session URL.
     const response = await fetch("/api/stripe");
@@ -46,10 +46,12 @@ export function BillingForm({
     // Redirect to the Stripe session.
     // This could be a checkout page for initial upgrade.
     // Or portal to manage existing subscription.
-    const session = await response.json();
-    if (session) {
-      window.location.href = session.url;
+    const data = await response.json();
+    if (data.url) {
+      window.location.href = data.url;
     }
+
+    setIsLoading(false);
   }
 
   return (
@@ -67,10 +69,8 @@ export function BillingForm({
           {subscriptionPlan.description}
         </CardContent>
         <CardFooter className="flex flex-col items-start space-y-2 md:flex-row md:justify-between md:space-x-0">
-          <Button type="submit" disabled={isLoading}>
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
+          <Button type="submit" role="link" disabled={isLoading}>
+            {isLoading && <Icons.spinner className="h-4 w-4 animate-spin" />}
             {subscriptionPlan.isPro ? "Manage Subscription" : "Upgrade to PRO"}
           </Button>
           {subscriptionPlan.isPro ? (
