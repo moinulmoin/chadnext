@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import AuthForm from "~/components/layout/auth-form";
 import { Card } from "~/components/ui/card";
-import { getCurrentSession } from "~/lib/server/session";
+import { getCurrentSession } from "~/lib/server/auth/session";
 
 export default async function Login() {
   const { session } = await getCurrentSession();

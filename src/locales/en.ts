@@ -20,7 +20,8 @@ export default {
     libs: {
       nextjs:
         "App dir, Routing, Layouts, API routes, Server Components, Server actions.",
-      tailwindcss: "UI components built using Radix UI and styled with Tailwind CSS.",
+      tailwindcss:
+        "UI components built using Radix UI and styled with Tailwind CSS.",
       postgres: "Using Postgres with Prisma ORM, hosted on Vercel Postgres.",
       lucia: "Authentication and Authorization using LuciaAuth v3.",
       uploadthing: "Upload and preview files effortlessly with UploadThing.",
@@ -30,7 +31,7 @@ export default {
       stripe: "Receive and process payments with Stripe.",
       vercel: "Production and Preview deployments with Vercel.",
     },
-    aboutMd: "ChadNext also includes Changelog & About page built using."
+    aboutMd: "ChadNext also includes Changelog & About page built using",
   },
   notFound: {
     title: "Page Not Found!",

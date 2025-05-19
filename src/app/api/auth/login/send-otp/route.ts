@@ -1,6 +1,6 @@
-import { generateEmailVerificationCode } from "~/actions/auth";
-import { sendOTP } from "~/actions/mail";
-import prisma from "~/lib/server/prisma";
+import { generateEmailVerificationCode } from "~/lib/server/auth";
+import { prisma } from "~/lib/server/db";
+import { sendOTP } from "~/lib/server/mail";
 
 export const POST = async (req: Request) => {
   const body = await req.json();

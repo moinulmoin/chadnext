@@ -5,7 +5,7 @@ import {
 } from "@oslojs/encoding";
 import type { Session, User } from "@prisma/client";
 import { cookies } from "next/headers";
-import prisma from "./prisma";
+import { prisma } from "~/lib/server/db";
 
 export function generateSessionToken(): string {
   const bytes = new Uint8Array(20);

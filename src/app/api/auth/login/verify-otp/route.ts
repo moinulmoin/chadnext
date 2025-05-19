@@ -1,12 +1,12 @@
 import { revalidatePath } from "next/cache";
-import { verifyVerificationCode } from "~/actions/auth";
-import { setSessionTokenCookie } from "~/lib/server/cookies";
-import prisma from "~/lib/server/prisma";
+import { verifyVerificationCode } from "~/lib/server/auth";
+import { setSessionTokenCookie } from "~/lib/server/auth/cookies";
 import {
   createSession,
   generateSessionToken,
   invalidateAllSessions,
-} from "~/lib/server/session";
+} from "~/lib/server/auth/session";
+import { prisma } from "~/lib/server/db";
 
 export const POST = async (req: Request, response: Response) => {
   const body = await req.json();
@@ -30,7 +30,7 @@ export const POST = async (req: Request, response: Response) => {
     }
 
     const isValid = await verifyVerificationCode(
-      { id: user.id, email: body.email },
+      { id: user.id, email: user.email! },
       body.code
     );
 

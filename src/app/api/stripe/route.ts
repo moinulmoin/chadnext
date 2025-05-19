@@ -1,10 +1,10 @@
+import { revalidatePath } from "next/cache";
 import { type NextRequest } from "next/server";
 import { z } from "zod";
-import { getUserSubscriptionPlan } from "~/actions/subscription";
 import { siteConfig } from "~/config/site";
 import { proPlan } from "~/config/subscription";
-import { getCurrentSession } from "~/lib/server/session";
-import { stripe } from "~/lib/server/stripe";
+import { getCurrentSession } from "~/lib/server/auth/session";
+import { getUserSubscriptionPlan, stripe } from "~/lib/server/payment";
 
 export async function GET(req: NextRequest) {
   const locale = req.cookies.get("Next-Locale")?.value || "en";
@@ -37,7 +37,6 @@ export async function GET(req: NextRequest) {
       cancel_url: billingUrl,
       payment_method_types: ["card"],
       mode: "subscription",
-      billing_address_collection: "auto",
       customer_email: user.email!,
       line_items: [
         {
@@ -49,7 +48,7 @@ export async function GET(req: NextRequest) {
         userId: user.id,
       },
     });
-
+    revalidatePath(`/dashboard/billing`);
     return new Response(JSON.stringify({ url: stripeSession.url }));
   } catch (error) {
     if (error instanceof z.ZodError) {

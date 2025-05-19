@@ -1,27 +1,9 @@
-"use server";
-
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { generateRandomString, RandomReader } from "@oslojs/crypto/random";
-import { deleteSessionTokenCookie } from "~/lib/server/cookies";
-import prisma from "~/lib/server/prisma";
-import { getCurrentSession, invalidateSession } from "~/lib/server/session";
+import { createMiddleware } from "next-safe-action";
+import { prisma } from "~/lib/server/db";
+import { getCurrentSession } from "./session";
 
 const digits = "0123456789";
-
-export async function logout() {
-  const { session } = await getCurrentSession();
-  if (!session) {
-    return {
-      message: "Unauthorized",
-    };
-  }
-
-  await invalidateSession(session.id);
-  deleteSessionTokenCookie();
-  revalidatePath("/");
-  return redirect("/login");
-}
 
 export async function generateEmailVerificationCode(
   userId: string,
@@ -81,3 +63,11 @@ export async function verifyVerificationCode(
     return true;
   });
 }
+
+export const authMiddleware = createMiddleware().define(async ({ next }) => {
+  const { session, user } = await getCurrentSession();
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+  return next({ ctx: { userId: user.id, sessionId: session.id } });
+});

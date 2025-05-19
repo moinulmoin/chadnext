@@ -122,7 +122,7 @@ export default async function RootLayout({
 }) {
   const { locale } = await params;
   return (
-    <html lang={locale}>
+    <html lang={locale} suppressHydrationWarning>
       <body
         className={cn(
           "font-sans antialiased",
@@ -142,6 +142,7 @@ export default async function RootLayout({
           <Toaster />
         </ThemeProvider>
       </body>
+      {/* remove this line when you are working on your own project */}
       {process.env.NODE_ENV === "production" && (
         <Script
           src="https://umami.moinulmoin.com/script.js"
