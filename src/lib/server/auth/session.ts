@@ -7,6 +7,10 @@ import type { Session, User } from "@prisma/client";
 import { cookies } from "next/headers";
 import { prisma } from "~/lib/server/db";
 
+export type SessionValidationResult =
+  | { session: Session; user: User }
+  | { session: null; user: null };
+
 export function generateSessionToken(): string {
   const bytes = new Uint8Array(20);
   crypto.getRandomValues(bytes);
@@ -80,7 +84,3 @@ export async function invalidateSession(sessionId: string): Promise<void> {
 export async function invalidateAllSessions(userId: string): Promise<void> {
   await prisma.session.deleteMany({ where: { userId } });
 }
-
-export type SessionValidationResult =
-  | { session: Session; user: User }
-  | { session: null; user: null };
