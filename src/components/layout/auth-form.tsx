@@ -1,12 +1,16 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { toast } from "~/hooks/use-toast";
+import {
+  githubSignIn,
+  sendEmailOtp,
+  verifyEmailOtp,
+} from "~/lib/client/auth-client";
 import { cn } from "~/lib/utils";
 import Icons from "../shared/icons";
 import { Input } from "../ui/input";
@@ -56,14 +60,9 @@ export default function AuthForm() {
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/auth/login/send-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      if (!res.ok) {
-        throw new Error(await res.text());
+      const result = await sendEmailOtp(data.email);
+      if (!result.data?.success) {
+        throw new Error(result.error?.message);
       }
       setCurrentStep(2);
       toast({
@@ -88,14 +87,10 @@ export default function AuthForm() {
     setIsVerifying(true);
 
     try {
-      const res = await fetch("/api/auth/login/verify-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: data.email, code: otp }),
-      });
+      const result = await verifyEmailOtp(data.email, otp);
 
-      if (!res.ok) {
-        throw new Error(await res.text());
+      if (!result.data?.user) {
+        throw new Error(result.error?.message);
       }
       setCountdown(0);
       reset();
@@ -123,6 +118,11 @@ export default function AuthForm() {
     await onEmailSubmit(getValues());
   }
 
+  async function handleGithubSignIn() {
+    setIsGithubLoading(true);
+    const result = await githubSignIn();
+  }
+
   return (
     <div className={cn("mt-4 flex max-w-full flex-col gap-4")}>
       {currentStep === 1 && (
@@ -146,16 +146,15 @@ export default function AuthForm() {
                   </p>
                 )}
               </div>
-              <button
+              <Button
                 type="submit"
-                className={cn(buttonVariants())}
                 disabled={isLoading || isGithubLoading || isVerifying}
               >
                 {isLoading && (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 )}
                 Send OTP
-              </button>
+              </Button>
             </div>
           </form>
           <div className="relative flex justify-center text-xs uppercase">
@@ -163,16 +162,12 @@ export default function AuthForm() {
           </div>
           {isGithubLoading ? (
             <Button className="w-full cursor-not-allowed" variant="outline">
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              <Icons.spinner />
             </Button>
           ) : (
-            <Link
-              href="/api/auth/login/github"
-              className={cn(buttonVariants({ variant: "outline" }))}
-              onClick={() => setIsGithubLoading(true)}
-            >
-              Continue with <Icons.gitHub className="ml-2 h-4 w-4" />
-            </Link>
+            <Button variant="outline" onClick={handleGithubSignIn}>
+              Continue with <Icons.gitHub />
+            </Button>
           )}
         </>
       )}

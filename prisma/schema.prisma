@@ -6,8 +6,10 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DB_PRISMA_URL") // uses connection pooling
-  directUrl = env("DB_URL_NON_POOLING") // uses a direct connection
+  url       = env("DB_PRISMA_URL")
+  // uses connection pooling
+  directUrl = env("DB_URL_NON_POOLING")
+  // uses a direct connection
 }
 
 model Session {
@@ -15,15 +17,14 @@ model Session {
   userId    String
   expiresAt DateTime
   user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
-}
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
 
-model EmailVerificationCode {
-  id        String   @id @default(cuid())
-  code      String
-  userId    String
-  email     String
-  expiresAt DateTime
-  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  @@unique([token])
+  @@map("session")
 }
 
 model User {
@@ -31,19 +32,21 @@ model User {
   name                   String?
   email                  String?                 @unique
   emailVerified          Boolean?                @default(false)
-  picture                String?
   githubId               Int?                    @unique
   sessions               Session[]
   projects               Project[]
-  emailVerificationCodes EmailVerificationCode[]
 
   stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
   stripePriceId          String?   @map(name: "stripe_price_id")
   stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  image     String?
+  accounts  Account[]
+
+  @@map("user")
 }
 
 model Project {
@@ -54,4 +57,34 @@ model Project {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
 }

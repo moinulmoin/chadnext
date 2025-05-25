@@ -3,7 +3,7 @@
 import { type Project } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { getCurrentSession } from "~/lib/server/auth/session";
+import { getCurrentSession } from "~/lib/server/auth";
 import { prisma } from "~/lib/server/db";
 import { getUserSubscriptionPlan } from "~/lib/server/payment";
 
@@ -13,7 +13,8 @@ interface Payload {
 }
 
 export async function createProject(payload: Payload) {
-  const { user } = await getCurrentSession();
+  const result = await getCurrentSession();
+  const user = result?.user;
 
   await prisma.project.create({
     data: {
@@ -30,7 +31,8 @@ export async function createProject(payload: Payload) {
 }
 
 export async function checkIfFreePlanLimitReached() {
-  const { user } = await getCurrentSession();
+  const result = await getCurrentSession();
+  const user = result?.user;
   const subscriptionPlan = await getUserSubscriptionPlan(user?.id as string);
 
   // If user is on a free plan.
@@ -47,7 +49,8 @@ export async function checkIfFreePlanLimitReached() {
 }
 
 export async function getProjects() {
-  const { user } = await getCurrentSession();
+  const result = await getCurrentSession();
+  const user = result?.user;
   const projects = await prisma.project.findMany({
     where: {
       userId: user?.id,
@@ -60,7 +63,8 @@ export async function getProjects() {
 }
 
 export async function getProjectById(id: string) {
-  const { user } = await getCurrentSession();
+  const result = await getCurrentSession();
+  const user = result?.user;
   const project = await prisma.project.findFirst({
     where: {
       id,
@@ -71,7 +75,8 @@ export async function getProjectById(id: string) {
 }
 
 export async function updateProjectById(id: string, payload: Payload) {
-  const { user } = await getCurrentSession();
+  const result = await getCurrentSession();
+  const user = result?.user;
   await prisma.project.update({
     where: {
       id,
@@ -83,7 +88,8 @@ export async function updateProjectById(id: string, payload: Payload) {
 }
 
 export async function deleteProjectById(id: string) {
-  const { user } = await getCurrentSession();
+  const result = await getCurrentSession();
+  const user = result?.user;
   await prisma.project.delete({
     where: {
       id,

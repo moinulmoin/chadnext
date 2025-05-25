@@ -14,7 +14,7 @@ interface ThanksTemplateProps {
   userName: string;
 }
 
-const ThanksTemp: React.FC<Readonly<ThanksTemplateProps>> = ({ userName }) => (
+export const ThanksTemp: React.FC<Readonly<ThanksTemplateProps>> = ({ userName }) => (
   <Html>
     <Head />
     <Preview>Welcome to ChadNext.</Preview>
@@ -45,5 +45,3 @@ const ThanksTemp: React.FC<Readonly<ThanksTemplateProps>> = ({ userName }) => (
     </Tailwind>
   </Html>
 );
-
-export default ThanksTemp;

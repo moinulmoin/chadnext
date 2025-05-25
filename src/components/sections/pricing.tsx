@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 import Link from "next/link";
-import { getCurrentSession } from "~/lib/server/auth/session";
+import { getCurrentSession } from "~/lib/server/auth";
 import { getUserSubscriptionPlan } from "~/lib/server/payment";
 import { cn } from "~/lib/utils";
 import { Badge } from "../ui/badge";
@@ -57,7 +57,8 @@ const plans: Plan[] = [
 ];
 
 export default async function Pricing() {
-  const { user } = await getCurrentSession();
+  const result = await getCurrentSession();
+  const user = result?.user;
   const subscription = user ? await getUserSubscriptionPlan(user.id) : null;
 
   return (

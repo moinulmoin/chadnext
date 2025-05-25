@@ -8,17 +8,13 @@ import {
   Tailwind,
   Text
 } from "@react-email/components";
-
-const siteUrl =
-  process.env.NEXT_PUBLIC_URL ?? "https://chadnext.moinulmoin.com";
-
 interface VerificationTemplateProps {
-  userName: string;
+  userName?: string;
   code: string;
 }
 
-const VerificationTemp: React.FC<Readonly<VerificationTemplateProps>> = ({
-  userName = "X",
+export const VerificationTemp: React.FC<Readonly<VerificationTemplateProps>> = ({
+  userName,
   code = "46590",
 }) => (
   <Html>
@@ -27,7 +23,7 @@ const VerificationTemp: React.FC<Readonly<VerificationTemplateProps>> = ({
     <Tailwind>
       <Body className="bg-gray-100">
         <Container className="p-6 m-10 mx-auto bg-white">
-          <Text className="mb-4 text-lg">Hi, {userName.split(" ")[0]}</Text>
+          <Text className="mb-4 text-lg">Hi, {userName ? userName.split(" ")[0] : "there"}</Text>
           <Text className="text-base font-semibold text-center">
             Here is your verification code.
           </Text>
@@ -49,5 +45,3 @@ const VerificationTemp: React.FC<Readonly<VerificationTemplateProps>> = ({
     </Tailwind>
   </Html>
 );
-
-export default VerificationTemp;

@@ -1,9 +1,10 @@
-import { getCurrentSession } from "~/lib/server/auth/session";
+import { getCurrentSession } from "~/lib/server/auth";
 import { getScopedI18n } from "~/locales/server";
 import Navbar from "./navbar";
 
 export default async function Header() {
-  const { session } = await getCurrentSession();
+  const result = await getCurrentSession();
+  const session = result?.session;
   const scopedT = await getScopedI18n("header");
   const headerText = {
     changelog: scopedT("changelog"),
@@ -15,7 +16,7 @@ export default async function Header() {
   return (
     <header className="h-20 w-full">
       <div className="container h-full">
-        <Navbar headerText={headerText} session={session!} />
+        <Navbar headerText={headerText} isUserLoggedIn={!!session} />
       </div>
     </header>
   );

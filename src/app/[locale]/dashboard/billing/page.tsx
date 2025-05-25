@@ -1,13 +1,16 @@
 import { AlertTriangleIcon } from "lucide-react";
+import { redirect } from "next/navigation";
 import { BillingForm } from "~/components/billing-form";
 import { Alert, AlertDescription } from "~/components/ui/alert";
-import { getCurrentSession } from "~/lib/server/auth/session";
+import { getCurrentSession } from "~/lib/server/auth";
 import { getUserSubscriptionPlan, stripe } from "~/lib/server/payment";
 
 export default async function Billing() {
-  const { user } = await getCurrentSession();
+  const result = await getCurrentSession();
+  const user = result?.user;
+  if (!user) return redirect("/login");
 
-  const subscriptionPlan = await getUserSubscriptionPlan(user?.id as string);
+  const subscriptionPlan = await getUserSubscriptionPlan(user.id);
 
   // If user has a pro plan, check cancel status on Stripe.
   let isCanceled = false;

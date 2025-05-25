@@ -1,6 +1,5 @@
 "use client";
 
-import { Session } from "@prisma/client";
 import { MenuIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,10 +9,10 @@ import { buttonVariants } from "~/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";
 import { cn } from "~/lib/utils";
 export default function Navbar({
-  session,
+  isUserLoggedIn,
   headerText,
 }: {
-  session: Session;
+  isUserLoggedIn: boolean;
   headerText: {
     changelog: string;
     about: string;
@@ -51,7 +50,7 @@ export default function Navbar({
           </Link>
         </div>
         <div className="flex items-center gap-x-2">
-          {session ? (
+          {isUserLoggedIn ? (
             <Link
               href="/dashboard"
               className={cn(
@@ -91,7 +90,7 @@ export default function Navbar({
               >
                 {headerText.about}
               </Link>
-              {session ? (
+              {isUserLoggedIn ? (
                 <>
                   <Link
                     href="/dashboard"

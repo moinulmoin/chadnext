@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@prisma/client";
 import { Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useRef, useTransition } from "react";
@@ -33,8 +32,17 @@ const CancelConfirmModal = dynamic(
   () => import("~/components/layout/cancel-confirm-modal")
 );
 
-export default function SettingsForm({ currentUser }: { currentUser: User }) {
-  const oldImage = useRef(currentUser.picture ?? "");
+export default function SettingsForm({
+  currentUser,
+}: {
+  currentUser: {
+    id: string;
+    name: string;
+    email: string;
+    image: string;
+  };
+}) {
+  const oldImage = useRef(currentUser.image ?? "");
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
@@ -43,33 +51,33 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
     defaultValues: {
       name: currentUser.name ?? "",
       email: currentUser.email ?? "",
-      picture: currentUser.picture ?? "",
+      image: currentUser.image ?? "",
     },
   });
 
   const { formState, getFieldState, handleSubmit, reset, getValues } = form;
-  const { isDirty: isImageChanged } = getFieldState("picture");
+  const { isDirty: isImageChanged } = getFieldState("image");
 
   useEffect(() => {
     reset({
       name: currentUser.name ?? "",
       email: currentUser.email ?? "",
-      picture: currentUser.picture ?? "",
+      image: currentUser.image ?? "",
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   useEffect(() => {
-    if (isImageChanged && currentUser.picture !== oldImage.current) {
-      oldImage.current = currentUser.picture ?? "";
+    if (isImageChanged && currentUser.image !== oldImage.current) {
+      oldImage.current = currentUser.image ?? "";
     }
-  }, [currentUser.picture, isImageChanged]);
+  }, [currentUser.image, isImageChanged]);
 
   const onSubmit = handleSubmit((data: SettingsValues) => {
     startTransition(async () => {
       try {
-        if (currentUser.picture && isImageChanged) {
-          await removeUserOldImageFromCDN(data.picture, currentUser.picture);
+        if (currentUser.image && isImageChanged) {
+          await removeUserOldImageFromCDN(data.image, currentUser.image);
         }
         await updateUser(currentUser.id, data);
         toast({ title: "Updated successfully!" });
@@ -83,7 +91,7 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
   const handleReset = async () => {
     if (isImageChanged) {
       try {
-        await removeNewImageFromCDN(getValues().picture);
+        await removeNewImageFromCDN(getValues().image);
       } catch (error) {
         console.log(error);
       }
@@ -104,7 +112,7 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
       >
         <FormField
           control={form.control}
-          name="picture"
+          name="image"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Picture</FormLabel>
@@ -113,9 +121,9 @@ export default function SettingsForm({ currentUser }: { currentUser: User }) {
               </FormDescription>
               <FormControl>
                 <Avatar className="group relative h-28 w-28 rounded-full">
-                  <AvatarImage src={field.value} alt={getValues().name ?? ""} />
+                  <AvatarImage src={field.value} alt={getValues().name} />
                   <AvatarFallback className="text-xs">
-                    {getValues().name?.[0] ?? "A"}
+                    {getValues().name?.[0] ?? "U"}
                   </AvatarFallback>
                   <ImageUploadModal onImageChange={field.onChange} />
                 </Avatar>

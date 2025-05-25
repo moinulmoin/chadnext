@@ -3,7 +3,7 @@ import { type NextRequest } from "next/server";
 import { z } from "zod";
 import { siteConfig } from "~/config/site";
 import { proPlan } from "~/config/subscription";
-import { getCurrentSession } from "~/lib/server/auth/session";
+import { getCurrentSession } from "~/lib/server/auth";
 import { getUserSubscriptionPlan, stripe } from "~/lib/server/payment";
 
 export async function GET(req: NextRequest) {
@@ -11,9 +11,10 @@ export async function GET(req: NextRequest) {
 
   const billingUrl = siteConfig(locale).url + "/dashboard/billing/";
   try {
-    const { user, session } = await getCurrentSession();
+    const result = await getCurrentSession();
+    const user = result?.user;
 
-    if (!session) {
+    if (!user) {
       return new Response("Unauthorized", { status: 401 });
     }
 

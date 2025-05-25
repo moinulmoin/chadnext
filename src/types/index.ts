@@ -11,11 +11,11 @@ export type CurrentUser = {
 export interface payload {
   name: string;
   email: string;
-  picture?: string;
+  image?: string;
 }
 
 export const settingsSchema = z.object({
-  picture: z.string().url(),
+  image: z.string().url(),
   name: z
     .string({
       required_error: "Please type your name.",
@@ -49,6 +49,7 @@ export interface SendWelcomeEmailProps {
   userName: string;
 }
 
-export interface SendOTPProps extends SendWelcomeEmailProps {
+export interface SendOTPProps extends Omit<SendWelcomeEmailProps, "userName"> {
   code: string;
+  userName?: string;
 }

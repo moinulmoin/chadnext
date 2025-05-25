@@ -1,9 +1,9 @@
-import ThanksTemp from "emails/thanks";
-import VerificationTemp from "emails/verification";
+import { ThanksTemp } from "~/emails/thanks";
+import { VerificationTemp } from "~/emails/verification";
+import { ReactNode } from "react";
 import { Resend } from "resend";
 import { type SendOTPProps, type SendWelcomeEmailProps } from "~/types";
 import { generateId } from "../utils";
-import { ReactNode } from "react";
 
 export const resend = new Resend(process.env.RESEND_API_KEY);
 

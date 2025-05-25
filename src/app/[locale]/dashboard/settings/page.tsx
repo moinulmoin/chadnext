@@ -1,5 +1,6 @@
 import { type Metadata } from "next";
-import { getCurrentSession } from "~/lib/server/auth/session";
+import { redirect } from "next/navigation";
+import { getCurrentSession } from "~/lib/server/auth";
 import SettingsForm from "./settings-form";
 
 export const metadata: Metadata = {
@@ -7,6 +8,18 @@ export const metadata: Metadata = {
 };
 
 export default async function Settings() {
-  const { user } = await getCurrentSession();
-  return <SettingsForm currentUser={user!} />;
+  const result = await getCurrentSession();
+  const user = result?.user;
+  if (!user) return redirect("/login");
+
+  return (
+    <SettingsForm
+      currentUser={{
+        id: user.id,
+        name: user.name ?? "",
+        email: user.email ?? "",
+        image: user.image ?? "",
+      }}
+    />
+  );
 }

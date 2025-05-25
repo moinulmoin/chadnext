@@ -34,7 +34,8 @@
       ],
       "content": [
         "./.velite"
-      ]
+      ],
+      "~/emails/*" : ["./emails/*"]
     }
   },
   "include": [
