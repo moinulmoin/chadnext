@@ -1,13 +1,6 @@
 import { type User } from "@prisma/client";
 import { z } from "zod";
 
-export type CurrentUser = {
-  id: string;
-  name: string;
-  email: string;
-  picture: string;
-};
-
 export interface payload {
   name: string;
   email: string;
