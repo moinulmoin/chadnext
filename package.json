@@ -84,7 +84,7 @@
     "autoprefixer": "10.4.20",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "eslint": "9.24.0",
+    "eslint": "9.32.0",
     "eslint-config-next": "15.3.2",
     "eslint-config-prettier": "^10.1.1",
     "lefthook": "^1.10.7",
