@@ -2,6 +2,7 @@ import { type Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import Script from "next/script";
+import { AnnouncementBanner } from "~/components/announcement-banner";
 import Footer from "~/components/layout/footer";
 import Header from "~/components/layout/header";
 import ThemeProvider from "~/components/shared/theme-provider";
@@ -131,6 +132,7 @@ export default async function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <AnnouncementBanner />
           <Header />
           <main>
             {children}
