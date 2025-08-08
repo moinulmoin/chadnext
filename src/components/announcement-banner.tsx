@@ -1,22 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { X } from "lucide-react";
 import Link from "next/link";
 
 export function AnnouncementBanner() {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const dismissed = localStorage.getItem("announcement-dismissed");
-    if (!dismissed) {
-      setIsVisible(true);
-    }
-  }, []);
+  const [isVisible, setIsVisible] = useState(true);
 
   const handleDismiss = () => {
     setIsVisible(false);
-    localStorage.setItem("announcement-dismissed", "true");
   };
 
   if (!isVisible) return null;
@@ -27,10 +19,10 @@ export function AnnouncementBanner() {
         <div className="flex items-center justify-between">
           <div className="flex-1 text-center text-sm font-medium text-primary-foreground">
             <span className="mr-2">🚀</span>
-            The Author has released a cool tool for vibe coders, developers,
-            founders, AI users -{" "}
+            The Author has released a timesaver tool for vibe coders,
+            developers, founders, AI users -{" "}
             <Link
-              href="https://your-tool-link.com"
+              href="https://voicetypr.com"
               target="_blank"
               rel="noopener noreferrer"
               className="font-semibold underline-offset-4 transition-all hover:underline"
