@@ -741,7 +741,7 @@ Critical Path: Task 1 → Task 2 → Task 4 → Task 7 → Task 10
 
 ---
 
-- [ ] 6. Fumadocs Setup (Changelog + Getting Started)
+- [x] 6. Fumadocs Setup (Changelog + Getting Started)
 
   **What to do**:
   - Install Fumadocs: `fumadocs-mdx`, `fumadocs-core`, `fumadocs-ui`
