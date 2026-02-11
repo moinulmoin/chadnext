@@ -4,6 +4,7 @@ import ConvexClientProvider from "../../convex/ConvexProvider";
 import ThemeProvider from "@/components/shared/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
+import { RootProvider } from "fumadocs-ui/provider/next";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -32,16 +33,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased flex flex-col min-h-screen`}
       >
-        <ConvexClientProvider>
-          <ThemeProvider>
-            <TooltipProvider>
-              {children}
-            </TooltipProvider>
-            <Toaster />
-          </ThemeProvider>
-        </ConvexClientProvider>
+        <RootProvider>
+          <ConvexClientProvider>
+            <ThemeProvider>
+              <TooltipProvider>
+                {children}
+              </TooltipProvider>
+              <Toaster />
+            </ThemeProvider>
+          </ConvexClientProvider>
+        </RootProvider>
       </body>
     </html>
   );
