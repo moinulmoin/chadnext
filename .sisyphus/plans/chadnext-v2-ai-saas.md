@@ -636,7 +636,7 @@ Critical Path: Task 1 → Task 2 → Task 4 → Task 7 → Task 10
 
 ---
 
-- [ ] 5. Landing Page (AI-Focused Marketing Sections)
+- [x] 5. Landing Page (AI-Focused Marketing Sections)
 
   **What to do**:
   - Build landing page at `src/app/page.tsx` with marketing sections:
