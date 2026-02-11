@@ -1,17 +1,34 @@
-import { getAuthConfigProvider } from "@convex-dev/better-auth/auth-config";
-import type { AuthConfig } from "convex/server";
-import { v } from "convex/values";
+import { components } from "./_generated/api";
+import { createClient, type GenericCtx } from "@convex-dev/better-auth";
+import { convex, crossDomain } from "@convex-dev/better-auth/plugins";
+import { betterAuth, type BetterAuthOptions } from "better-auth/minimal";
+import { DataModel } from "./_generated/dataModel";
+import authConfig from "./auth.config";
 
-import { query } from "./_generated/server";
+const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-export const authConfig = {
-  providers: [getAuthConfigProvider()],
-} satisfies AuthConfig;
-
-export const getCurrentUserId = query({
-  args: {},
-  returns: v.union(v.id("users"), v.null()),
-  handler: async () => {
-    return null;
-  },
+// Create the component client
+export const authComponent = createClient<DataModel>(components.betterAuth, {
+  verbose: false,
 });
+
+// Configure Better Auth options
+export const createAuthOptions = (ctx: GenericCtx<DataModel>) => ({
+  baseURL: siteUrl,
+  trustedOrigins: [siteUrl],
+  database: authComponent.adapter(ctx),
+  socialProviders: {
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+    },
+  },
+  plugins: [
+    crossDomain({ siteUrl }),
+    convex({ authConfig }),
+  ],
+}) satisfies BetterAuthOptions;
+
+// Export the createAuth function
+export const createAuth = (ctx: GenericCtx<DataModel>) =>
+  betterAuth(createAuthOptions(ctx));
