@@ -230,7 +230,7 @@ Critical Path: Task 1 → Task 2 → Task 4 → Task 7 → Task 10
 
 ## TODOs
 
-- [ ] 1. Scaffold Next.js 16 + Tailwind 4 + shadcn/ui on v2 Branch
+- [x] 1. Scaffold Next.js 16 + Tailwind 4 + shadcn/ui on v2 Branch
 
   **What to do**:
   - Create `v2` branch from latest `origin/main`
@@ -343,7 +343,7 @@ Critical Path: Task 1 → Task 2 → Task 4 → Task 7 → Task 10
 
 ---
 
-- [ ] 2. Design Convex Schema + Register All 5 Components
+- [x] 2. Design Convex Schema + Register All 5 Components
 
   **What to do**:
   - Install Convex: `pnpm add convex`
@@ -456,7 +456,7 @@ Critical Path: Task 1 → Task 2 → Task 4 → Task 7 → Task 10
 
 ---
 
-- [ ] 3. Create example.env with All Variables Documented
+- [x] 3. Create example.env with All Variables Documented
 
   **What to do**:
   - Create `example.env` (NOT `.env.example` — Convex convention) at project root
