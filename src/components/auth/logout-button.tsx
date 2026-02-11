@@ -1,19 +1,29 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/auth-client";
-import { LogOut } from "lucide-react";
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+
+import { authClient } from "@/lib/auth-client"
+import { Button } from "@/components/ui/button"
 
 export function LogoutButton() {
-  const handleLogout = async () => {
-    await authClient.signOut();
-    window.location.href = "/";
-  };
+  const [isPending, setIsPending] = useState(false)
+  const router = useRouter()
+
+  const onLogout = async () => {
+    setIsPending(true)
+    try {
+      await authClient.signOut()
+      router.push("/login")
+      router.refresh()
+    } finally {
+      setIsPending(false)
+    }
+  }
 
   return (
-    <Button onClick={handleLogout} variant="ghost" size="sm">
-      <LogOut className="mr-2 h-4 w-4" />
-      Sign Out
+    <Button variant="ghost" onClick={onLogout} disabled={isPending}>
+      {isPending ? "Signing out..." : "Sign out"}
     </Button>
-  );
+  )
 }

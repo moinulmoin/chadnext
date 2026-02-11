@@ -140,3 +140,88 @@ grep -v "^#" example.env | grep -v "^$" | wc -l
 ## Code Pattern
 - Componentized sections in `src/components/sections/` to keep `page.tsx` clean and declarative.
 - Each section follows a similar pattern: `container` wrapper -> `header` -> `content`.
+
+---
+
+# Task 4: better-auth Integration (2026-02-12)
+
+## What Worked
+- Created complete better-auth integration with GitHub OAuth
+- Implemented auth API route at `src/app/api/auth/[...all]/route.ts`
+- Created client utilities (`src/lib/auth-client.ts`) and server utilities (`src/lib/auth-server.ts`)
+- Built login page with GitHub sign-in button
+- Implemented proxy.ts auth redirect logic
+- Created logout button component
+
+## Key Workaround
+- Build was failing due to missing `convex/_generated/dataModel.d.ts`
+- Created stub dataModel.d.ts with type definitions matching schema.ts
+- This allows build to pass before Convex initialization
+- Real file will be generated when user runs `npx convex dev`
+
+## Files Created
+- `convex/auth.config.ts` - Convex auth configuration
+- `convex/auth.ts` - Better Auth backend with Convex adapter
+- `src/lib/auth-client.ts` - Client-side auth utilities
+- `src/lib/auth-server.ts` - Server-side auth handlers
+- `src/app/api/auth/[...all]/route.ts` - Auth API catch-all route
+- `src/components/auth/github-signin-button.tsx` - GitHub OAuth button
+- `src/components/auth/logout-button.tsx` - Logout button
+- `src/app/login/page.tsx` - Login page (updated)
+- `src/proxy.ts` - Auth redirect logic (updated)
+- `convex/_generated/dataModel.d.ts` - Stub type definitions
+
+## Verification
+- `pnpm build` now passes successfully
+- All TypeScript errors resolved
+- Ready to proceed with Wave 3 tasks
+
+---
+
+# Task 7: Dashboard Projects CRUD (2026-02-12)
+
+## What Worked
+- Implemented dashboard shell layout with shadcn sidebar in `src/app/dashboard/layout.tsx` and wired nav links for Projects, Billing, Settings, and AI Chat.
+- Added complete projects pages:
+  - `src/app/dashboard/projects/page.tsx` for listing projects and creating new projects via dialog.
+  - `src/app/dashboard/projects/[projectId]/page.tsx` for editing and deleting a project with confirmation dialog.
+- Completed Convex projects API in `convex/projects.ts` with validated `list`, `get`, `create`, `update`, and `remove` functions.
+- Added ownership checks on mutation operations using authenticated `ctx.userId` guard helper.
+- Enforced free plan cap at 3 projects in `create` mutation and surfaced upgrade messaging in UI when limit is reached.
+
+## Key Implementation Notes
+- `convex/_generated/api.ts` must expose runtime function references (`anyApi`) or Convex hooks fail with `is not a functionReference` during build.
+- Build-time prerendering for client pages using Convex hooks still requires a `ConvexProvider` context; using a placeholder Convex URL keeps build stable when env vars are not configured.
+- `useQuery` state handling pattern:
+  - `undefined` => loading
+  - `null` => not found/unauthorized (detail page)
+  - object/array => render content
+
+## Verification
+- LSP diagnostics: clean on all changed files.
+- `pnpm build`: passes successfully with `/dashboard/projects` and `/dashboard/projects/[projectId]` routes included.
+
+---
+
+# Task: better-auth GitHub + Email OTP refresh (2026-02-12)
+
+## What Worked
+- Convex Better Auth routes must be registered in `convex/http.ts` via `authComponent.registerRoutes(http, createAuth)`; without this, `/api/auth/[...all]` proxy handlers have no backend endpoints.
+- Next.js server utilities are simplest with `convexBetterAuthNextJs(...)` from `@convex-dev/better-auth/nextjs`, then re-export `{ handler, isAuthenticated, fetchAuth* }` from `src/lib/auth-server.ts`.
+- Login UX can support both sign-in and sign-up implicitly with email OTP by using:
+  - `authClient.emailOtp.sendVerificationOtp({ email, type: "sign-in" })`
+  - `authClient.signIn.emailOtp({ email, otp })`
+- Proxy redirection for `/dashboard/:path*` and `/login` works with cookie existence checks using `getSessionCookie(request)` from `better-auth/cookies`.
+
+## Implementation Notes
+- Session policy set in Better Auth config (`convex/auth.ts`) with 30-day expiry and auto-renewal:
+  - `session.expiresIn = 60 * 60 * 24 * 30`
+  - `session.updateAge = 60 * 60 * 24`
+- Email OTP delivery uses Convex Resend component inside plugin callback:
+  - `emailOTP({ sendVerificationOTP: async (...) => resend.sendEmail(...) })`
+  - `requireActionCtx(ctx)` is needed before calling Resend from Better Auth plugin callbacks.
+
+## Verification
+- LSP diagnostics: clean on all changed TS/TSX files.
+- `pnpm build`: passes.
+- Build output includes `/login` and `/api/auth/[...all]`, confirming route wiring.

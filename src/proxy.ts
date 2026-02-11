@@ -1,22 +1,19 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { isAuthenticated } from "@/lib/auth-server";
+import { getSessionCookie } from "better-auth/cookies";
 
-export async function proxy(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const isAuthenticated = Boolean(getSessionCookie(request));
 
   if (pathname.startsWith("/dashboard")) {
-    const authenticated = await isAuthenticated();
-    
-    if (!authenticated) {
+    if (!isAuthenticated) {
       return NextResponse.redirect(new URL("/login", request.url));
     }
   }
 
   if (pathname === "/login") {
-    const authenticated = await isAuthenticated();
-    
-    if (authenticated) {
+    if (isAuthenticated) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   }
@@ -25,7 +22,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
-  ],
+  matcher: ["/dashboard/:path*", "/login"],
 };
