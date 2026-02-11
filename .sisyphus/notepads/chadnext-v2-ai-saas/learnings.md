@@ -108,6 +108,38 @@ grep -v "^#" example.env | grep -v "^$" | wc -l
 - pnpm build succeeds.
 - Convex deploy verification is blocked until deployment/env setup exists.
 
+# Task 4: Better Auth Integration (GitHub + Email OTP) (2026-02-11)
+
+## What Worked
+- Convex Better Auth setup in `convex/auth.ts` works with `createClient`, `betterAuth`, `convex({ authConfig })`, GitHub provider, and `emailOTP` plugin.
+- Email OTP delivery can be wired directly through `@convex-dev/resend` by calling `resend.sendEmail(requireActionCtx(ctx), ...)` inside `sendVerificationOTP`.
+- Session durability for product auth can be set with `session.expiresIn = 60 * 60 * 24 * 30` and auto-renew via `session.updateAge = 60 * 60 * 24`.
+- Next.js App Router auth endpoint works with `src/app/api/auth/[...all]/route.ts` exporting `GET/POST` from `convexBetterAuthNextJs` handler utilities.
+- Next.js 16 `src/proxy.ts` redirect rules are reliable by checking `/api/auth/get-session` with request cookies:
+  - unauthenticated `/dashboard/*` -> `/login`
+  - authenticated `/login` -> `/dashboard`
+
+## Key Conventions
+- Use `BETTER_AUTH_URL` first, then `NEXT_PUBLIC_APP_URL` fallback for auth base URL.
+- For local/staging environments where `NEXT_PUBLIC_CONVEX_SITE_URL` is unset, derive `convex.site` URL from `NEXT_PUBLIC_CONVEX_URL` (`.convex.cloud` -> `.convex.site`).
+- Keep login UX in one page (GitHub + Email OTP) so signup and signin share the same flow.
+- Add a dedicated `getServerSession` helper in `src/lib/auth-server.ts` for server components by calling `/api/auth/get-session` with `await headers()`.
+
+## Verification Commands Used
+```bash
+# Type/lint diagnostics on changed auth files
+# (via lsp_diagnostics tool)
+
+# Build
+pnpm build
+
+# Unauthenticated dashboard redirect check
+pnpm dev > /tmp/chadnext-dev.log 2>&1 & DEV_PID=$!; sleep 10; curl -s -o /dev/null -w "%{http_code} %{url_effective}" -L "http://localhost:3000/dashboard"; kill $DEV_PID
+
+# Login page render text check
+webfetch http://localhost:3000/login
+```
+
 ---
 
 # Task 5: Landing Page (AI-Focused Marketing Sections) (2026-02-11)
