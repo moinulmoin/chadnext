@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "mcp__sequential-thinking__sequentialthinking"
     ],
     "deny": []
   }
