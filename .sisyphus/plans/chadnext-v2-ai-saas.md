@@ -930,7 +930,7 @@ Critical Path: Task 1 → Task 2 → Task 4 → Task 7 → Task 10
 
 ---
 
-- [ ] 8. Polar.sh Billing Integration (Free/Pro Fixed Tiers)
+- [!] 8. Polar.sh Billing Integration (Free/Pro Fixed Tiers) - BLOCKED - See problems.md
 
   **What to do**:
   - Configure `@convex-dev/polar` component in `convex/billing.ts`:
