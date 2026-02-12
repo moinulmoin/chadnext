@@ -65,3 +65,40 @@ Type error: Cannot find module './_generated/dataModel'
 
 **Next Steps Document**: `.sisyphus/NEXT_STEPS.md` created with detailed instructions.
 
+
+---
+
+## 2026-02-12: Task 8 (Polar Billing) Blocker
+
+**Problem**: @convex-dev/polar component integration not working as expected
+
+**Root Cause**: 
+- Polar component API is not matching documentation (different method signatures)
+- Multiple attempts to implement result in consistent TypeScript errors
+- Subagents timeout on this task
+- Even direct implementation faces persistent LSP errors
+
+**Impact**: 
+- **Blocks Task 10** (AI copilot billing tools)
+- Cannot complete Task 8 acceptance criteria
+
+**Workaround Implemented**:
+- Created subscription config (src/config/subscription.ts) with Free/Pro tier definitions
+- Updated convex.config.ts to import and configure polar component
+- Created stub functions in convex/billing.ts that return hardcoded values
+
+**Current State**:
+- Subscription config works
+- Billing functions are stubs (return placeholders)
+- Build failing due to TypeScript errors in convex/billing.ts
+
+**Decision**: 
+- Mark Task 8 as BLOCKED with documented workaround
+- Proceed to Task 9 (User Settings) which is independent
+- Return to Task 8 later when @convex-dev/polar API is understood or after Convex initialization
+
+**Next Steps**:
+1. Implement Task 9 (User Settings Page)
+2. Continue with Task 11, 12 (independent Wave 4 tasks)
+3. Revisit Task 8 after Convex is initialized by user
+

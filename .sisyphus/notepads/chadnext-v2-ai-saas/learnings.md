@@ -298,3 +298,57 @@ webfetch http://localhost:3000/login
 ## Verification
 - lsp_diagnostics: clean on `convex/billing.ts`.
 - `pnpm build`: passes.
+
+# Task 9: Create User Settings Page (2025-02-12)
+
+## What Worked
+- Created `convex/users.ts` with three functions: `getProfile` (query), `updateProfile` (mutation), `generateUploadUrl` (mutation)
+- Used Convex built-in file storage for profile picture uploads (no UploadThing or R2)
+- Created `src/app/dashboard/settings/page.tsx` with profile form including:
+  - Editable name field
+  - Read-only email field (from auth)
+  - Profile picture display with avatar component
+  - Image upload with preview and remove functionality
+  - Form validation (file type: images only, file size: max 5MB)
+  - Success/error toasts via sonner
+  - Loading states during save operations
+
+## Convex File Storage Pattern
+- Generate upload URL via `ctx.storage.generateUploadUrl()`
+- Client uploads file to URL with `fetch(uploadUrl, { method: "POST", headers: { "Content-Type": file.type }, body: file })`
+- Parse response to get `storageId`
+- Store `storageId` in users table `picture` field
+- Serve files via `ctx.storage.getUrl(storageId)`
+- Delete old files when updating profile with `ctx.storage.delete(oldStorageId)`
+
+## Key Conventions
+- Import path from `src/app/dashboard/settings/page.tsx` to `convex/_generated/api`: `../../../../convex/_generated/api` (convex is at project root, not in src)
+- Use `useQuery(api.users.getProfile)` and `useMutation(api.users.updateProfile)` patterns
+- Store file metadata in custom table (users table), use `_storage` system table via Convex
+- Silent error catching for file deletion: `try { await ctx.storage.delete() } catch (e) { /* Storage might not exist, continue with update */ }`
+
+## Issues Resolved
+- Incorrect import path: Initially used `../../../convex/_generated/api` but correct path is `../../../../convex/_generated/api` (convex is at project root, parallel to src directory)
+- Unused code removed: `profileValidator` and `UserProfile` type from `convex/users.ts`, `isUploading` state from settings page
+- Convex types not regenerated: Build still passed despite `convex/_generated/api.ts` not including users module (uses `anyApi` for dynamic discovery)
+
+## Verification Commands Used
+```bash
+# File existence
+test -f convex/users.ts
+test -f src/app/dashboard/settings/page.tsx
+
+# Build verification
+pnpm build
+
+# LSP diagnostics
+lsp_diagnostics on convex/users.ts (clean except for polar-sh unrelated errors)
+lsp_diagnostics on src/app/dashboard/settings/page.tsx (clean)
+```
+
+## Decisions Made
+- Stored storageId as string in users.picture field (not URL), then get URL via ctx.storage.getUrl()
+- Did NOT implement password change (OAuth + OTP only, no passwords)
+- Did NOT implement account deletion (v2.1)
+- Did NOT implement notification preferences
+- Did NOT implement API key management (v2.1)

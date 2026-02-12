@@ -1031,7 +1031,7 @@ Critical Path: Task 1 → Task 2 → Task 4 → Task 7 → Task 10
 
 ---
 
-- [ ] 9. User Settings Page (Profile, Image Upload)
+- [x] 9. User Settings Page (Profile, Image Upload)
 
   **What to do**:
   - Build Settings page: `src/app/dashboard/settings/page.tsx`
