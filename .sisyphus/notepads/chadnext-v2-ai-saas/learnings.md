@@ -352,3 +352,47 @@ lsp_diagnostics on src/app/dashboard/settings/page.tsx (clean)
 - Did NOT implement account deletion (v2.1)
 - Did NOT implement notification preferences
 - Did NOT implement API key management (v2.1)
+
+# Task 11: Email Templates (React Email + Resend) (2026-02-12)
+
+## What Worked
+- Created 3 email templates in `emails/` directory using React Email components:
+  - `emails/verification.tsx` - OTP email with 6-digit code styling, supports both "verification" and "login" types
+  - `emails/welcome.tsx` - Welcome email with product features and personalized greeting
+  - `emails/subscription.tsx` - Pro upgrade confirmation with plan benefits
+- All templates use `@react-email/html` and `@react-email/text` components with inline styles
+- Consistent styling pattern across all emails: container, content, title, text, heading, featureList, featureText, footerText
+- LSP diagnostics clean on all 3 new files
+- `pnpm build` passes with zero errors
+
+## Key Conventions
+- Use `@react-email/html` as the root component for all email templates
+- Define TypeScript interfaces for props to enable autocomplete (e.g., `VerificationEmailProps`, `WelcomeEmailProps`, `SubscriptionEmailProps`)
+- Use inline style objects (not CSS classes) for email client compatibility
+- Pattern: `{ style={container} }` with constants defined at file bottom
+- 6-digit OTP styling: `fontSize: "36px"`, `fontWeight: "700"`, `letterSpacing: "8px"`, centered in dashed border container
+- Provide sensible defaults for optional props (e.g., `appName = "ChadNext"`)
+- Use emojis sparingly in feature lists for visual appeal (✨🚀🔒, ⚡🎨📊)
+
+## Resend Integration Context
+- Resend component already registered in `convex/convex.config.ts`
+- Email delivery wired in `convex/auth.ts` via `@convex-dev/resend` inside Better Auth's `emailOTP` plugin
+- Existing `resend` export in `convex/email.ts` ready for use: `resend.sendEmail(requireActionCtx(ctx), { from, to, subject, html, text })`
+- Email templates return HTML strings that can be passed to Resend's `html` parameter
+
+## Email Template Patterns
+- **Verification Email**: Shows OTP code prominently, indicates expiration (10 minutes), handles verification vs login types
+- **Welcome Email**: Personalized greeting (optional name), product features as bullet points, supportive tone
+- **Subscription Email**: Upgrade confirmation, plan benefits list, customer-focused language
+
+## Verification
+- `lsp_diagnostics` on all 3 template files: clean (no errors)
+- `pnpm build`: successful with all routes including email templates
+- No need to wire templates in code yet (task requirement: create templates only)
+
+## Notes for Future Integration
+- To wire verification template to auth: Update `convex/auth.ts` `sendVerificationOTP` to render template with `render(<VerificationEmail otp={otp} type={type} />)` and pass to Resend
+- To wire welcome template: Call from user creation flow in `convex/auth.ts` or `convex/users.ts`
+- To wire subscription template: Call from Polar webhook handler (future task: Polar webhook integration)
+- All templates support dynamic content via props for personalization (name, planName, type, appName)
+

@@ -1262,7 +1262,7 @@ Critical Path: Task 1 → Task 2 → Task 4 → Task 7 → Task 10
 
 ---
 
-- [ ] 11. Email Templates (OTP, Welcome, Billing)
+- [x] 11. Email Templates (OTP, Welcome, Billing)
 
   **What to do**:
   - Configure `@convex-dev/resend` in `convex/email.ts`
