@@ -275,3 +275,26 @@ webfetch http://localhost:3000/login
 ### Verification
 - lsp_diagnostics: No errors
 - pnpm build: Successful compilation
+
+---
+
+# Task 8 (File 2): Convex Billing Functions (2026-02-12)
+
+## What Worked
+- Implemented `convex/billing.ts` around `@convex-dev/polar` with a typed `polar` client and authenticated user guard (`ctx.userId` check).
+- Added `getUserInfo` helper returning `{ userId, email }` and throwing `ConvexError` when unauthenticated or missing user email.
+- Added required functions:
+  - `getCurrentSubscription` query
+  - `getSubscriptionStatus` query
+  - `generateCheckoutLink` mutation
+  - `generatePortalLink` mutation
+- Used Polar client methods directly (`getCurrentSubscription`, `createCheckoutSession`, `createCustomerPortalSession`) and normalized failures into user-safe `ConvexError` messages.
+
+## Implementation Notes
+- Product key mapping uses env-backed IDs (`POLAR_FREE_PRODUCT_ID`, `POLAR_PRO_PRODUCT_ID`) so Free/Pro plan naming aligns with existing subscription config.
+- `getSubscriptionStatus` returns `"free"` when no subscription exists and `"pro"` for active Pro subscriptions; otherwise it returns Polar status.
+- Added explicit `args` and `returns` validators to all Convex exports in this file.
+
+## Verification
+- lsp_diagnostics: clean on `convex/billing.ts`.
+- `pnpm build`: passes.
