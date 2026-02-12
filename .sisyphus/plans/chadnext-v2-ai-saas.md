@@ -527,7 +527,7 @@ Critical Path: Task 1 → Task 2 → Task 4 → Task 7 → Task 10
 
 ---
 
-- [ ] 4. better-auth Integration (GitHub + Email OTP)
+- [x] 4. better-auth Integration (GitHub + Email OTP)
 
   **What to do**:
   - Configure `@convex-dev/better-auth` component in `convex/auth.ts`

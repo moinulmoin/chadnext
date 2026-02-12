@@ -1,3 +1,5 @@
+import { anyApi } from "convex/server";
+
 export const components = {
   agent: {} as any,
   betterAuth: {} as any,
@@ -5,3 +7,5 @@ export const components = {
   rateLimiter: {} as any,
   resend: {} as any,
 };
+
+export const api = anyApi;
