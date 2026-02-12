@@ -257,3 +257,21 @@ webfetch http://localhost:3000/login
 - LSP diagnostics: clean on all changed TS/TSX files.
 - `pnpm build`: passes.
 - Build output includes `/login` and `/api/auth/[...all]`, confirming route wiring.
+
+## Subscription Configuration File (src/config/subscription.ts)
+
+### Pattern Applied (2026-02-12)
+- Follows existing config pattern from `site.ts`
+- Uses `as const` for type inference on config objects
+- Exports named exports: `freePlan`, `proPlan`, `subscriptionPlans`
+- Exports TypeScript types: `Plan`, `PlanId`
+
+### Implementation Details
+- Free tier: 3 projects max, limited AI copilot (10 requests/day)
+- Pro tier: Unlimited projects, unlimited AI copilot, premium features
+- Price field: Pro tier at $29/month
+- Features array: List of plan features for display
+
+### Verification
+- lsp_diagnostics: No errors
+- pnpm build: Successful compilation

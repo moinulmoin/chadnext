@@ -824,7 +824,7 @@ Critical Path: Task 1 → Task 2 → Task 4 → Task 7 → Task 10
 
 ---
 
-- [ ] 7. Dashboard Layout + Projects CRUD
+- [x] 7. Dashboard Layout + Projects CRUD
 
   **What to do**:
   - Create dashboard layout: `src/app/dashboard/layout.tsx`
