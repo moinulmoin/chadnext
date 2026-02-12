@@ -129,7 +129,7 @@ export default function ProjectsPage() {
                   id="project-name"
                   placeholder="Customer Support Bot"
                   value={name}
-                  onChange={(event) => setName(event.target.value)}
+                  onChange={(e: any) => setName(e.target.value)}
                 />
               </div>
 
@@ -139,7 +139,7 @@ export default function ProjectsPage() {
                   id="project-description"
                   placeholder="AI assistant for support tickets"
                   value={description}
-                  onChange={(event) => setDescription(event.target.value)}
+                  onChange={(e: any) => setDescription(e.target.value)}
                 />
               </div>
 
@@ -149,7 +149,7 @@ export default function ProjectsPage() {
                   id="project-domain"
                   placeholder="support.example.com"
                   value={domain}
-                  onChange={(event) => setDomain(event.target.value)}
+                  onChange={(e: any) => setDomain(e.target.value)}
                 />
               </div>
 

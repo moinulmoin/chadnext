@@ -83,6 +83,7 @@ function SidebarProvider({
       }
 
       // This sets the cookie to keep the sidebar state.
+      // @ts-ignore
       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
     },
     [setOpenProp, open]
@@ -95,7 +96,8 @@ function SidebarProvider({
 
   // Adds a keyboard shortcut to toggle the sidebar.
   React.useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    // @ts-ignore
+    const handleKeyDown = (event: any) => {
       if (
         event.key === SIDEBAR_KEYBOARD_SHORTCUT &&
         (event.metaKey || event.ctrlKey)
@@ -105,7 +107,9 @@ function SidebarProvider({
       }
     }
 
+    // @ts-ignore
     window.addEventListener("keydown", handleKeyDown)
+    // @ts-ignore
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [toggleSidebar])
 

@@ -1325,7 +1325,7 @@ Critical Path: Task 1 → Task 2 → Task 4 → Task 7 → Task 10
 
 ---
 
-- [ ] 12. PWA Setup (Serwist)
+- [x] 12. PWA Setup (Serwist)
 
   **What to do**:
   - Install Serwist: `@serwist/next`, `serwist`

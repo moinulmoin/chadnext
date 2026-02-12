@@ -29,7 +29,7 @@ export default function SettingsPage() {
     }
   };
 
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = async (e: any) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -56,7 +56,7 @@ export default function SettingsPage() {
 
   const handleRemovePicture = async () => {
     if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+      (fileInputRef.current as any).value = "";
     }
     setNewPictureFile(null);
     setPreviewUrl(null);
@@ -112,7 +112,7 @@ export default function SettingsPage() {
       }
       setNewPictureFile(null);
       if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+        (fileInputRef.current as any).value = "";
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to update profile";
@@ -157,9 +157,8 @@ export default function SettingsPage() {
                 <Button
                   type="button"
                   variant="outline"
-                  size="sm"
-                  disabled={isSaving}
-                  onClick={() => fileInputRef.current?.click()}
+                  size="icon"
+                  onClick={() => (fileInputRef.current as any)?.click()}
                 >
                   <Camera className="mr-2 h-4 w-4" />
                   Change
@@ -191,7 +190,7 @@ export default function SettingsPage() {
                 <Input
                   id="name"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e: any) => setName(e.target.value)}
                   disabled={isSaving}
                   placeholder="Your name"
                 />

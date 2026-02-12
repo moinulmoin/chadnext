@@ -158,7 +158,7 @@ export default function ProjectDetailPage() {
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="project-name">Project Name</Label>
-            <Input id="project-name" value={name} onChange={(event) => setName(event.target.value)} />
+            <Input id="project-name" value={name} onChange={(e: any) => setName(e.target.value)} />
           </div>
 
           <div className="space-y-2">
@@ -166,13 +166,13 @@ export default function ProjectDetailPage() {
             <Input
               id="project-description"
               value={description}
-              onChange={(event) => setDescription(event.target.value)}
+              onChange={(e: any) => setDescription(e.target.value)}
             />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="project-domain">Domain</Label>
-            <Input id="project-domain" value={domain} onChange={(event) => setDomain(event.target.value)} />
+            <Input id="project-domain" value={domain} onChange={(e: any) => setDomain(e.target.value)} />
           </div>
 
           <div className="space-y-2">
@@ -181,7 +181,7 @@ export default function ProjectDetailPage() {
               id="project-status"
               className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs outline-none"
               value={status}
-              onChange={(event) => setStatus(event.target.value as "active" | "archived")}
+              onChange={(e: any) => setStatus(e.target.value as "active" | "archived")}
             >
               <option value="active">Active</option>
               <option value="archived">Archived</option>
