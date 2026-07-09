@@ -24,6 +24,8 @@ Save time and effort, and build performant apps with an excellent developer expe
 4. Run `pnpm prisma db push` to set up the database.
 5. Start the dev server: `pnpm dev`
 
+> 💡 **Email providers.** Emails are sent via [Resend](https://resend.com/) by default. You can switch to [Mailtrap](https://mailtrap.io/) — a Resend alternative — by setting `EMAIL_PROVIDER=mailtrap` (plus `MAILTRAP_API_TOKEN`). Live Mailtrap sending requires a verified sending domain and a matching `FROM` address (set in `src/lib/server/mail.ts`). For local development, set `USE_MAILTRAP_SANDBOX=true` (plus `MAILTRAP_API_TOKEN` and `MAILTRAP_INBOX_ID`) to route all emails to a Mailtrap Sandbox test inbox instead of delivering them — no domain setup needed, and no spamming real inboxes or burning Resend quota while building.
+
 ### Or
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmoinulmoin%2Fchadnext&env=DB_PRISMA_URL,DB_URL_NON_POOLING,GITHUB_CLIENT_ID,GITHUB_CLIENT_SECRET,NEXTAUTH_SECRET,NEXT_PUBLIC_APP_URL,RESEND_API_KEY,UPLOADTHING_SECRET,UPLOADTHING_APP_ID,UPLOADTHING_URL)
