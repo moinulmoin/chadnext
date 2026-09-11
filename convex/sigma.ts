@@ -24,7 +24,7 @@ import { action, internalAction, internalMutation, internalQuery, mutation, quer
 import { aiProvider, defaultModelId, resolveLanguageModel } from "./aiConfig";
 import { authComponent } from "./auth";
 import { FREE_RUNS_PER_DAY } from "./limits";
-import { limiter, SIGMA_CHAT_LIMIT } from "./rateLimiter";
+import { limiter, sigmaChatLimitName, SIGMA_CHAT_LIMITS } from "./rateLimiter";
 
 /**
  * Sigma — the in-app assistant.
@@ -506,20 +506,27 @@ const getDashboardStatsTool = createTool({
 
 const getSubscriptionStatusTool = createTool({
   description:
-    "Get the user's plan and usage: current plan, runs used today vs the free daily limit.",
+    "Get the user's plan and usage: current plan, runs used today vs the free daily limit, tokens this month.",
   inputSchema: z.object({}),
   execute: async (ctx) => {
     if (!ctx.userId) throw new Error("No user context");
+    const userId = ctx.userId as GenericId<"users">;
     const stats = await ctx.runQuery(internal.runs.getStatsInternal, {
-      userId: ctx.userId as GenericId<"users">,
+      userId,
+    });
+    const plan = await ctx.runQuery(internal.billing.getUserPlanInternal, {
+      userId,
     });
     return {
-      plan: "free",
+      plan,
       runsToday: stats.runsToday,
-      freeRunsPerDay: FREE_RUNS_PER_DAY,
+      freeRunsPerDay: plan === "pro" ? null : FREE_RUNS_PER_DAY,
       totalRuns: stats.totalRuns,
       tokensThisMonth: stats.tokensThisMonth,
-      note: "Pro upgrades are managed in Billing.",
+      note:
+        plan === "pro"
+          ? "Pro plan: unlimited runs."
+          : "Pro upgrades are managed in Billing.",
     };
   },
 });
@@ -819,12 +826,19 @@ async function instructionsWithMemories(
     .join("\n")}`;
 }
 
-function mockReplyForStats(stats: {
-  totalRuns: number;
-  runsToday: number;
-  tokensThisMonth: number;
-}): string {
-  return `Here are your current stats:\n\n- **Total runs:** ${stats.totalRuns}\n- **Runs today:** ${stats.runsToday} (free limit: ${FREE_RUNS_PER_DAY}/day)\n- **Tokens this month:** ${stats.tokensThisMonth.toLocaleString()}\n\n_Live model responses are disabled — ChadNext is running in demo mode._`;
+function mockReplyForStats(
+  stats: {
+    totalRuns: number;
+    runsToday: number;
+    tokensThisMonth: number;
+  },
+  plan: "free" | "pro",
+): string {
+  const runsLine =
+    plan === "pro"
+      ? `- **Runs today:** ${stats.runsToday} (Pro: unlimited)`
+      : `- **Runs today:** ${stats.runsToday} (free limit: ${FREE_RUNS_PER_DAY}/day)`;
+  return `Here are your current stats:\n\n- **Plan:** ${plan === "pro" ? "Pro" : "Free"}\n${runsLine}\n- **Tokens this month:** ${stats.tokensThisMonth.toLocaleString()}\n\n_Live model responses are disabled — ChadNext is running in demo mode._`;
 }
 
 function mockReplyForRuns(runs: any[]): string {
@@ -865,7 +879,10 @@ async function mockRespond(
     const stats = await ctx.runQuery(internal.runs.getStatsInternal, {
       userId: viewer,
     });
-    reply = mockReplyForStats(stats);
+    const plan = await ctx.runQuery(internal.billing.getUserPlanInternal, {
+      userId: viewer,
+    });
+    reply = mockReplyForStats(stats, plan);
   } else if (/\b(list|show|recent|runs?)\b/.test(lowered)) {
     const runs = await ctx.runQuery(internal.runs.listRecentInternal, {
       userId: viewer,
@@ -900,15 +917,22 @@ export const sendMessage = action({
       throw new ConvexError("Message is too long (max 4000 characters).");
     }
 
-    // Plan-based rate limit (free: 20/hour). Friendly, surfaced in the UI.
-    const status = await limiter.limit(ctx, "sigmaChat", {
+    // Plan-based rate limit (free: 20/hour, pro: 200/hour), branched by
+    // plan at send time. Friendly, surfaced in the UI.
+    const plan: "free" | "pro" = await ctx.runQuery(
+      internal.billing.getUserPlanInternal,
+      { userId: viewer },
+    );
+    const status = await limiter.limit(ctx, sigmaChatLimitName(plan), {
       key: viewer,
       throws: false,
     });
     if (!status.ok) {
       throw new ConvexError(
-        `You've reached the Sigma limit of ${SIGMA_CHAT_LIMIT} messages per hour. ` +
-          "Upgrade to Pro for more assistant usage.",
+        `You've reached the Sigma limit of ${SIGMA_CHAT_LIMITS[plan]} messages per hour. ` +
+          (plan === "pro"
+            ? "Your window resets soon."
+            : "Upgrade to Pro on the Billing page for 200 messages per hour."),
       );
     }
 

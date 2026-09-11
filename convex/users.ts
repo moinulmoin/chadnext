@@ -32,6 +32,33 @@ export const getUserIdInternal = internalQuery({
   },
 });
 
+/**
+ * Resolve the signed-in user's id + email in one query. Works in action
+ * contexts (no ctx.db) — used by the Polar component's checkout/portal
+ * helpers, which need the customer email.
+ */
+export const getCurrentUserInfoInternal = internalQuery({
+  args: {},
+  returns: v.union(
+    v.object({ userId: v.id("users"), email: v.string() }),
+    v.null(),
+  ),
+  handler: async (ctx) => {
+    const authUser = await authComponent.safeGetAuthUser(ctx);
+    if (!authUser) {
+      return null;
+    }
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q: any) => q.eq("email", authUser.email))
+      .first();
+    if (!user) {
+      return null;
+    }
+    return { userId: user._id, email: user.email };
+  },
+});
+
 export const getProfile = query({
   args: {},
   returns: v.union(

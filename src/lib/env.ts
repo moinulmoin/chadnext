@@ -24,10 +24,12 @@ export const env = createEnv({
     ANTHROPIC_API_KEY: z.string().optional(),
     AI_MODEL: z.string().optional(),
 
-    // Billing (Polar)
-    POLAR_ACCESS_TOKEN: z.string().optional(),
+    // Billing (Polar) — consumed by the Convex runtime (@convex-dev/polar
+    // reads POLAR_ORGANIZATION_TOKEN / POLAR_WEBHOOK_SECRET there); declared
+    // here so forks see the full key surface. All optional: no keys = the
+    // app runs in free mode with a setup card on the billing page.
+    POLAR_ORGANIZATION_TOKEN: z.string().optional(),
     POLAR_WEBHOOK_SECRET: z.string().optional(),
-    POLAR_FREE_PRODUCT_ID: z.string().optional(),
     POLAR_PRO_PRODUCT_ID: z.string().optional(),
 
     // Email (Resend)
@@ -54,9 +56,8 @@ export const env = createEnv({
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     AI_MODEL: process.env.AI_MODEL,
 
-    POLAR_ACCESS_TOKEN: process.env.POLAR_ACCESS_TOKEN,
+    POLAR_ORGANIZATION_TOKEN: process.env.POLAR_ORGANIZATION_TOKEN,
     POLAR_WEBHOOK_SECRET: process.env.POLAR_WEBHOOK_SECRET,
-    POLAR_FREE_PRODUCT_ID: process.env.POLAR_FREE_PRODUCT_ID,
     POLAR_PRO_PRODUCT_ID: process.env.POLAR_PRO_PRODUCT_ID,
 
     RESEND_API_KEY: process.env.RESEND_API_KEY,

@@ -302,9 +302,15 @@ export const createRunInternal = internalMutation({
       .collect();
     const runsToday = runs.filter((run: any) => run.createdAt >= dayStart).length;
 
-    if (runsToday >= FREE_RUNS_PER_DAY) {
+    // Plan-gated quota: Free = 10 runs/day, Pro = unlimited. Plan state is
+    // owned by billing.ts (Polar component subscription data).
+    const plan = await ctx.runQuery(internal.billing.getUserPlanInternal, {
+      userId: args.userId,
+    });
+
+    if (plan !== "pro" && runsToday >= FREE_RUNS_PER_DAY) {
       throw new ConvexError(
-        `Free plan limited to ${FREE_RUNS_PER_DAY} runs per day. Upgrade to Pro for unlimited runs.`,
+        `Free plan limited to ${FREE_RUNS_PER_DAY} runs per day. Upgrade to Pro for unlimited runs — see the Billing page.`,
       );
     }
 

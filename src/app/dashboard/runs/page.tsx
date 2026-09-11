@@ -87,6 +87,7 @@ export default function RunsPage() {
     }),
   );
   const statsQuery = useQuery(convexQuery(api.runs.getStats, {}));
+  const subscriptionQuery = useQuery(convexQuery(api.billing.getUserSubscription, {}));
 
   const createRun = useMutation(api.runs.createRun);
   const processRun = useMutation(api.runs.processRun);
@@ -98,7 +99,8 @@ export default function RunsPage() {
 
   const runs = runsQuery.data?.page ?? [];
   const runsToday = statsQuery.data?.runsToday ?? 0;
-  const freeLimitReached = runsToday >= FREE_RUNS_PER_DAY;
+  const isPro = subscriptionQuery.data?.plan === "pro";
+  const freeLimitReached = !isPro && runsToday >= FREE_RUNS_PER_DAY;
 
   const table = useReactTable({
     data: runs,
@@ -145,7 +147,7 @@ export default function RunsPage() {
 
       if (message.includes("Free plan limited")) {
         toast.error("Free plan limit reached", {
-          description: `Upgrade to Pro for unlimited runs. You have used ${runsToday}/${FREE_RUNS_PER_DAY} runs today.`,
+          description: `You have used ${runsToday}/${FREE_RUNS_PER_DAY} runs today. Upgrade to Pro for unlimited runs on the Billing page.`,
         });
       }
     } finally {
@@ -183,8 +185,10 @@ export default function RunsPage() {
             <DialogHeader>
               <DialogTitle>New Run</DialogTitle>
               <DialogDescription>
-                Describe what the run should produce. Free plan includes up to{" "}
-                {FREE_RUNS_PER_DAY} runs per day.
+                Describe what the run should produce.{" "}
+                {isPro
+                  ? "Pro plan — unlimited runs."
+                  : `Free plan includes up to ${FREE_RUNS_PER_DAY} runs per day.`}
               </DialogDescription>
             </DialogHeader>
 
@@ -225,13 +229,29 @@ export default function RunsPage() {
       <Card>
         <CardContent className="flex items-center justify-between gap-3 py-4">
           <p className="text-sm text-muted-foreground">
-            {statsQuery.data === undefined
+            {statsQuery.data === undefined || subscriptionQuery.isLoading
               ? "Checking your plan usage..."
-              : "Free plan usage today"}
+              : isPro
+                ? "Pro plan usage today"
+                : "Free plan usage today"}
           </p>
-          <Badge variant={freeLimitReached ? "destructive" : "secondary"}>
-            {runsToday}/{FREE_RUNS_PER_DAY}
-          </Badge>
+          {isPro ? (
+            <Badge>Pro · unlimited</Badge>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Badge variant={freeLimitReached ? "destructive" : "secondary"}>
+                {runsToday}/{FREE_RUNS_PER_DAY}
+              </Badge>
+              {freeLimitReached ? (
+                <Link
+                  href="/dashboard/billing"
+                  className="text-sm underline underline-offset-4"
+                >
+                  Upgrade for unlimited runs
+                </Link>
+              ) : null}
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -323,10 +343,16 @@ export default function RunsPage() {
 
       <p className="text-xs text-muted-foreground">
         Runs are processed asynchronously — status updates stream in live.{" "}
-        <Link href="/dashboard/billing" className="underline underline-offset-4">
-          Upgrade to Pro
-        </Link>{" "}
-        for unlimited runs.
+        {isPro
+          ? "Pro plan: unlimited runs included."
+          : (
+            <>
+              <Link href="/dashboard/billing" className="underline underline-offset-4">
+                Upgrade to Pro
+              </Link>{" "}
+              for unlimited runs.
+            </>
+          )}
       </p>
     </div>
   );

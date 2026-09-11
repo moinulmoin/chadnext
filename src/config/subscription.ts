@@ -6,8 +6,12 @@ export const freePlan = {
   currency: "USD",
   interval: "month" as const,
   maxRunsPerDay: 10,
+  // Mirror of convex/rateLimiter.ts SIGMA_CHAT_LIMITS (Convex can't import
+  // from src/; keep the two in sync).
+  sigmaMessagesPerHour: 20,
   features: [
     "10 runs per day",
+    "20 Sigma messages per hour",
     "Mock mode — works with zero API keys",
     "Email support",
     "Community access",
@@ -22,8 +26,10 @@ export const proPlan = {
   currency: "USD",
   interval: "month" as const,
   maxRunsPerDay: Infinity,
+  sigmaMessagesPerHour: 200,
   features: [
     "Unlimited runs",
+    "200 Sigma messages per hour",
     "Advanced AI copilot (unlimited)",
     "Priority email support",
     "Community access",
