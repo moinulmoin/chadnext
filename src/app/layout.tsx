@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import ConvexClientProvider from "../../convex/ConvexProvider";
+import QueryProvider from "@/components/shared/query-provider";
 import ThemeProvider from "@/components/shared/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
@@ -19,6 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
     default: siteConfig.name,
     template: `%s | ${siteConfig.name}`,
@@ -58,14 +60,16 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased flex flex-col min-h-screen`}
       >
         <RootProvider>
-          <ConvexClientProvider>
-            <ThemeProvider>
-              <TooltipProvider>
-                {children}
-              </TooltipProvider>
-              <Toaster />
-            </ThemeProvider>
-          </ConvexClientProvider>
+          <QueryProvider>
+            <ConvexClientProvider>
+              <ThemeProvider>
+                <TooltipProvider>
+                  {children}
+                </TooltipProvider>
+                <Toaster />
+              </ThemeProvider>
+            </ConvexClientProvider>
+          </QueryProvider>
         </RootProvider>
       </body>
     </html>
