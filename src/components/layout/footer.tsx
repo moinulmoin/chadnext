@@ -59,8 +59,11 @@ export function Footer() {
           </div>
         </div>
         
-        <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} {siteConfig.name}. All rights reserved.</p>
+        <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
+          <p>
+            © {new Date().getFullYear()} {siteConfig.name}. Released under the
+            MIT license.
+          </p>
         </div>
       </div>
     </footer>

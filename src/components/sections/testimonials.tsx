@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Reveal } from "@/components/shared/reveal";
 import {
   Card,
   CardContent,
@@ -34,16 +35,16 @@ const testimonials = [
 export function TestimonialsSection() {
   return (
     <section className="container py-24 sm:py-32">
-      <div className="flex flex-col items-center gap-4 text-center mb-16">
+      <Reveal className="mb-16 flex flex-col items-center gap-4 text-center">
         <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
           Loved by developers
         </h2>
         <p className="max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
           See what others are saying about ChadNext.
         </p>
-      </div>
-      
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      </Reveal>
+
+      <Reveal className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {testimonials.map((testimonial) => (
           <Card key={testimonial.name} className="flex flex-col h-full">
             <CardHeader className="flex flex-row items-center gap-4 pb-4">
@@ -61,7 +62,7 @@ export function TestimonialsSection() {
             </CardContent>
           </Card>
         ))}
-      </div>
+      </Reveal>
     </section>
   );
 }

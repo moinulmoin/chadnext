@@ -177,15 +177,20 @@ function SigmaChat() {
 
       {/* Chat column */}
       <section className="flex min-h-0 flex-col gap-3">
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <Bot className="h-5 w-5 text-primary" />
-            <h1 className="text-lg font-semibold tracking-tight">Sigma</h1>
-            {statusQuery.data && (
-              <Badge variant="secondary" className="font-mono text-[10px]">
-                {statusQuery.data.model}
-              </Badge>
-            )}
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <div className="flex items-center gap-2">
+              <Bot className="h-5 w-5 text-primary" />
+              <h1 className="text-2xl font-semibold tracking-tight">Sigma</h1>
+              {statusQuery.data && (
+                <Badge variant="secondary" className="font-mono text-[10px]">
+                  {statusQuery.data.model}
+                </Badge>
+              )}
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Answers from your data — writes need your approval.
+            </p>
           </div>
           <Button variant="outline" size="sm" className="lg:hidden" onClick={handleNewChat}>
             <Plus className="mr-1 h-3.5 w-3.5" />

@@ -30,6 +30,9 @@ export function Navbar() {
           <Link href="#faq" className="text-sm font-medium hover:text-primary transition-colors">
             FAQ
           </Link>
+          <Link href="/docs" className="text-sm font-medium hover:text-primary transition-colors">
+            Docs
+          </Link>
           <div className="flex items-center gap-4 border-l pl-4">
             <ThemeToggle />
             <Button size="sm" asChild>
@@ -63,12 +66,19 @@ export function Navbar() {
             >
               Pricing
             </Link>
-            <Link 
-              href="#faq" 
+            <Link
+              href="#faq"
               className="text-sm font-medium hover:text-primary transition-colors"
               onClick={() => setIsOpen(false)}
             >
               FAQ
+            </Link>
+            <Link
+              href="/docs"
+              className="text-sm font-medium hover:text-primary transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Docs
             </Link>
             <div className="border-t pt-4">
               <Button className="w-full" asChild>
