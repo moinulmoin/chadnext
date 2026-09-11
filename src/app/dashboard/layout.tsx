@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Bot, CreditCard, Settings2, Zap } from "lucide-react";
 
 import { LogoutButton } from "@/components/auth/logout-button";
+import { CommandMenu } from "@/components/layout/command-menu";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import {
   Sidebar,
@@ -74,6 +75,7 @@ export default function DashboardLayout({
             <span className="text-sm font-medium text-muted-foreground">Dashboard</span>
           </div>
           <div className="flex items-center gap-2">
+            <CommandMenu />
             <ThemeToggle />
             <LogoutButton />
           </div>

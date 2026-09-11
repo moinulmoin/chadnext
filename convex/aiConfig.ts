@@ -12,6 +12,10 @@
 
 export type AIProviderKind = "gateway" | "openai" | "anthropic" | "mock";
 
+import { createAnthropic } from "@ai-sdk/anthropic";
+import { createGateway } from "@ai-sdk/gateway";
+import { createOpenAI } from "@ai-sdk/openai";
+
 export function aiProvider(): AIProviderKind {
   if (process.env.VERCEL_AI_GATEWAY_API_KEY) return "gateway";
   if (process.env.OPENAI_API_KEY) return "openai";
@@ -32,5 +36,22 @@ export function defaultModelId(): string {
       return "claude-sonnet-4-5";
     default:
       return "mock";
+  }
+}
+
+/** Resolve the configured language model. Callers handle "mock" themselves. */
+export function resolveLanguageModel(
+  provider: AIProviderKind,
+  modelId: string,
+) {
+  switch (provider) {
+    case "gateway":
+      return createGateway()(modelId);
+    case "openai":
+      return createOpenAI()(modelId);
+    case "anthropic":
+      return createAnthropic()(modelId);
+    default:
+      throw new Error("No AI provider configured");
   }
 }

@@ -1,6 +1,7 @@
 import { ConvexError, type GenericId, v } from "convex/values";
 
-import { mutation, query } from "./_generated/server";
+import { internalQuery, mutation, query } from "./_generated/server";
+import { authComponent } from "./auth";
 
 function requireUserId(ctx: unknown): GenericId<"users"> {
   const userId = (ctx as { userId?: GenericId<"users"> }).userId;
@@ -9,6 +10,27 @@ function requireUserId(ctx: unknown): GenericId<"users"> {
   }
   return userId;
 }
+
+/**
+ * Resolve the signed-in app user from the better-auth identity.
+ * Used by actions and scheduler contexts that carry no ctx.db-based
+ * session lookup (e.g. run processing, Sigma continuations).
+ */
+export const getUserIdInternal = internalQuery({
+  args: {},
+  returns: v.union(v.id("users"), v.null()),
+  handler: async (ctx) => {
+    const authUser = await authComponent.safeGetAuthUser(ctx);
+    if (!authUser) {
+      return null;
+    }
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_email", (q: any) => q.eq("email", authUser.email))
+      .first();
+    return user?._id ?? null;
+  },
+});
 
 export const getProfile = query({
   args: {},

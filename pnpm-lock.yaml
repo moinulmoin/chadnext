@@ -62,6 +62,9 @@ importers:
       '@serwist/next':
         specifier: ^9.5.5
         version: 9.5.5(next@16.3.4(@babel/core@7.29.0(supports-color@7.2.0))(@opentelemetry/api@1.9.0)(@types/node@20.19.33)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(typescript@5.9.3)
+      '@shadcn/react':
+        specifier: ^0.3.1
+        version: 0.3.1(@types/react@19.2.14)(react@19.3.0)
       '@t3-oss/env-nextjs':
         specifier: ^0.13.11
         version: 0.13.11(typescript@5.9.3)(zod@4.3.6)
@@ -2265,6 +2268,17 @@ packages:
       typescript: '>=5.0.0'
     peerDependenciesMeta:
       typescript:
+        optional: true
+
+  '@shadcn/react@0.3.1':
+    resolution: {integrity: sha512-2gOR0HDMtWeRsCZfNDaU0YDFdgH3zsDQ6lz67Fv/y/qjY9y+R8kJqAn6q56phqv7/zHi0wqURjntrNO9zL7vnQ==}
+    peerDependencies:
+      '@types/react': '>=19'
+      react: '>=19'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      react:
         optional: true
 
   '@shikijs/core@3.22.0':
@@ -8111,6 +8125,11 @@ snapshots:
       typescript: 5.9.3
     transitivePeerDependencies:
       - browserslist
+
+  '@shadcn/react@0.3.1(@types/react@19.2.14)(react@19.3.0)':
+    optionalDependencies:
+      '@types/react': 19.2.14
+      react: 19.3.0
 
   '@shikijs/core@3.22.0':
     dependencies:

@@ -126,6 +126,59 @@ export type DataModel = {
     searchIndexes: {};
     vectorIndexes: {};
   };
+  // Additive stubs (replaced by real codegen on `npx convex dev`).
+  approvals: {
+    document: {
+      _id: GenericId<"approvals">;
+      _creationTime: number;
+      userId: GenericId<"users">;
+      threadId: string;
+      toolCallId: string;
+      toolName: string;
+      args: string;
+      status: "pending" | "approved" | "denied";
+      createdAt: number;
+      decidedAt?: number;
+    };
+    fieldPaths:
+      | "_id"
+      | "_creationTime"
+      | "userId"
+      | "threadId"
+      | "toolCallId"
+      | "toolName"
+      | "args"
+      | "status"
+      | "createdAt"
+      | "decidedAt";
+    indexes: {
+      by_userId: ["userId"];
+      by_thread: ["threadId"];
+      by_toolCallId: ["toolCallId"];
+    };
+    searchIndexes: {};
+    vectorIndexes: {};
+  };
+  sigmaMemories: {
+    document: {
+      _id: GenericId<"sigmaMemories">;
+      _creationTime: number;
+      userId: GenericId<"users">;
+      content: string;
+      createdAt: number;
+    };
+    fieldPaths:
+      | "_id"
+      | "_creationTime"
+      | "userId"
+      | "content"
+      | "createdAt";
+    indexes: {
+      by_userId: ["userId"];
+    };
+    searchIndexes: {};
+    vectorIndexes: {};
+  };
 };
 
 export type TableNames = keyof DataModel;

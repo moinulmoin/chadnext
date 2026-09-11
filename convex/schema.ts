@@ -32,27 +32,31 @@ export default defineSchema({
     .index("by_userId", ["userId"])
     .index("by_userId_and_status", ["userId", "status"]),
 
-  conversations: defineTable({
+  // Confirm Gate records for Sigma's gated tools. A gated write is only
+  // executed when a matching record here is "approved" by the owning user;
+  // denial leaves zero data side-effects (only this record + chat messages).
+  approvals: defineTable({
     userId: v.id("users"),
-    title: v.string(),
-    model: v.string(),
-    tokenCount: v.number(),
-    createdAt: v.number(),
-    updatedAt: v.number(),
-  }).index("by_userId", ["userId"]),
-
-  messages: defineTable({
-    conversationId: v.id("conversations"),
-    role: v.union(
-      v.literal("user"),
-      v.literal("assistant"),
-      v.literal("system"),
-      v.literal("tool"),
+    threadId: v.string(),
+    toolCallId: v.string(),
+    toolName: v.string(),
+    args: v.string(),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("approved"),
+      v.literal("denied"),
     ),
-    content: v.string(),
-    toolCalls: v.optional(v.array(v.any())),
-    toolResults: v.optional(v.array(v.any())),
-    tokens: v.number(),
     createdAt: v.number(),
-  }).index("by_conversationId", ["conversationId"]),
+    decidedAt: v.optional(v.number()),
+  })
+    .index("by_userId", ["userId"])
+    .index("by_thread", ["threadId"])
+    .index("by_toolCallId", ["toolCallId"]),
+
+  // "What Sigma knows" — simple per-user facts (name/preferences style).
+  sigmaMemories: defineTable({
+    userId: v.id("users"),
+    content: v.string(),
+    createdAt: v.number(),
+  }).index("by_userId", ["userId"]),
 });

@@ -27,6 +27,7 @@
     "@react-email/preview": "^0.0.14",
     "@react-email/text": "^0.1.6",
     "@serwist/next": "^9.5.5",
+    "@shadcn/react": "^0.3.1",
     "@t3-oss/env-nextjs": "^0.13.11",
     "@tanstack/react-query": "^5.102.8",
     "@tanstack/react-table": "^8.21.3",

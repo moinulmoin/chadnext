@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { SigmaMemories } from "@/components/dashboard/sigma-memories";
 import { api } from "../../../../convex/_generated/api";
 
 export default function SettingsPage() {
@@ -225,6 +226,8 @@ export default function SettingsPage() {
           </div>
         </CardContent>
       </Card>
+
+      <SigmaMemories />
     </div>
   );
 }

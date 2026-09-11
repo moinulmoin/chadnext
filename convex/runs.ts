@@ -1,6 +1,3 @@
-import { createAnthropic } from "@ai-sdk/anthropic";
-import { createGateway } from "@ai-sdk/gateway";
-import { createOpenAI } from "@ai-sdk/openai";
 import { generateText } from "ai";
 import { paginationOptsValidator } from "convex/server";
 import { ConvexError, type GenericId, v } from "convex/values";
@@ -13,7 +10,12 @@ import {
   mutation,
   query,
 } from "./_generated/server";
-import { aiProvider, defaultModelId, type AIProviderKind } from "./aiConfig";
+import {
+  aiProvider,
+  defaultModelId,
+  resolveLanguageModel,
+} from "./aiConfig";
+import { authComponent } from "./auth";
 import { FREE_RUNS_PER_DAY } from "./limits";
 
 const MAX_INSTRUCTION_LENGTH = 2000;
@@ -45,12 +47,30 @@ const runValidator = v.object({
   completedAt: v.optional(v.number()),
 });
 
-function requireUserId(ctx: unknown): GenericId<"users"> {
-  const userId = (ctx as { userId?: GenericId<"users"> }).userId;
-  if (!userId) {
+const statsValidator = v.object({
+  totalRuns: v.number(),
+  runsToday: v.number(),
+  tokensThisMonth: v.number(),
+});
+
+/**
+ * Resolve the signed-in app user (better-auth identity → users row).
+ * Works in query/mutation contexts; actions resolve via
+ * `internal.users.getUserIdInternal` (scheduler/action contexts carry no auth).
+ */
+async function requireUserId(ctx: unknown): Promise<GenericId<"users">> {
+  const authUser = await authComponent.safeGetAuthUser(ctx as any);
+  if (!authUser) {
     throw new ConvexError("Unauthorized");
   }
-  return userId;
+  const user = await (ctx as { db: any }).db
+    .query("users")
+    .withIndex("by_email", (q: any) => q.eq("email", authUser.email))
+    .first();
+  if (!user) {
+    throw new ConvexError("Unauthorized");
+  }
+  return user._id as GenericId<"users">;
 }
 
 function startOfUtcDay(time = Date.now()): number {
@@ -81,19 +101,6 @@ In real mode, the finished artifact would appear here: a concise, well-structure
 Add \`VERCEL_AI_GATEWAY_API_KEY\` (or \`OPENAI_API_KEY\` / \`ANTHROPIC_API_KEY\`) to your deployment env to switch future runs to a real model.`;
 }
 
-function resolveLanguageModel(provider: AIProviderKind, modelId: string) {
-  switch (provider) {
-    case "gateway":
-      return createGateway()(modelId);
-    case "openai":
-      return createOpenAI()(modelId);
-    case "anthropic":
-      return createAnthropic()(modelId);
-    default:
-      throw new ConvexError("No AI provider configured");
-  }
-}
-
 export const list = query({
   args: { paginationOpts: paginationOptsValidator },
   returns: v.object({
@@ -102,7 +109,7 @@ export const list = query({
     continueCursor: v.string(),
   }),
   handler: async (ctx, args) => {
-    const userId = requireUserId(ctx);
+    const userId = await requireUserId(ctx);
 
     return await ctx.db
       .query("runs")
@@ -116,7 +123,7 @@ export const get = query({
   args: { runId: v.id("runs") },
   returns: v.union(runValidator, v.null()),
   handler: async (ctx, args) => {
-    const userId = requireUserId(ctx);
+    const userId = await requireUserId(ctx);
     const run = await ctx.db.get(args.runId);
 
     if (!run || run.userId !== userId) {
@@ -129,28 +136,10 @@ export const get = query({
 
 export const getStats = query({
   args: {},
-  returns: v.object({
-    totalRuns: v.number(),
-    runsToday: v.number(),
-    tokensThisMonth: v.number(),
-  }),
+  returns: statsValidator,
   handler: async (ctx) => {
-    const userId = requireUserId(ctx);
-    const runs = await ctx.db
-      .query("runs")
-      .withIndex("by_userId", (q: any) => q.eq("userId", userId))
-      .collect();
-
-    const monthStart = startOfUtcMonth();
-    const dayStart = startOfUtcDay();
-
-    return {
-      totalRuns: runs.length,
-      runsToday: runs.filter((run: any) => run.createdAt >= dayStart).length,
-      tokensThisMonth: runs
-        .filter((run: any) => run.createdAt >= monthStart)
-        .reduce((sum: number, run: any) => sum + run.tokensUsed, 0),
-    };
+    const userId = await requireUserId(ctx);
+    return await ctx.runQuery(internal.runs.getStatsInternal, { userId });
   },
 });
 
@@ -158,36 +147,10 @@ export const createRun = mutation({
   args: { instruction: v.string() },
   returns: v.id("runs"),
   handler: async (ctx, args) => {
-    const userId = requireUserId(ctx);
-    const instruction = args.instruction.trim();
-
-    if (instruction.length < 1 || instruction.length > MAX_INSTRUCTION_LENGTH) {
-      throw new ConvexError(
-        `Instruction must be between 1 and ${MAX_INSTRUCTION_LENGTH} characters.`,
-      );
-    }
-
-    const dayStart = startOfUtcDay();
-    const runs = await ctx.db
-      .query("runs")
-      .withIndex("by_userId", (q: any) => q.eq("userId", userId))
-      .collect();
-    const runsToday = runs.filter((run: any) => run.createdAt >= dayStart).length;
-
-    if (runsToday >= FREE_RUNS_PER_DAY) {
-      throw new ConvexError(
-        `Free plan limited to ${FREE_RUNS_PER_DAY} runs per day. Upgrade to Pro for unlimited runs.`,
-      );
-    }
-
-    return await ctx.db.insert("runs", {
+    const userId = await requireUserId(ctx);
+    return await ctx.runMutation(internal.runs.createRunInternal, {
       userId,
-      instruction,
-      status: "queued",
-      tokensUsed: 0,
-      costCents: 0,
-      model: defaultModelId(),
-      createdAt: Date.now(),
+      instruction: args.instruction,
     });
   },
 });
@@ -196,21 +159,11 @@ export const retryRun = mutation({
   args: { runId: v.id("runs") },
   returns: v.null(),
   handler: async (ctx, args) => {
-    const userId = requireUserId(ctx);
-    const run = await ctx.db.get(args.runId);
-
-    if (!run || run.userId !== userId) {
-      throw new ConvexError("Run not found");
-    }
-    if (run.status !== "failed") {
-      throw new ConvexError("Only failed runs can be retried.");
-    }
-
-    await ctx.db.patch(args.runId, {
-      status: "queued",
-      errorMessage: undefined,
+    const userId = await requireUserId(ctx);
+    return await ctx.runMutation(internal.runs.retryRunInternal, {
+      userId,
+      runId: args.runId,
     });
-    return null;
   },
 });
 
@@ -218,15 +171,11 @@ export const deleteRun = mutation({
   args: { runId: v.id("runs") },
   returns: v.null(),
   handler: async (ctx, args) => {
-    const userId = requireUserId(ctx);
-    const run = await ctx.db.get(args.runId);
-
-    if (!run || run.userId !== userId) {
-      throw new ConvexError("Run not found");
-    }
-
-    await ctx.db.delete(args.runId);
-    return null;
+    const userId = await requireUserId(ctx);
+    return await ctx.runMutation(internal.runs.deleteRunInternal, {
+      userId,
+      runId: args.runId,
+    });
   },
 });
 
@@ -234,7 +183,10 @@ export const processRun = action({
   args: { runId: v.id("runs") },
   returns: v.null(),
   handler: async (ctx, args) => {
-    const userId = requireUserId(ctx);
+    const userId = await ctx.runQuery(internal.users.getUserIdInternal, {});
+    if (!userId) {
+      throw new ConvexError("Unauthorized");
+    }
     const run = await ctx.runQuery(internal.runs.getRunInternal, {
       runId: args.runId,
     });
@@ -287,6 +239,119 @@ export const processRun = action({
       });
     }
 
+    return null;
+  },
+});
+
+/**
+ * Business logic below is owned by runs.ts and takes an explicit userId so
+ * both the UI path (auth-derived) and the Sigma path (Confirm-Gate-approved,
+ * scheduler-invoked) reuse it without duplication.
+ */
+
+export const getStatsInternal = internalQuery({
+  args: { userId: v.id("users") },
+  returns: statsValidator,
+  handler: async (ctx, args) => {
+    const runs = await ctx.db
+      .query("runs")
+      .withIndex("by_userId", (q: any) => q.eq("userId", args.userId))
+      .collect();
+
+    const monthStart = startOfUtcMonth();
+    const dayStart = startOfUtcDay();
+
+    return {
+      totalRuns: runs.length,
+      runsToday: runs.filter((run: any) => run.createdAt >= dayStart).length,
+      tokensThisMonth: runs
+        .filter((run: any) => run.createdAt >= monthStart)
+        .reduce((sum: number, run: any) => sum + run.tokensUsed, 0),
+    };
+  },
+});
+
+export const listRecentInternal = internalQuery({
+  args: { userId: v.id("users"), limit: v.number() },
+  returns: v.array(runValidator),
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("runs")
+      .withIndex("by_userId", (q: any) => q.eq("userId", args.userId))
+      .order("desc")
+      .take(args.limit);
+  },
+});
+
+export const createRunInternal = internalMutation({
+  args: { userId: v.id("users"), instruction: v.string() },
+  returns: v.id("runs"),
+  handler: async (ctx, args) => {
+    const instruction = args.instruction.trim();
+
+    if (instruction.length < 1 || instruction.length > MAX_INSTRUCTION_LENGTH) {
+      throw new ConvexError(
+        `Instruction must be between 1 and ${MAX_INSTRUCTION_LENGTH} characters.`,
+      );
+    }
+
+    const dayStart = startOfUtcDay();
+    const runs = await ctx.db
+      .query("runs")
+      .withIndex("by_userId", (q: any) => q.eq("userId", args.userId))
+      .collect();
+    const runsToday = runs.filter((run: any) => run.createdAt >= dayStart).length;
+
+    if (runsToday >= FREE_RUNS_PER_DAY) {
+      throw new ConvexError(
+        `Free plan limited to ${FREE_RUNS_PER_DAY} runs per day. Upgrade to Pro for unlimited runs.`,
+      );
+    }
+
+    return await ctx.db.insert("runs", {
+      userId: args.userId,
+      instruction,
+      status: "queued",
+      tokensUsed: 0,
+      costCents: 0,
+      model: defaultModelId(),
+      createdAt: Date.now(),
+    });
+  },
+});
+
+export const retryRunInternal = internalMutation({
+  args: { userId: v.id("users"), runId: v.id("runs") },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const run = await ctx.db.get(args.runId);
+
+    if (!run || run.userId !== args.userId) {
+      throw new ConvexError("Run not found");
+    }
+    if (run.status !== "failed") {
+      throw new ConvexError("Only failed runs can be retried.");
+    }
+
+    await ctx.db.patch(args.runId, {
+      status: "queued",
+      errorMessage: undefined,
+    });
+    return null;
+  },
+});
+
+export const deleteRunInternal = internalMutation({
+  args: { userId: v.id("users"), runId: v.id("runs") },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const run = await ctx.db.get(args.runId);
+
+    if (!run || run.userId !== args.userId) {
+      throw new ConvexError("Run not found");
+    }
+
+    await ctx.db.delete(args.runId);
     return null;
   },
 });
