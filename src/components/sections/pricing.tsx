@@ -33,7 +33,7 @@ export function PricingSection() {
             <ul className="mt-8 space-y-4">
               <li className="flex items-center">
                 <Check className="mr-2 h-4 w-4 text-primary" />
-                <span className="text-muted-foreground">3 projects max</span>
+                <span className="text-muted-foreground">10 runs/day</span>
               </li>
               <li className="flex items-center">
                 <Check className="mr-2 h-4 w-4 text-primary" />
@@ -69,7 +69,7 @@ export function PricingSection() {
             <ul className="mt-8 space-y-4">
               <li className="flex items-center">
                 <Check className="mr-2 h-4 w-4 text-primary" />
-                <span className="text-muted-foreground font-medium">Unlimited projects</span>
+                <span className="text-muted-foreground font-medium">Unlimited runs</span>
               </li>
               <li className="flex items-center">
                 <Check className="mr-2 h-4 w-4 text-primary" />

@@ -9,3 +9,7 @@ export const components = {
 };
 
 export const api = anyApi;
+
+// Loose stub for internal function references (internal.runs.x) — replaced by
+// real codegen when `npx convex dev` runs.
+export const internal = anyApi;

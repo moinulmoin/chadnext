@@ -68,6 +68,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.102.8
         version: 5.102.8(react@19.3.0)
+      '@tanstack/react-table':
+        specifier: ^8.21.3
+        version: 8.21.3(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       ai:
         specifier: ^7.0.97
         version: 7.0.97(zod@4.3.6)
@@ -128,6 +131,9 @@ importers:
       react-hook-form:
         specifier: ^7.71.1
         version: 7.71.1(react@19.3.0)
+      react-markdown:
+        specifier: ^10.1.0
+        version: 10.1.0(@types/react@19.2.14)(react@19.3.0)(supports-color@7.2.0)
       remeda:
         specifier: ^2.33.6
         version: 2.33.6
@@ -4037,6 +4043,9 @@ packages:
     resolution: {integrity: sha512-qY60FjREgVZL03vJU6IfMV4GDjGBIoOyvuFdpBDIX9yTlDw0TjxVBQp+P8NvpdIXNJvfWBTNul7fsAQJq2FNpg==}
     engines: {node: '>=14'}
 
+  html-url-attributes@3.0.1:
+    resolution: {integrity: sha512-ol6UPyBWqsrO6EJySPz2O7ZSr856WDrEzM5zMqp+FJJLGMW35cLYmmZnl0vztAZxRUoNZJFTCohfjuIJ8I4QBQ==}
+
   html-void-elements@3.0.0:
     resolution: {integrity: sha512-bEqo66MRXsUGxWHV5IP0PUiAWwoEjba4VCzg0LjFJBpchPaTfyfCKTG6bc5F8ucKec3q5y6qOdGyYTSBEvhCrg==}
 
@@ -5164,6 +5173,12 @@ packages:
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+
+  react-markdown@10.1.0:
+    resolution: {integrity: sha512-qKxVopLT/TyA6BX3Ue5NwabOsAzm0Q7kAPwq6L+wWDwisYs7R8vZ0nRXqq6rkueboxpkjvLGU9fWifiX/ZZFxQ==}
+    peerDependencies:
+      '@types/react': '>=18'
+      react: '>=18'
 
   react-medium-image-zoom@5.4.0:
     resolution: {integrity: sha512-BsE+EnFVQzFIlyuuQrZ9iTwyKpKkqdFZV1ImEQN573QPqGrIUuNni7aF+sZwDcxlsuOMayCr6oO/PZR/yJnbRg==}
@@ -10037,6 +10052,8 @@ snapshots:
       htmlparser2: 8.0.2
       selderee: 0.11.0
 
+  html-url-attributes@3.0.1: {}
+
   html-void-elements@3.0.0: {}
 
   htmlparser2@8.0.2:
@@ -11386,6 +11403,24 @@ snapshots:
       react: 19.3.0
 
   react-is@16.13.1: {}
+
+  react-markdown@10.1.0(@types/react@19.2.14)(react@19.3.0)(supports-color@7.2.0):
+    dependencies:
+      '@types/hast': 3.0.4
+      '@types/mdast': 4.0.4
+      '@types/react': 19.2.14
+      devlop: 1.1.0
+      hast-util-to-jsx-runtime: 2.3.6(supports-color@7.2.0)
+      html-url-attributes: 3.0.1
+      mdast-util-to-hast: 13.2.1
+      react: 19.3.0
+      remark-parse: 11.0.0(supports-color@7.2.0)
+      remark-rehype: 11.1.2
+      unified: 11.0.5
+      unist-util-visit: 5.1.0
+      vfile: 6.0.3
+    transitivePeerDependencies:
+      - supports-color
 
   react-medium-image-zoom@5.4.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0):
     dependencies:

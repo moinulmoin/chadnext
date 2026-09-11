@@ -1,9 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { RunStatsCards } from "@/components/dashboard/run-stats-cards";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { isAuthenticated } from "@/lib/auth-server";
@@ -40,35 +40,7 @@ export default async function DashboardPage() {
           <p className="text-muted-foreground">Welcome to your workspace.</p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
-          <Card>
-            <CardHeader>
-              <CardDescription>Total Users</CardDescription>
-              <CardTitle className="text-3xl">0</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-xs text-muted-foreground">Placeholder</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardDescription>Revenue</CardDescription>
-              <CardTitle className="text-3xl">$0</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-xs text-muted-foreground">Placeholder</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardDescription>Active Projects</CardDescription>
-              <CardTitle className="text-3xl">0</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-xs text-muted-foreground">Placeholder</p>
-            </CardContent>
-          </Card>
-        </div>
+        <RunStatsCards />
       </main>
     </div>
   );

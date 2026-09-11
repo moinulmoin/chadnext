@@ -12,15 +12,25 @@ export default defineSchema({
     updatedAt: v.number(),
   }).index("by_email", ["email"]),
 
-  projects: defineTable({
+  runs: defineTable({
     userId: v.id("users"),
-    name: v.string(),
-    description: v.optional(v.string()),
-    status: v.union(v.literal("active"), v.literal("archived")),
-    domain: v.optional(v.string()),
+    instruction: v.string(),
+    status: v.union(
+      v.literal("queued"),
+      v.literal("running"),
+      v.literal("succeeded"),
+      v.literal("failed"),
+    ),
+    output: v.optional(v.string()),
+    errorMessage: v.optional(v.string()),
+    tokensUsed: v.number(),
+    costCents: v.number(),
+    model: v.string(),
     createdAt: v.number(),
-    updatedAt: v.number(),
-  }).index("by_userId", ["userId"]),
+    completedAt: v.optional(v.number()),
+  })
+    .index("by_userId", ["userId"])
+    .index("by_userId_and_status", ["userId", "status"]),
 
   conversations: defineTable({
     userId: v.id("users"),

@@ -37,30 +37,37 @@ export type DataModel = {
     searchIndexes: {};
     vectorIndexes: {};
   };
-  projects: {
+  runs: {
     document: {
-      _id: GenericId<"projects">;
+      _id: GenericId<"runs">;
       _creationTime: number;
       userId: GenericId<"users">;
-      name: string;
-      description?: string;
-      status: "active" | "archived";
-      domain?: string;
+      instruction: string;
+      status: "queued" | "running" | "succeeded" | "failed";
+      output?: string;
+      errorMessage?: string;
+      tokensUsed: number;
+      costCents: number;
+      model: string;
       createdAt: number;
-      updatedAt: number;
+      completedAt?: number;
     };
     fieldPaths:
       | "_id"
       | "_creationTime"
       | "userId"
-      | "name"
-      | "description"
+      | "instruction"
       | "status"
-      | "domain"
+      | "output"
+      | "errorMessage"
+      | "tokensUsed"
+      | "costCents"
+      | "model"
       | "createdAt"
-      | "updatedAt";
+      | "completedAt";
     indexes: {
       by_userId: ["userId"];
+      by_userId_and_status: ["userId", "status"];
     };
     searchIndexes: {};
     vectorIndexes: {};
