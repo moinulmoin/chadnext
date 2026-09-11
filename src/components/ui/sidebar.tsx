@@ -83,7 +83,6 @@ function SidebarProvider({
       }
 
       // This sets the cookie to keep the sidebar state.
-      // @ts-ignore
       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
     },
     [setOpenProp, open]
@@ -96,8 +95,7 @@ function SidebarProvider({
 
   // Adds a keyboard shortcut to toggle the sidebar.
   React.useEffect(() => {
-    // @ts-ignore
-    const handleKeyDown = (event: any) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (
         event.key === SIDEBAR_KEYBOARD_SHORTCUT &&
         (event.metaKey || event.ctrlKey)
@@ -107,9 +105,7 @@ function SidebarProvider({
       }
     }
 
-    // @ts-ignore
     window.addEventListener("keydown", handleKeyDown)
-    // @ts-ignore
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [toggleSidebar])
 
@@ -610,10 +606,14 @@ function SidebarMenuSkeleton({
 }: React.ComponentProps<"div"> & {
   showIcon?: boolean
 }) {
-  // Random width between 50 to 90%.
+  // Stable pseudo-random width between 50 to 90%. Derived from useId so the
+  // render stays pure (react-hooks/purity) and SSR/CSR output matches.
+  const id = React.useId()
   const width = React.useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`
-  }, [])
+    const digits = id.replace(/\D/g, "")
+    const n = Number.parseInt(digits.slice(-2) || "0", 10)
+    return `${(Number.isNaN(n) ? 0 : n) % 41 + 50}%`
+  }, [id])
 
   return (
     <div

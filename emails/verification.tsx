@@ -28,8 +28,8 @@ export function VerificationEmail({
             <Text style={code}>{otp}</Text>
           </div>
           <Text style={footerText}>
-            This code will expire in 10 minutes. If you didn't request this code,
-            please ignore this email.
+            This code will expire in 10 minutes. If you didn&apos;t request this
+            code, please ignore this email.
           </Text>
         </div>
       </div>

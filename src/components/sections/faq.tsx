@@ -40,7 +40,7 @@ export function FAQSection() {
           Frequently Asked Questions
         </h2>
         <p className="max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-          Got questions? We've got answers.
+          Got questions? We&apos;ve got answers.
         </p>
       </div>
       

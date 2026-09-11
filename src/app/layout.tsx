@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import ConvexClientProvider from "../../convex/ConvexProvider";
 import QueryProvider from "@/components/shared/query-provider";
+import PostHogProvider from "@/components/shared/posthog-provider";
 import ThemeProvider from "@/components/shared/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
@@ -61,14 +62,16 @@ export default function RootLayout({
       >
         <RootProvider>
           <QueryProvider>
-            <ConvexClientProvider>
-              <ThemeProvider>
-                <TooltipProvider>
-                  {children}
-                </TooltipProvider>
-                <Toaster />
-              </ThemeProvider>
-            </ConvexClientProvider>
+            <PostHogProvider>
+              <ConvexClientProvider>
+                <ThemeProvider>
+                  <TooltipProvider>
+                    {children}
+                  </TooltipProvider>
+                  <Toaster />
+                </ThemeProvider>
+              </ConvexClientProvider>
+            </PostHogProvider>
           </QueryProvider>
         </RootProvider>
       </body>

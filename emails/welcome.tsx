@@ -18,11 +18,11 @@ export function WelcomeEmail({
         <div style={content}>
           <Text style={title}>{greeting}</Text>
           <Text style={text}>
-            We're excited to have you on board. You've just joined {appName},
-            and we can't wait to see what you'll build.
+            We&apos;re excited to have you on board. You&apos;ve just joined{" "}
+            {appName}, and we can&apos;t wait to see what you&apos;ll build.
           </Text>
 
-          <Text style={heading}>What's next?</Text>
+          <Text style={heading}>What&apos;s next?</Text>
 
           <div style={featureList}>
             <Text style={featureText}>

@@ -91,11 +91,13 @@ export default function RunsPage() {
 
   const createRun = useMutation(api.runs.createRun);
   const processRun = useMutation(api.runs.processRun);
+  const seedDemoRuns = useMutation(api.seed.seedDemoRuns);
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [instruction, setInstruction] = useState("");
   const [createError, setCreateError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSeeding, setIsSeeding] = useState(false);
 
   const runs = runsQuery.data?.page ?? [];
   const runsToday = statsQuery.data?.runsToday ?? 0;
@@ -155,6 +157,24 @@ export default function RunsPage() {
     }
   };
 
+  const handleSeedDemoData = async () => {
+    setIsSeeding(true);
+    try {
+      const { inserted } = await seedDemoRuns({});
+      toast.success(
+        inserted > 0
+          ? `Loaded ${inserted} demo runs`
+          : "You already have runs — demo data skipped",
+      );
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to load demo data.";
+      toast.error("Couldn't load demo data", { description: message });
+    } finally {
+      setIsSeeding(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -206,7 +226,7 @@ export default function RunsPage() {
                   rows={5}
                   maxLength={MAX_INSTRUCTION_LENGTH}
                   value={instruction}
-                  onChange={(e: any) => setInstruction(e.target.value)}
+                  onChange={(e) => setInstruction(e.target.value)}
                 />
               </div>
 
@@ -276,6 +296,20 @@ export default function RunsPage() {
               <p className="text-sm text-muted-foreground">
                 Start your first run to see the AI job loop in action.
               </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button size="sm" onClick={() => setDialogOpen(true)}>
+                <Play className="mr-2 h-4 w-4" />
+                New Run
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={isSeeding}
+                onClick={handleSeedDemoData}
+              >
+                {isSeeding ? "Loading..." : "Load demo data"}
+              </Button>
             </div>
           </CardContent>
         </Card>

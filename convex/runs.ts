@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any
+   -- loose ctx/any types until `npx convex dev` generates the real
+   codegen; mirrors the established pattern across convex/. */
+
 import { generateText } from "ai";
 import { paginationOptsValidator } from "convex/server";
 import { ConvexError, type GenericId, v } from "convex/values";

@@ -45,6 +45,16 @@ export function Footer() {
                   Twitter
                 </Link>
               </li>
+              <li>
+                <Link href="/privacy" className="hover:text-primary transition-colors">
+                  Privacy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="hover:text-primary transition-colors">
+                  Terms
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

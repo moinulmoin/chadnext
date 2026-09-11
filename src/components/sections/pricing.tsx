@@ -18,7 +18,7 @@ export function PricingSection() {
           Simple, transparent pricing
         </h2>
         <p className="max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-          Choose the plan that's right for you. No hidden fees.
+          Choose the plan that&apos;s right for you. No hidden fees.
         </p>
       </div>
       

@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any
+   -- loose ctx/any types until `npx convex dev` generates the real
+   codegen; mirrors the established pattern across convex/. */
+
 import { ConvexError, type GenericId, v } from "convex/values";
 
 import { internalQuery, mutation, query } from "./_generated/server";
@@ -118,7 +122,7 @@ export const updateProfile = mutation({
       if (user?.picture) {
         try {
           await ctx.storage.delete(user.picture as GenericId<"_storage">);
-        } catch (e) {
+        } catch {
           // Storage might not exist, continue with update
         }
       }

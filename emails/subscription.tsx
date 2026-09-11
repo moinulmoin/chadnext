@@ -18,7 +18,7 @@ export function SubscriptionEmail({
     <Html>
       <div style={container}>
         <div style={content}>
-          <Text style={title}>You've been upgraded to {planName}!</Text>
+          <Text style={title}>You&apos;ve been upgraded to {planName}!</Text>
           <Text style={text}>
             {greeting} Great news! Your {appName} account has been successfully
             upgraded to the {planName} plan.
@@ -46,8 +46,8 @@ export function SubscriptionEmail({
           </div>
 
           <Text style={text}>
-            Start exploring your new {planName} features right away. We're here
-            to help you make the most of your upgrade.
+            Start exploring your new {planName} features right away. We&apos;re
+            here to help you make the most of your upgrade.
           </Text>
 
           <Text style={footerText}>

@@ -34,6 +34,8 @@ export const env = createEnv({
 
     // Email (Resend)
     RESEND_API_KEY: z.string().optional(),
+    // Optional "From" header for outgoing email (Convex runtime reads it too).
+    RESEND_FROM: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_CONVEX_URL: z.string().optional(),
@@ -61,6 +63,7 @@ export const env = createEnv({
     POLAR_PRO_PRODUCT_ID: process.env.POLAR_PRO_PRODUCT_ID,
 
     RESEND_API_KEY: process.env.RESEND_API_KEY,
+    RESEND_FROM: process.env.RESEND_FROM,
 
     NEXT_PUBLIC_CONVEX_URL: process.env.NEXT_PUBLIC_CONVEX_URL,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,

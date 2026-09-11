@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export async function GET(request: Request) {
+export async function GET() {
   const title = "ChadNext v2 - AI SaaS Template";
   const description =
     "ChadNext v2 is an AI-focused indie SaaS starter template built with Next.js 16, " +

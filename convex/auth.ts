@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any
+   -- loose ctx/any types until `npx convex dev` generates the real
+   codegen; mirrors the established pattern across convex/. */
+
 import { components } from "./_generated/api";
 import { createClient, type GenericCtx } from "@convex-dev/better-auth";
 import { convex } from "@convex-dev/better-auth/plugins";
@@ -5,13 +9,12 @@ import { requireActionCtx } from "@convex-dev/better-auth/utils";
 import { betterAuth, type BetterAuthOptions } from "better-auth/minimal";
 import { emailOTP } from "better-auth/plugins";
 import { query } from "./_generated/server";
+import { internal } from "./_generated/api";
 import { v } from "convex/values";
 import authConfig from "./auth.config";
-import { resend } from "./email";
 
 const siteUrl =
   process.env.BETTER_AUTH_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-const resendFrom = process.env.RESEND_FROM_EMAIL ?? "ChadNext <onboarding@resend.dev>";
 
 export const authComponent = createClient<any>(components.betterAuth, {
   verbose: false,
@@ -33,15 +36,37 @@ export const createAuthOptions = (ctx: GenericCtx<any>) => {
         clientSecret: process.env.GITHUB_CLIENT_SECRET!,
       },
     },
+    databaseHooks: {
+      user: {
+        create: {
+          // Welcome email on first login/signup. Fires on the users-table row
+          // the convex adapter creates, so `user.id` is the app userId.
+          after: async (user: { id: string; name: string; email: string }) => {
+            try {
+              const actionCtx = requireActionCtx(ctx);
+              await actionCtx.runMutation(internal.email.sendWelcomeEmail, {
+                userId: user.id as any,
+                name: user.name ?? "",
+                email: user.email,
+              });
+            } catch (error) {
+              // A failed welcome email must never fail the signup itself.
+              console.error("[email] Welcome email failed", error);
+            }
+          },
+        },
+      },
+    },
     plugins: [
       emailOTP({
         async sendVerificationOTP({ email, otp, type }) {
-          await resend.sendEmail(requireActionCtx(ctx), {
-            from: resendFrom,
-            to: email,
-            subject: `Your ${type} code for ChadNext`,
-            text: `Your ${type} code is ${otp}. If you did not request this code, you can ignore this email.`,
-            html: `<p>Your <strong>${type}</strong> code is <strong>${otp}</strong>.</p><p>If you did not request this code, you can ignore this email.</p>`,
+          // Auth requests run in an action context; the email module enqueues
+          // the send durably from there (skips silently without a key).
+          const actionCtx = requireActionCtx(ctx);
+          await actionCtx.runMutation(internal.email.sendOtpEmail, {
+            email,
+            code: otp,
+            type,
           });
         },
       }),

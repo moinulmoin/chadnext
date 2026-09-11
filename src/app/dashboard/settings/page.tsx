@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, type ChangeEvent } from "react";
 import { Camera, Loader2, User } from "lucide-react";
 import { useMutation, useQuery } from "convex/react";
 import { toast } from "sonner";
@@ -30,7 +30,7 @@ export default function SettingsPage() {
     }
   };
 
-  const handleFileSelect = async (e: any) => {
+  const handleFileSelect = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -57,7 +57,7 @@ export default function SettingsPage() {
 
   const handleRemovePicture = async () => {
     if (fileInputRef.current) {
-      (fileInputRef.current as any).value = "";
+      fileInputRef.current.value = "";
     }
     setNewPictureFile(null);
     setPreviewUrl(null);
@@ -113,7 +113,7 @@ export default function SettingsPage() {
       }
       setNewPictureFile(null);
       if (fileInputRef.current) {
-        (fileInputRef.current as any).value = "";
+        fileInputRef.current.value = "";
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to update profile";
@@ -159,7 +159,7 @@ export default function SettingsPage() {
                   type="button"
                   variant="outline"
                   size="icon"
-                  onClick={() => (fileInputRef.current as any)?.click()}
+                  onClick={() => fileInputRef.current?.click()}
                 >
                   <Camera className="mr-2 h-4 w-4" />
                   Change
@@ -191,7 +191,7 @@ export default function SettingsPage() {
                 <Input
                   id="name"
                   value={name}
-                  onChange={(e: any) => setName(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                   disabled={isSaving}
                   placeholder="Your name"
                 />
