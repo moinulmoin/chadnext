@@ -46,7 +46,12 @@ export function resolveLanguageModel(
 ) {
   switch (provider) {
     case "gateway":
-      return createGateway()(modelId);
+      // The key must be passed explicitly: the SDK's fallback (Vercel OIDC)
+      // doesn't exist in the Convex runtime, so an unkeyed createGateway()
+      // 401s on every real call.
+      return createGateway({
+        apiKey: process.env.VERCEL_AI_GATEWAY_API_KEY,
+      })(modelId);
     case "openai":
       return createOpenAI()(modelId);
     case "anthropic":

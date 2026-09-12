@@ -13,12 +13,15 @@ import { internalMutation } from "./_generated/server";
  * emails/ in sync — they exist for future Next-side rendering.
  *
  * Zero-config rule: every send is skipped silently (debug log) when
- * RESEND_API_KEY is missing. Production sends also require flipping the
- * component's `testMode` to false (see the component README).
+ * RESEND_API_KEY is missing. The component's `testMode` is controlled by
+ * RESEND_TEST_MODE (default: real sends once a key exists — set
+ * RESEND_TEST_MODE="true" to constrain delivery to resend.dev test
+ * addresses).
  */
 
 export const resend = new Resend(components.resend, {
-  testMode: true,
+  // Default is REAL sends; "true" restricts delivery to test addresses.
+  testMode: process.env.RESEND_TEST_MODE === "true",
 });
 
 const APP_NAME = "ChadNext";
@@ -167,8 +170,9 @@ export const sendOtpEmail = internalMutation({
   returns: v.null(),
   handler: async (ctx, args) => {
     if (!emailEnabled()) {
+      // Never log the OTP code itself.
       console.debug(
-        `[email] RESEND_API_KEY not set — skipping OTP email to ${args.email}`,
+        `[email] email delivery disabled (no RESEND_API_KEY) — skipping OTP email to ${args.email}`,
       );
       return null;
     }
@@ -184,14 +188,18 @@ export const sendOtpEmail = internalMutation({
   },
 });
 
-/** Welcome email — triggered by better-auth's user.create databaseHook. */
+/**
+ * Welcome email — triggered by better-auth's user.create databaseHook. Takes
+ * name/email directly: better-auth hands the hook its COMPONENT user doc, so
+ * there is no app `users` id to pass here.
+ */
 export const sendWelcomeEmail = internalMutation({
-  args: { userId: v.id("users"), name: v.string(), email: v.string() },
+  args: { name: v.string(), email: v.string() },
   returns: v.null(),
   handler: async (ctx, args) => {
     if (!emailEnabled()) {
       console.debug(
-        `[email] RESEND_API_KEY not set — skipping welcome email to ${args.email}`,
+        `[email] email delivery disabled (no RESEND_API_KEY) — skipping welcome email to ${args.email}`,
       );
       return null;
     }

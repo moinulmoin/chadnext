@@ -139,6 +139,31 @@ export const getUserSubscription = query({
 });
 
 /**
+ * Checkout origins must match NEXT_PUBLIC_APP_URL (or localhost when unset,
+ * i.e. dev) — an attacker-supplied origin would otherwise control where
+ * Polar redirects the buyer after checkout.
+ */
+function isAllowedCheckoutOrigin(origin: string): boolean {
+  let candidate: URL;
+  try {
+    candidate = new URL(origin);
+  } catch {
+    return false;
+  }
+  const configured = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  if (!configured) {
+    return (
+      candidate.hostname === "localhost" || candidate.hostname === "127.0.0.1"
+    );
+  }
+  try {
+    return candidate.origin === new URL(configured).origin;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Hosted Polar checkout URL for the Pro product. Runs as an action because
  * checkout creation performs network I/O; the client redirects via
  * `window.location.href`. Returns null when billing is not configured so the
@@ -151,6 +176,12 @@ export const getCheckoutUrl = action({
     const user = await ctx.runQuery(internal.users.getCurrentUserInfoInternal, {});
     if (!user) {
       throw new ConvexError("Unauthorized");
+    }
+
+    if (!isAllowedCheckoutOrigin(args.origin)) {
+      throw new ConvexError(
+        "Checkout blocked: this origin does not match the configured app URL.",
+      );
     }
 
     const productId = proProductId();

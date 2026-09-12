@@ -32,7 +32,7 @@ const SUGGESTIONS = [
 function SigmaChat() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const initialQuery = searchParams.get("q");
+  const prefillQuery = searchParams.get("q");
 
   // Setup state: mock banner, model name.
   const statusQuery = useQuery(convexQuery(api.sigma.getChatStatus, {}));
@@ -48,15 +48,16 @@ function SigmaChat() {
   const [isSending, setIsSending] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // ⌘K / suggestion entry: pre-fill the input once from ?q=.
+  // ⌘K / suggestion entry: pre-fill the input from ?q=. Depends on the query
+  // value so a new ?q= pushed while already on this page re-applies;
+  // router.replace below clears the param, which makes the effect settle.
   useEffect(() => {
-    if (initialQuery) {
-      setInput(initialQuery);
+    if (prefillQuery) {
+      setInput(prefillQuery);
       inputRef.current?.focus();
       router.replace("/dashboard/chat");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [prefillQuery, router]);
 
   const messagesQuery = useUIMessages(
     api.sigma.listThreadMessages,

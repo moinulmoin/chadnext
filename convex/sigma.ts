@@ -82,9 +82,15 @@ async function assertThreadOwner(
   viewer: GenericId<"users">,
   threadId: string,
 ) {
-  const threadDoc = await getThreadMetadata(ctx as any, components.agent, {
-    threadId,
-  });
+  let threadDoc: { userId?: string } | null;
+  try {
+    // getThreadMetadata THROWS (never returns null) on a bad/unreachable id.
+    threadDoc = await getThreadMetadata(ctx as any, components.agent, {
+      threadId,
+    });
+  } catch {
+    throw new ConvexError("Thread not found");
+  }
   if (!threadDoc || threadDoc.userId !== viewer) {
     throw new ConvexError("Thread not found");
   }
@@ -94,6 +100,36 @@ async function assertThreadOwner(
 // ---------------------------------------------------------------------------
 // Approvals (Confirm Gate records)
 // ---------------------------------------------------------------------------
+
+/** Shape of an approvals record (mirrors convex/schema.ts). */
+type ApprovalRecord = {
+  _id: GenericId<"approvals">;
+  userId: GenericId<"users">;
+  threadId: string;
+  toolCallId: string;
+  toolName: string;
+  args: string;
+  status: "pending" | "approved" | "denied" | "consumed";
+  createdAt: number;
+  decidedAt?: number;
+};
+
+const approvalRecordValidator = v.object({
+  _id: v.id("approvals"),
+  userId: v.id("users"),
+  threadId: v.string(),
+  toolCallId: v.string(),
+  toolName: v.string(),
+  args: v.string(),
+  status: v.union(
+    v.literal("pending"),
+    v.literal("approved"),
+    v.literal("denied"),
+    v.literal("consumed"),
+  ),
+  createdAt: v.number(),
+  decidedAt: v.optional(v.number()),
+});
 
 export const recordPendingApproval = internalMutation({
   args: {
@@ -127,24 +163,7 @@ export const recordPendingApproval = internalMutation({
 
 export const getApprovalByToolCallId = internalQuery({
   args: { toolCallId: v.string() },
-  returns: v.union(
-    v.object({
-      _id: v.id("approvals"),
-      userId: v.id("users"),
-      threadId: v.string(),
-      toolCallId: v.string(),
-      toolName: v.string(),
-      args: v.string(),
-      status: v.union(
-        v.literal("pending"),
-        v.literal("approved"),
-        v.literal("denied"),
-      ),
-      createdAt: v.number(),
-      decidedAt: v.optional(v.number()),
-    }),
-    v.null(),
-  ),
+  returns: v.union(approvalRecordValidator, v.null()),
   handler: async (ctx, args) => {
     const record = await ctx.db
       .query("approvals")
@@ -187,7 +206,8 @@ export const listPendingApprovals = query({
 /**
  * Server-side Confirm Gate check executed before any gated business logic.
  * The tool wrapper refuses to run the mutation unless the approvals record
- * for this exact tool call is approved by the owning user.
+ * for this exact tool call is approved by the owning user. Consumed records
+ * are rejected too — one approval executes exactly one write.
  */
 async function assertApprovedToolCall(
   ctx: any,
@@ -195,10 +215,10 @@ async function assertApprovedToolCall(
   threadId: string | undefined,
   toolCallId: string,
   toolName: string,
-): Promise<{ args: string }> {
-  const record = await ctx.runQuery(internal.sigma.getApprovalByToolCallId, {
+): Promise<ApprovalRecord> {
+  const record = (await ctx.runQuery(internal.sigma.getApprovalByToolCallId, {
     toolCallId,
-  });
+  })) as ApprovalRecord | null;
   const owned =
     record &&
     record.userId === userId &&
@@ -305,6 +325,10 @@ export const denyToolCall = mutation({
     if (!record || record.userId !== viewer || record.threadId !== args.threadId) {
       throw new ConvexError("Approval not found");
     }
+    if (record.status !== "pending") {
+      return null; // Already decided/consumed; idempotent — an approved
+      // record must never flip straight to denied (audit corruption).
+    }
 
     // Denial: mark the record; the underlying runs mutations are never called.
     await ctx.db.patch(record._id, {
@@ -362,32 +386,49 @@ export const executeApprovedTool = internalAction({
 
     const parsed = JSON.parse(approval.args) as Record<string, unknown>;
     let resultText: string;
+    let succeeded = false;
     try {
       if (approval.toolName === "createRun") {
         const runId = await ctx.runMutation(internal.runs.createRunInternal, {
           userId: approval.userId,
           instruction: String(parsed.instruction ?? ""),
         });
+        // Process without a client trigger; the queued→running claim makes
+        // this safe to race with any other dispatcher.
+        await ctx.scheduler.runAfter(0, internal.runs.processRunInternal, {
+          runId,
+        });
         resultText = `Run created (id: ${runId}). It is queued and will process shortly.`;
+        succeeded = true;
       } else if (approval.toolName === "retryRun") {
         await ctx.runMutation(internal.runs.retryRunInternal, {
           userId: approval.userId,
           runId: String(parsed.runId ?? "") as GenericId<"runs">,
         });
         resultText = "Run re-queued for retry.";
+        succeeded = true;
       } else if (approval.toolName === "deleteRun") {
         await ctx.runMutation(internal.runs.deleteRunInternal, {
           userId: approval.userId,
           runId: String(parsed.runId ?? "") as GenericId<"runs">,
         });
         resultText = "Run deleted.";
+        succeeded = true;
       } else {
         resultText = `Done: ${approval.toolName}.`;
+        succeeded = true;
       }
     } catch (error) {
       resultText = `The approved action failed: ${
         error instanceof Error ? error.message : "unknown error"
       }`;
+    }
+
+    if (succeeded) {
+      // Consume-on-use: the approval is spent; it can never replay.
+      await ctx.runMutation(internal.sigma.markApprovalConsumed, {
+        toolCallId: approval.toolCallId,
+      });
     }
 
     await saveMessages(ctx, components.agent, {
@@ -401,27 +442,31 @@ export const executeApprovedTool = internalAction({
 
 export const getApprovalById = internalQuery({
   args: { approvalId: v.id("approvals") },
-  returns: v.union(
-    v.object({
-      _id: v.id("approvals"),
-      userId: v.id("users"),
-      threadId: v.string(),
-      toolCallId: v.string(),
-      toolName: v.string(),
-      args: v.string(),
-      status: v.union(
-        v.literal("pending"),
-        v.literal("approved"),
-        v.literal("denied"),
-      ),
-      createdAt: v.number(),
-      decidedAt: v.optional(v.number()),
-    }),
-    v.null(),
-  ),
+  returns: v.union(approvalRecordValidator, v.null()),
   handler: async (ctx, args) => {
     const record = await ctx.db.get(args.approvalId);
     return record ?? null;
+  },
+});
+
+/**
+ * Consume-on-use: after a gated tool executes successfully, retire the
+ * approval so the same record can never replay a second write. Only
+ * "approved" records transition; anything else is left untouched.
+ */
+export const markApprovalConsumed = internalMutation({
+  args: { toolCallId: v.string() },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const record = await ctx.db
+      .query("approvals")
+      .withIndex("by_toolCallId", (q: any) => q.eq("toolCallId", args.toolCallId))
+      .first();
+    if (!record || record.status !== "approved") {
+      return null;
+    }
+    await ctx.db.patch(record._id, { status: "consumed" });
+    return null;
   },
 });
 
@@ -568,6 +613,14 @@ const createRunTool = createTool({
       userId: ctx.userId as GenericId<"users">,
       instruction: args.instruction,
     });
+    // Schedule processing (no browser around to trigger it) and spend the
+    // approval — the CAS claim in processRunInternal makes races harmless.
+    await ctx.scheduler.runAfter(0, internal.runs.processRunInternal, {
+      runId,
+    });
+    await ctx.runMutation(internal.sigma.markApprovalConsumed, {
+      toolCallId: options.toolCallId,
+    });
     return { runId: String(runId), status: "queued" };
   },
 });
@@ -589,6 +642,9 @@ const retryRunTool = createTool({
     await ctx.runMutation(internal.runs.retryRunInternal, {
       userId: ctx.userId as GenericId<"users">,
       runId: args.runId as GenericId<"runs">,
+    });
+    await ctx.runMutation(internal.sigma.markApprovalConsumed, {
+      toolCallId: options.toolCallId,
     });
     return { ok: true, runId: args.runId, status: "queued" };
   },
@@ -612,6 +668,9 @@ const deleteRunTool = createTool({
       userId: ctx.userId as GenericId<"users">,
       runId: args.runId as GenericId<"runs">,
     });
+    await ctx.runMutation(internal.sigma.markApprovalConsumed, {
+      toolCallId: options.toolCallId,
+    });
     return { ok: true, runId: args.runId };
   },
 });
@@ -624,8 +683,11 @@ const providerKind = aiProvider();
 
 export const sigma = new Agent(components.agent, {
   name: "Sigma",
-  // Mock mode never reaches the LLM (see sendMessage); the mock model just
-  // satisfies the required constructor argument.
+  // NOTE: the Agent constructor requires a concrete language model here, so
+  // provider resolution is module-load-bound (env is re-read per isolate
+  // boot; deployment env changes restart isolates). Mock mode never reaches
+  // the LLM (see sendMessage); the mock model just satisfies the required
+  // constructor argument.
   languageModel:
     providerKind === "mock"
       ? mockModel()
@@ -974,7 +1036,10 @@ export const getChatStatus = query({
     mock: v.boolean(),
     model: v.string(),
   }),
-  handler: async () => {
+  handler: async (ctx) => {
+    // Auth required — provider/model names are internal setup detail, not
+    // anonymous surface area.
+    await requireViewer(ctx);
     const provider = aiProvider();
     return {
       provider,

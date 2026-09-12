@@ -51,6 +51,7 @@ export type DataModel = {
       model: string;
       createdAt: number;
       completedAt?: number;
+      isSeed?: boolean;
     };
     fieldPaths:
       | "_id"
@@ -64,64 +65,32 @@ export type DataModel = {
       | "costCents"
       | "model"
       | "createdAt"
-      | "completedAt";
+      | "completedAt"
+      | "isSeed";
     indexes: {
       by_userId: ["userId"];
       by_userId_and_status: ["userId", "status"];
+      by_status_and_createdAt: ["status", "createdAt"];
     };
     searchIndexes: {};
     vectorIndexes: {};
   };
-  conversations: {
+  usageCounters: {
     document: {
-      _id: GenericId<"conversations">;
+      _id: GenericId<"usageCounters">;
       _creationTime: number;
       userId: GenericId<"users">;
-      title?: string;
-      model?: string;
-      tokenCount?: number;
-      createdAt: number;
-      updatedAt: number;
+      day: string;
+      runsCreated: number;
     };
     fieldPaths:
       | "_id"
       | "_creationTime"
       | "userId"
-      | "title"
-      | "model"
-      | "tokenCount"
-      | "createdAt"
-      | "updatedAt";
+      | "day"
+      | "runsCreated";
     indexes: {
-      by_userId: ["userId"];
-    };
-    searchIndexes: {};
-    vectorIndexes: {};
-  };
-  messages: {
-    document: {
-      _id: GenericId<"messages">;
-      _creationTime: number;
-      conversationId: GenericId<"conversations">;
-      role: "user" | "assistant" | "system" | "tool";
-      content: string;
-      toolCalls?: any[];
-      toolResults?: any[];
-      tokens?: number;
-      createdAt: number;
-    };
-    fieldPaths:
-      | "_id"
-      | "_creationTime"
-      | "conversationId"
-      | "role"
-      | "content"
-      | "toolCalls"
-      | "toolResults"
-      | "tokens"
-      | "createdAt";
-    indexes: {
-      by_conversationId: ["conversationId"];
+      by_userId_and_day: ["userId", "day"];
     };
     searchIndexes: {};
     vectorIndexes: {};
@@ -136,7 +105,7 @@ export type DataModel = {
       toolCallId: string;
       toolName: string;
       args: string;
-      status: "pending" | "approved" | "denied";
+      status: "pending" | "approved" | "denied" | "consumed";
       createdAt: number;
       decidedAt?: number;
     };

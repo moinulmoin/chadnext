@@ -175,6 +175,9 @@ export const seedDemoRuns = mutation({
         // Seeded runs are terminal (succeeded/failed) — mirror completeRun/
         // failRun, which stamp completion ~immediately after creation.
         completedAt: createdAt + 30_000,
+        // Demo rows are excluded from quota accounting (usageCounters only
+        // tracks real creates).
+        isSeed: true,
       });
     }
 

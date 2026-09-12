@@ -1,23 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Component, useMemo, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMutation } from "convex/react";
+import { useMutation, usePaginatedQuery } from "convex/react";
 import { useQuery } from "@tanstack/react-query";
 import { convexQuery } from "@convex-dev/react-query";
-import {
-  type ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { ArrowLeft, ArrowRight, Play, Zap } from "lucide-react";
+import { ArrowDown, Loader2, Play, Zap } from "lucide-react";
 import { toast } from "sonner";
 
 import { api } from "../../../../convex/_generated/api";
-import type { Doc } from "../../../../convex/_generated/dataModel";
 import { RunStatusBadge } from "@/components/shared/run-status-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -43,49 +35,47 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { subscriptionPlans } from "@/config/subscription";
 import { timeAgo } from "@/lib/utils";
-type Run = Doc<"runs">;
 
 const MAX_INSTRUCTION_LENGTH = 2000;
 const RUNS_PAGE_SIZE = 100;
 const FREE_RUNS_PER_DAY = subscriptionPlans.free.maxRunsPerDay;
 
-const columns: ColumnDef<Run>[] = [
-  {
-    accessorKey: "instruction",
-    header: "Instruction",
-    cell: ({ row }) => (
-      <span className="block max-w-md truncate">{row.original.instruction}</span>
-    ),
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => <RunStatusBadge status={row.original.status} />,
-  },
-  {
-    accessorKey: "tokensUsed",
-    header: "Tokens",
-    cell: ({ row }) => (
-      <span className="tabular-nums">{row.original.tokensUsed.toLocaleString()}</span>
-    ),
-  },
-  {
-    accessorKey: "createdAt",
-    header: "Created",
-    cell: ({ row }) => (
-      <span className="text-muted-foreground">{timeAgo(row.original.createdAt)}</span>
-    ),
-  },
-];
+/**
+ * Convex `usePaginatedQuery` throws query errors during render (no isError
+ * field), so the page wraps itself in a boundary to keep the inline error
+ * card instead of crashing the route.
+ */
+class RunsErrorBoundary extends Component<
+  { children: ReactNode },
+  { error: Error | null }
+> {
+  state = { error: null as Error | null };
 
-export default function RunsPage() {
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <Card>
+          <CardContent className="py-10 text-center text-sm text-destructive">
+            Failed to load runs. Please try again.
+          </CardContent>
+        </Card>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+function RunsTable() {
   const router = useRouter();
 
-  const runsQuery = useQuery(
-    convexQuery(api.runs.list, {
-      paginationOpts: { numItems: RUNS_PAGE_SIZE, cursor: null },
-    }),
-  );
+  // Real cursor pagination: "Load more" below fetches the next page.
+  const runsQuery = usePaginatedQuery(api.runs.list, {}, {
+    initialNumItems: RUNS_PAGE_SIZE,
+  });
   const statsQuery = useQuery(convexQuery(api.runs.getStats, {}));
   const subscriptionQuery = useQuery(convexQuery(api.billing.getUserSubscription, {}));
 
@@ -99,17 +89,10 @@ export default function RunsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSeeding, setIsSeeding] = useState(false);
 
-  const runs = runsQuery.data?.page ?? [];
+  const runs = runsQuery.results;
   const runsToday = statsQuery.data?.runsToday ?? 0;
   const isPro = subscriptionQuery.data?.plan === "pro";
   const freeLimitReached = !isPro && runsToday >= FREE_RUNS_PER_DAY;
-
-  const table = useReactTable({
-    data: runs,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-  });
 
   const instructionLength = useMemo(() => instruction.trim().length, [instruction]);
 
@@ -137,7 +120,9 @@ export default function RunsPage() {
       setDialogOpen(false);
 
       // Fire-and-forget processing; the reactive subscription picks up the
-      // queued → running → succeeded/failed transitions.
+      // queued → running → succeeded/failed transitions. (The server also
+      // schedules processing as a safety net — the queued→running claim
+      // makes double dispatch harmless.)
       processRun({ runId }).catch((error) => {
         const message =
           error instanceof Error ? error.message : "Failed to start processing.";
@@ -275,16 +260,10 @@ export default function RunsPage() {
         </CardContent>
       </Card>
 
-      {runsQuery.isPending ? (
+      {runsQuery.status === "LoadingFirstPage" ? (
         <Card>
           <CardContent className="py-10 text-center text-sm text-muted-foreground">
             Loading runs...
-          </CardContent>
-        </Card>
-      ) : runsQuery.isError ? (
-        <Card>
-          <CardContent className="py-10 text-center text-sm text-destructive">
-            Failed to load runs. Please try again.
           </CardContent>
         </Card>
       ) : runs.length === 0 ? (
@@ -318,28 +297,36 @@ export default function RunsPage() {
           <CardContent className="px-0 pb-0">
             <Table>
               <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                      <TableHead key={header.id} className="px-4">
-                        {flexRender(header.column.columnDef.header, header.getContext())}
-                      </TableHead>
-                    ))}
-                  </TableRow>
-                ))}
+                <TableRow>
+                  <TableHead className="px-4">Instruction</TableHead>
+                  <TableHead className="px-4">Status</TableHead>
+                  <TableHead className="px-4">Tokens</TableHead>
+                  <TableHead className="px-4">Created</TableHead>
+                </TableRow>
               </TableHeader>
               <TableBody>
-                {table.getRowModel().rows.map((row) => (
+                {runs.map((run) => (
                   <TableRow
-                    key={row.id}
+                    key={run._id}
                     className="cursor-pointer"
-                    onClick={() => router.push(`/dashboard/runs/${row.original._id}`)}
+                    onClick={() => router.push(`/dashboard/runs/${run._id}`)}
                   >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} className="px-4">
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
+                    <TableCell className="px-4">
+                      <span className="block max-w-md truncate">{run.instruction}</span>
+                    </TableCell>
+                    <TableCell className="px-4">
+                      <RunStatusBadge status={run.status} />
+                    </TableCell>
+                    <TableCell className="px-4">
+                      <span className="tabular-nums">
+                        {run.tokensUsed.toLocaleString()}
+                      </span>
+                    </TableCell>
+                    <TableCell className="px-4">
+                      <span className="text-muted-foreground">
+                        {timeAgo(run.createdAt)}
+                      </span>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -347,29 +334,24 @@ export default function RunsPage() {
 
             <div className="flex items-center justify-between border-t px-4 py-3">
               <p className="text-xs text-muted-foreground">
-                Page {table.getState().pagination.pageIndex + 1} of{" "}
-                {Math.max(table.getPageCount(), 1)}
+                Showing {runs.length} run{runs.length === 1 ? "" : "s"}
               </p>
-              <div className="flex items-center gap-2">
+              {runsQuery.status === "CanLoadMore" ? (
                 <Button
                   variant="outline"
                   size="sm"
-                  disabled={!table.getCanPreviousPage()}
-                  onClick={() => table.previousPage()}
+                  onClick={() => runsQuery.loadMore(RUNS_PAGE_SIZE)}
                 >
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  Previous
+                  Load more
+                  <ArrowDown className="ml-2 h-4 w-4" />
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={!table.getCanNextPage()}
-                  onClick={() => table.nextPage()}
-                >
-                  Next
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </div>
+              ) : null}
+              {runsQuery.status === "LoadingMore" ? (
+                <span className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  Loading...
+                </span>
+              ) : null}
             </div>
           </CardContent>
         </Card>
@@ -389,5 +371,13 @@ export default function RunsPage() {
           )}
       </p>
     </div>
+  );
+}
+
+export default function RunsPage() {
+  return (
+    <RunsErrorBoundary>
+      <RunsTable />
+    </RunsErrorBoundary>
   );
 }

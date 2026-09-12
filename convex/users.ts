@@ -7,12 +7,25 @@ import { ConvexError, type GenericId, v } from "convex/values";
 import { internalQuery, mutation, query } from "./_generated/server";
 import { authComponent } from "./auth";
 
-function requireUserId(ctx: unknown): GenericId<"users"> {
-  const userId = (ctx as { userId?: GenericId<"users"> }).userId;
-  if (!userId) {
+/**
+ * Resolve the signed-in app user from the better-auth identity.
+ * `ctx.userId` does not exist on Convex function contexts — the viewer is
+ * resolved via the auth component + the app `users` row (kept in sync by
+ * the triggers in convex/auth.ts).
+ */
+async function requireUserId(ctx: unknown): Promise<GenericId<"users">> {
+  const authUser = await authComponent.safeGetAuthUser(ctx as any);
+  if (!authUser) {
     throw new ConvexError("Unauthorized");
   }
-  return userId;
+  const user = await (ctx as { db: any }).db
+    .query("users")
+    .withIndex("by_email", (q: any) => q.eq("email", authUser.email))
+    .first();
+  if (!user) {
+    throw new ConvexError("Unauthorized");
+  }
+  return user._id as GenericId<"users">;
 }
 
 /**
@@ -99,15 +112,16 @@ export const getProfile = query({
 export const updateProfile = mutation({
   args: {
     name: v.optional(v.string()),
-    picture: v.optional(v.id("_storage")),
+    // null = remove the current picture (the settings page sends exactly this).
+    picture: v.optional(v.union(v.id("_storage"), v.null())),
   },
   returns: v.null(),
   handler: async (ctx, args) => {
-    const userId = requireUserId(ctx);
+    const userId = await requireUserId(ctx);
 
     const updates: {
       name?: string;
-      picture?: GenericId<"_storage"> | undefined;
+      picture?: GenericId<"_storage"> | null;
       updatedAt: number;
     } = {
       updatedAt: Date.now(),
@@ -126,9 +140,12 @@ export const updateProfile = mutation({
           // Storage might not exist, continue with update
         }
       }
-      updates.picture = args.picture;
-    } else if (args.picture === null && !args.name) {
-      updates.picture = undefined;
+      if (args.picture === null) {
+        // Clear the field (patching undefined removes it).
+        updates.picture = undefined;
+      } else {
+        updates.picture = args.picture;
+      }
     }
 
     await ctx.db.patch(userId, updates);
@@ -140,6 +157,10 @@ export const generateUploadUrl = mutation({
   args: {},
   returns: v.string(),
   handler: async (ctx) => {
+    // Uploads are a free resource — gate them behind auth.
+    await requireUserId(ctx);
+    // NOTE: `maxSizeBytes` needs a newer convex runtime than installed
+    // (1.31.7 takes no options); size limiting lands with the upgrade.
     return await ctx.storage.generateUploadUrl();
   },
 });

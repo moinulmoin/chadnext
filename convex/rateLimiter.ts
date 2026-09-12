@@ -2,7 +2,7 @@
    -- loose ctx/any types until `npx convex dev` generates the real
    codegen; mirrors the established pattern across convex/. */
 
-import { HOUR, MINUTE, RateLimiter } from "@convex-dev/rate-limiter";
+import { HOUR, RateLimiter } from "@convex-dev/rate-limiter";
 import { ConvexError, type GenericId, v } from "convex/values";
 
 import { components, internal } from "./_generated/api";
@@ -10,11 +10,12 @@ import { query } from "./_generated/server";
 import { authComponent } from "./auth";
 
 export const limiter = new RateLimiter(components.rateLimiter, {
-  chatMessagesPerMinute: {
+  // Run creation abuse guard, independent of the plan quota (runs.ts).
+  runCreation: {
     kind: "token bucket",
-    rate: 20,
-    period: MINUTE,
-    capacity: 20,
+    rate: 30,
+    period: HOUR,
+    capacity: 30,
   },
   // Sigma assistant messages, branched by plan at send time (the rate
   // limiter's TS types don't allow per-call config overrides for named

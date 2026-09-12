@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import ConvexClientProvider from "../../convex/ConvexProvider";
+import ConvexClientProvider from "@/components/shared/convex-provider";
 import QueryProvider from "@/components/shared/query-provider";
 import PostHogProvider from "@/components/shared/posthog-provider";
 import ThemeProvider from "@/components/shared/theme-provider";

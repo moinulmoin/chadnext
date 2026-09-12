@@ -36,6 +36,10 @@ export const env = createEnv({
     RESEND_API_KEY: z.string().optional(),
     // Optional "From" header for outgoing email (Convex runtime reads it too).
     RESEND_FROM: z.string().optional(),
+    // "true" keeps the Resend component in test mode (resend.dev addresses
+    // only). Unset/false = real sends once RESEND_API_KEY exists. Read by the
+    // Convex runtime (convex/email.ts); declared here so forks see the surface.
+    RESEND_TEST_MODE: z.string().optional(),
   },
   client: {
     NEXT_PUBLIC_CONVEX_URL: z.string().optional(),
@@ -64,6 +68,7 @@ export const env = createEnv({
 
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     RESEND_FROM: process.env.RESEND_FROM,
+    RESEND_TEST_MODE: process.env.RESEND_TEST_MODE,
 
     NEXT_PUBLIC_CONVEX_URL: process.env.NEXT_PUBLIC_CONVEX_URL,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
