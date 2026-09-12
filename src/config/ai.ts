@@ -7,12 +7,14 @@ import { env } from "@/lib/env";
 /**
  * AI provider resolution — "models swap, memory stays".
  *
- * Priority: Vercel AI Gateway (one key → any provider/model, zero markup)
- * → direct OpenAI → direct Anthropic → mock mode (deterministic, no key).
- *
- * This module is for Next.js-side code only. Convex actions (the Sigma
- * agent, run processing) resolve their provider from Convex env vars in
- * convex/aiConfig.ts using the same priority order.
+ * OPTIONAL module: nothing in the repo imports it. All in-product AI (the
+ * Sigma agent, run processing) runs in the Convex runtime and resolves its
+ * provider from Convex env vars in convex/aiConfig.ts — that is the
+ * canonical resolution. This file is kept as scaffolding for forkers adding
+ * Next.js-side AI features (route handlers, server actions, etc.), with the
+ * same priority: Vercel AI Gateway (one key → any provider/model, zero
+ * markup) → direct OpenAI → direct Anthropic → mock mode (deterministic,
+ * no key).
  */
 
 export type AIProviderKind = "gateway" | "openai" | "anthropic" | "mock";

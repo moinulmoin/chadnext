@@ -20,9 +20,9 @@ npx convex dev    # Convex backend — REQUIRES interactive login; ask the user 
 - **Convex is the only backend.** Data + business logic live in `convex/` with explicit validators and per-user ownership checks. Never add another database. Never call internal mutations without auth context.
 - **Auth**: better-auth (GitHub OAuth + Email OTP) via `@convex-dev/better-auth`. All dashboard data is scoped by `ctx.userId`.
 - **Billing**: Polar fixed tiers (Free/Pro) defined in `src/config/subscription.ts`. No usage-based/metered billing — ever.
-- **AI**: AI SDK v7. Provider resolution: `src/config/ai.ts` (Next-side) and `convex/aiConfig.ts` (Convex-side), priority = Vercel AI Gateway → OpenAI → Anthropic → mock. `@convex-dev/agent` v0.7+ uses `instructions:` (not `system:`).
+- **AI**: AI SDK v7. Provider resolution is **Convex-side** (`convex/aiConfig.ts`, priority = Vercel AI Gateway → OpenAI → Anthropic → mock) — that's where the Sigma agent and run processing execute. `src/config/ai.ts` is optional scaffolding for forkers adding Next.js-side AI features (nothing in the repo imports it). `@convex-dev/agent` v0.7+ uses `instructions:` (not `system:`).
 - **Client data layer**: TanStack Query via `@convex-dev/react-query` — use `convexQuery(api.x.y, args)` with `useQuery` from `@tanstack/react-query`. Native `convex/react` `useQuery` is allowed for quick internals but prefer the adapter for new pages.
-- **Env**: all Next-side env access goes through `src/lib/env.ts` (`@t3-oss/env-nextjs`). Never scatter `process.env` reads in `src/`. Convex-side code reads its own `process.env` (separate runtime).
+- **Env**: all Next-side env access goes through `src/lib/env.ts` (`@t3-oss/env-nextjs`). Never scatter `process.env` reads in `src/`. One documented exception: `src/lib/auth-server.ts` reads the better-auth/Convex URL vars directly (it needs the raw `BETTER_AUTH_URL` → `NEXT_PUBLIC_APP_URL` fallback chain before better-auth is initialized). Convex-side code reads its own `process.env` (separate runtime).
 - **Zero-config boot**: the app must build and render useful setup states with NO optional keys set (AI, Polar, Resend, PostHog all gracefully optional). Never add a hard dependency on a paid key.
 
 ## Project map
@@ -58,7 +58,7 @@ emails/            React Email templates (OTP, welcome, subscription) —
 - TypeScript strict; functional patterns; named exports for components.
 - Directories kebab-case. Files: component.tsx / hook in `src/hooks` / lib in `src/lib`.
 - Zod schemas colocated with the module that owns the data.
-- Copy existing patterns before inventing new ones: `convex/projects.ts` (auth'd CRUD), dashboard pages (loading/empty states), `emails/` templates.
+- Copy existing patterns before inventing new ones: `convex/runs.ts` (auth'd CRUD, public/internal split), dashboard pages (loading/empty states), `emails/` templates.
 - Comments only for constraints code can't express. No changelog comments.
 
 ## Extension recipes

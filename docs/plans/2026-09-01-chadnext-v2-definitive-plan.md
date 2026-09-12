@@ -37,7 +37,7 @@ What users/buyers of AI-native apps now expect (2026 consensus), mapped to what 
 | 5 | Memory/personalization as baseline (no longer premium) | Convex Agent built-in memory + "What Sigma knows" transparency panel | new |
 | 6 | Transparent usage limits + tiers | Billing page: usage meters (runs/day, tokens/mo), Free/Pro, enforced rate limits | new |
 | 7 | Fast first token / latency | Streaming-first UX; Convex reactive updates | new |
-| 8 | Feedback capture (thumbs) | 👍/👎 on run artifacts (light: two buttons + one mutation) | new (small) |
+| 8 | Feedback capture (thumbs) | 👍/👎 on run artifacts (light: two buttons + one mutation) | deferred to v2.1 |
 | 9 | BYOK — bring your own key | v2.0: app-level provider config (OpenAI/Anthropic via env). Per-user BYOK → **Pro** | partial |
 | 10 | Usage metering economics | Per-run token/cost tracking, displayed. Fixed-tier billing only (guardrail); usage-based billing → future | new |
 | 11 | Fast time-to-first-AI-value | Zero-config demo mode: runs work via deterministic mock with NO API keys | new |
@@ -51,7 +51,7 @@ What users/buyers of AI-native apps now expect (2026 consensus), mapped to what 
 ```
 runs: userId, instruction, status(queued|running|succeeded|failed),
       output(artifact), tokensUsed, costCents, model, createdAt, completedAt
-      indexes: by_userId, by_status
+      indexes: by_userId, by_userId_and_status, by_status_and_createdAt
 ```
 
 - Free plan limit becomes **runs/day + token metering** (upgrade prompt fires at moment of value).
@@ -63,7 +63,7 @@ runs: userId, instruction, status(queued|running|succeeded|failed),
 
 A dashboard assistant scoped to the logged-in user's data. NOT RAG, NOT a general chatbot, NOT a connectors hub.
 
-- **7 tools** — reads (auto-run): `listRuns`, `getRun`, `getDashboardStats`, `getSubscriptionStatus` · writes (gated): `createRun`, `retryRun`, `archiveRun`
+- **7 tools** — reads (auto-run): `listRuns`, `getRun`, `getDashboardStats`, `getSubscriptionStatus` · writes (gated): `createRun`, `retryRun`, `deleteRun`
 - **Confirm Gate:** mutations physically cannot execute without an approval record written by the user's click. Adversarial test case included (agent attempts ungated write).
 - **Generative UI:** answers render as live components — run table w/ status pills, artifact viewer, usage meter card (AI SDK tool→component mapping).
 - **Memory:** profile, plan, preferences. Transparency panel in Settings (view/edit/delete).
@@ -110,7 +110,7 @@ Selection criterion (user's): **easy to deploy and manage, not free-tier chasing
 |---|---|---|
 | **P1 Foundation** | Next 16.1.6→16.3 (security patch) · `ai@6→7` + `@convex-dev/agent→0.7+` (system→instructions) · Vercel AI Gateway provider wiring (gateway key + direct-key fallback) · `@t3-oss/env-nextjs` env module · `@convex-dev/react-query` adapter + QueryClientProvider (TanStack data layer) · AGENTS.md v1 + CLAUDE.md/.cursor/rules pointers · delete stale `.cursorrules`/`.windsurfrules` · build green | S-M |
 | **P2 Runs Loop** | Schema Projects→Runs (runs table, by_userId/by_status indexes) · CRUD + ownership checks · status machine queued/running/succeeded/failed · processing action (real via Gateway; deterministic mock no-key mode) · live status via reactivity · artifacts + viewer · tokensUsed/costCents metering · free-tier runs/day limit + upgrade prompt · `crons.ts` infra · Runs table UI on TanStack Table (shadcn DataTable) · Runs pages + Home stats | M-L |
-| **P3 Sigma** | Agent definition (instructions, model via Gateway) · 7 tools (reads: listRuns, getRun, getDashboardStats, getSubscriptionStatus · gated: createRun, retryRun, archiveRun) · Confirm Gate server-enforced + adversarial test · chat UI (threads, streaming, stop/regenerate, @shadcn/helpers) · generative UI (run table w/ status pills, artifact viewer, usage meter) · memory + "What Sigma knows" panel · per-plan rate limits · graceful states (no-key/quota/unauth) · ⌘K entry + Home greeting card | L |
+| **P3 Sigma** | Agent definition (instructions, model via Gateway) · 7 tools (reads: listRuns, getRun, getDashboardStats, getSubscriptionStatus · gated: createRun, retryRun, deleteRun) · Confirm Gate server-enforced + adversarial test · chat UI (threads, streaming, stop/regenerate, @shadcn/helpers) · generative UI (run table w/ status pills, artifact viewer, usage meter) · memory + "What Sigma knows" panel · per-plan rate limits · graceful states (no-key/quota/unauth) · ⌘K entry + Home greeting card | L |
 | **P4 Money** | Polar checkout + portal + webhooks (signature verified) · billing page (plan + usage meters runs/day & tokens/mo) · plan→quota enforcement wiring · subscription email trigger | M |
 | **P5 Wiring & Polish** | Email triggers (OTP wired, welcome on signup) · PostHog 3 modules (analytics, error tracking, AI observability — gracefully optional) · design refresh (bento features, functional motion, agent-native hero) · AGENTS.md recipes ("Swap the Noun", "Add a Tool") + **Design Sourcing section** (blessed registries + aesthetic tokens so coding agents keep design coherent) · **seed/demo data** (dashboards look alive for docs + demo video) · fonts (Geist) · legal stub pages · dead links fixed · Fumadocs overhaul | S-M |
 | **P6 Verify & Launch** | E2E vs live Convex (user runs `npx convex dev`) · prove all flows (auth, runs, gate, billing) · README/landing rewrite (positioning) · "agent builds a feature in 10 min" demo video · GitHub Actions CI (lint+typecheck+build) · example.env audit · repo cosmetics (badges, social preview, issue templates, CONTRIBUTING) · launch checklist (HN, r/nextjs, Product Hunt) · tag v2.0 | M |
@@ -135,10 +135,20 @@ RAG/uploads/embeddings · MCP connectors (in-bound) · admin panel · teams/orgs
 
 - Fresh clone, zero keys: landing + dashboard + mock run loop + Sigma setup-state all render, `pnpm build` green.
 - With keys: real run completes end-to-end; artifact kept; tokens metered; quota enforced.
-- Sigma: reads answer grounded; every write blocked until approved; denial leaves no trace; artifact-rendered UI in chat.
+- Sigma: reads answer grounded; every write blocked until approved; denial has zero data side-effects; artifact-rendered UI in chat.
 - Forker flow: agent-following "Swap the Noun" recipe produces a working custom entity in one session.
 - No dead links; docs match reality; demo video recorded.
 
 ---
 
 *Research sources: AIUXPlayground Trust Stack; MeasuringU 2026 chat benchmarks; TheFrontKit AI chat UI 2026; BuildMVPFast BYOK 2026; Flexera token economics; Kong rate-limit tiers; personalization-as-baseline analyses (full links in session log).*
+
+---
+
+## Adversarial review amendments (shipped post-review, 2026-09)
+
+Hardening that landed after the adversarial review pass, so this doc matches the code:
+
+- **Stuck-run reaper cron** — `convex/crons.ts` (every 5 min) fails runs stuck in `running` >10 min ("Timed out") and re-dispatches `queued` runs older than 2 min, so a crashed processor can't strand a run forever.
+- **`usageCounters` ledger** — daily per-user usage is tracked in a dedicated table (`by_userId_and_day`) instead of being derived ad hoc from run scans; quota checks read the ledger.
+- **Approval consumed state** — approvals are single-use: `assertApprovedToolCall` transitions the record to a consumed state on execution, so a captured approval id can't replay the write.

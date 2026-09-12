@@ -26,7 +26,7 @@ Polar webhook → `https://<deployment>.convex.site/polar/events` (`subscription
 - [ ] Zero keys: run loop works in mock mode end-to-end (create → succeeded artifact)
 - [ ] "Load demo data" seeds 6 runs on empty state
 - [ ] GitHub OAuth + Email OTP login (OTP email arrives if RESEND_API_KEY set)
-- [ ] Sigma chat: streaming reply; `listRuns` renders in-chat table; `createRun` → approval card → **Approve** creates the run; **Deny** leaves no trace (verify runs count unchanged)
+- [ ] Sigma chat: streaming reply; `listRuns` renders in-chat table; `createRun` → approval card → **Approve** creates the run; **Deny** has zero data side-effects (verify runs count unchanged)
 - [ ] Rate limit: 21st Sigma message in an hour (free) shows friendly limit error
 - [ ] Billing page: unconfigured setup card OR checkout redirect + portal with Polar env
 - [ ] Pro upgrade lifts runs/day + Sigma hourly limits

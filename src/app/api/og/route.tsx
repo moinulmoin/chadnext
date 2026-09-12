@@ -3,10 +3,10 @@ import { ImageResponse } from "next/og";
 export const runtime = "edge";
 
 export async function GET() {
-  const title = "ChadNext v2 - AI SaaS Template";
+  const title = "The agent-native SaaS starter";
   const description =
-    "ChadNext v2 is an AI-focused indie SaaS starter template built with Next.js 16, " +
-    "Tailwind 4, shadcn/ui, and Convex. Ship your AI SaaS faster than fast.";
+    "Built by your agents. Ships with Sigma. Next.js 16, Convex, " +
+    "better-auth, Polar, and AI SDK v7 — pre-wired into a working product.";
 
   return new ImageResponse(
     (

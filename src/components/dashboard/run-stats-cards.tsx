@@ -11,8 +11,12 @@ const FREE_RUNS_PER_DAY = subscriptionPlans.free.maxRunsPerDay;
 
 export function RunStatsCards() {
   const { data } = useQuery(convexQuery(api.runs.getStats, {}));
+  const { data: subscription } = useQuery(
+    convexQuery(api.billing.getUserSubscription, {}),
+  );
 
   const stats = data ?? { totalRuns: 0, runsToday: 0, tokensThisMonth: 0 };
+  const isPro = subscription?.plan === "pro";
 
   return (
     <div className="grid gap-4 md:grid-cols-3">
@@ -36,7 +40,9 @@ export function RunStatsCards() {
         </CardHeader>
         <CardContent>
           <p className="text-xs text-muted-foreground">
-            Free plan: {stats.runsToday}/{FREE_RUNS_PER_DAY} used today
+            {isPro
+              ? `${stats.runsToday.toLocaleString()} today · unlimited on Pro`
+              : `Free plan: ${stats.runsToday}/${FREE_RUNS_PER_DAY} used today`}
           </p>
         </CardContent>
       </Card>

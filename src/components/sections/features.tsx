@@ -56,7 +56,7 @@ export function FeaturesSection() {
           <FeatureCard
             icon={Bot}
             title="Sigma, the in-app assistant"
-            description="Seven tools scoped to the signed-in user. Reads answer instantly from live Convex data; every write pauses at the Confirm Gate — nothing changes until someone clicks Approve, and denial leaves no trace. With memory and generative UI, answers render as live cards, not prose."
+            description="Seven tools scoped to the signed-in user. Reads answer instantly from live Convex data; every write pauses at the Confirm Gate — nothing changes until someone clicks Approve, and denial has zero data side-effects. With memory and generative UI, answers render as live cards, not prose."
             className="h-full"
           >
             {/* Confirm Gate mock */}
@@ -130,7 +130,7 @@ export function FeaturesSection() {
           <FeatureCard
             icon={Rocket}
             title="Ship-fast DX"
-            description="TanStack Query over live Convex data, TanStack Table built in, and zero-config boot: no API keys? The whole loop still demos in mock mode."
+            description="TanStack Query over live Convex data, TanStack Table built in, and zero-config boot: the landing and build need no keys, and once you're signed in the run loop demos in mock mode — no AI keys required."
           />
         </Reveal>
       </div>

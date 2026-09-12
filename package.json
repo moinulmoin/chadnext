@@ -2,6 +2,7 @@
   "name": "chadnext",
   "version": "2.0.0",
   "private": true,
+  "packageManager": "pnpm@11.25.0",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",

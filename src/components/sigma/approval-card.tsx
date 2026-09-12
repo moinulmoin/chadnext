@@ -79,7 +79,7 @@ export function SigmaApprovalCard({
         </p>
         {!decision && (
           <p className="text-xs text-muted-foreground">
-            Nothing happens until you approve. Denial leaves no trace.
+            Nothing happens until you approve. Denial changes nothing — your data is untouched.
           </p>
         )}
         {!decision && (

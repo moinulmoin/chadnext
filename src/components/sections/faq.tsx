@@ -21,7 +21,7 @@ const faqs = [
   },
   {
     question: "Does it work without API keys?",
-    answer: "Yes. Zero-config boot: with no keys set, runs process via a deterministic mock so the entire loop demos instantly. The AI provider, Polar, Resend, and PostHog integrations are all gracefully optional.",
+    answer: "Partially — and honestly: the build and landing page need nothing, and once you sign in the run loop processes via a deterministic mock so it demos with no AI keys. Sign-in itself needs GitHub OAuth credentials (plus a session secret) set on both the Next.js and Convex runtimes. The AI provider, Polar, Resend, and PostHog integrations are all gracefully optional after that.",
   },
   {
     question: "What are the plan limits?",
@@ -29,7 +29,7 @@ const faqs = [
   },
   {
     question: "How do I deploy it?",
-    answer: "Push to a Git repository and import into Vercel — zero-config deploys, with the Vercel AI Gateway authenticating via OIDC. Convex deploys from the CLI. Full instructions live in the docs.",
+    answer: "Push to a Git repository and import into Vercel for the Next.js app, then create and push a Convex deployment from the CLI and set the shared auth/AI vars on it. Full instructions live in the docs.",
   },
 ];
 

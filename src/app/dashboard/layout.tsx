@@ -29,7 +29,7 @@ const navigationItems = [
   { href: "/dashboard/runs", label: "Runs", icon: Zap },
   { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
   { href: "/dashboard/settings", label: "Settings", icon: Settings2 },
-  { href: "/dashboard/chat", label: "AI Chat", icon: Bot },
+  { href: "/dashboard/chat", label: "Sigma", icon: Bot },
 ];
 
 export default function DashboardLayout({
@@ -63,7 +63,7 @@ export default function DashboardLayout({
         </SidebarContent>
         <SidebarSeparator />
         <SidebarFooter className="p-3 text-xs text-muted-foreground">
-          Free plan: 10 runs/day
+          Runs usage renews daily
         </SidebarFooter>
         <SidebarRail />
       </Sidebar>

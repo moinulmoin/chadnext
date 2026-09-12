@@ -4,11 +4,83 @@ title: Getting Started
 
 # Getting Started with ChadNext v2
 
-## Quick Start
+ChadNext is an agent-native SaaS starter: **Next.js 16 + Convex + better-auth + Polar + AI SDK v7**, with a demo product (the Runs loop) and an in-app assistant (**Sigma**). This guide takes you from clone to a running app.
 
-1. Clone: `git clone https://github.com/moinulmoin/chadnext.git`
-2. Install: `pnpm install`
-3. Configure: Copy `example.env` to `.env.local`
-4. Run: `pnpm dev`
+## Prerequisites
 
-See example.env for required environment variables.
+- Node.js 22+
+- [pnpm](https://pnpm.io) 11+
+- A GitHub OAuth App (for login — the dashboard is auth-gated)
+- A free [Convex](https://convex.dev) account (created during setup)
+
+## 1. Install
+
+```bash
+git clone https://github.com/moinulmoin/chadnext.git
+cd chadnext
+pnpm install
+```
+
+## 2. Copy the example env
+
+```bash
+cp example.env .env.local
+```
+
+Do this **before** running `npx convex dev` — the Convex CLI writes the real `CONVEX_DEPLOYMENT` / `NEXT_PUBLIC_CONVEX_URL` values into `.env.local` for you, and copying afterwards would clobber them.
+
+## 3. Initialize Convex
+
+```bash
+npx convex dev
+```
+
+This is interactive: it creates your free Convex account (if you don't have one), provisions a deployment, pushes the schema, and keeps syncing `convex/` code as you edit. It also fills in the Convex URL variables in `.env.local`. Leave it running in a separate terminal.
+
+## 4. Set the Convex-side env vars
+
+ChadNext has **two runtimes**: the Next.js server (reads `.env.local`) and your Convex deployment (reads its own env). Several variables are read by *both* — set them in `.env.local` **and** on the deployment:
+
+```bash
+npx convex env set BETTER_AUTH_SECRET "$(openssl rand -base64 32)"
+npx convex env set GITHUB_CLIENT_ID <your-client-id>
+npx convex env set GITHUB_CLIENT_SECRET <your-client-secret>
+```
+
+| Variable | Where to get it | Runtime(s) |
+|---|---|---|
+| `BETTER_AUTH_SECRET` | `openssl rand -base64 32` (min 32 chars) | Next.js + Convex |
+| `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | [GitHub OAuth App settings](https://github.com/settings/developers) — callback `http://localhost:3000/api/auth/callback/github` | Next.js + Convex |
+| `NEXT_PUBLIC_CONVEX_URL` | written by `npx convex dev` automatically | Next.js |
+| `VERCEL_AI_GATEWAY_API_KEY` (optional) | [Vercel AI Gateway keys](https://vercel.com/dashboard/ai-gateway/keys) — one key, every provider | Convex (AI calls execute there) |
+| `POLAR_ORGANIZATION_TOKEN` / `POLAR_PRO_PRODUCT_ID` / `POLAR_WEBHOOK_SECRET` (optional) | [Polar settings](https://polar.sh/settings/tokens) | Convex |
+| `RESEND_API_KEY` (optional) | [Resend API keys](https://resend.com/api-keys) | Convex (also required for Email OTP login) |
+| `NEXT_PUBLIC_POSTHOG_KEY` (optional) | [PostHog project settings](https://us.posthog.com/project/settings) | Next.js only |
+
+Optional `BETTER_AUTH_URL` overrides the app URL better-auth uses on either runtime; it defaults to `NEXT_PUBLIC_APP_URL`.
+
+## 5. Run
+
+```bash
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000), sign in with GitHub, and you land on `/dashboard`.
+
+## What works without keys?
+
+- **Build + landing + docs**: nothing required, ever.
+- **Run loop**: after login, runs process in **deterministic mock mode** with zero AI keys — full queue → run → artifact loop, real metering, real quotas.
+- **Sigma**: answers from your real data with zero AI keys in mock mode.
+- **Billing**: shows a setup card until the Polar vars exist.
+- **What does need keys**: login itself (GitHub OAuth creds + secret, both runtimes) and email OTP (Resend).
+
+Usage windows (runs/day, Sigma messages/hour) reset at **00:00 UTC**.
+
+## Deploy
+
+1. **Vercel** — import the repo; the [deploy button](https://github.com/moinulmoin/chadnext#deploy) in the README pre-fills the env list. Set `NEXT_PUBLIC_CONVEX_URL`, `BETTER_AUTH_SECRET`, `GITHUB_CLIENT_ID/SECRET` (plus your domain as `NEXT_PUBLIC_APP_URL`).
+2. **Convex production** — `npx convex deploy` (or keep `npx convex dev` linked), then `npx convex env set` the auth/AI/Polar/Resend vars on the production deployment.
+3. **Polar webhook** — point it at `https://<your-deployment>.convex.site/polar/events` subscribing to `subscription.*` and `product.*` events.
+
+Update the GitHub OAuth App callback URL to your production domain, and you're live.
